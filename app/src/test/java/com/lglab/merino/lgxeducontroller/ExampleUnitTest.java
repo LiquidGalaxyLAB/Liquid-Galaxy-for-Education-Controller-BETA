@@ -1,4 +1,4 @@
-package com.lglab.merino.lgxeducontroller;
+package com.lglab.merino.lgxeducontroller.legacy;
 
 import org.junit.Test;
 

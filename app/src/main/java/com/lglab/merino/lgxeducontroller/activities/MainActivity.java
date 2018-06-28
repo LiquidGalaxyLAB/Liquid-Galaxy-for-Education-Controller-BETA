@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.lglab.merino.lgxeducontroller.R;
+import com.lglab.merino.lgxeducontroller.legacy.LGPC;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private void button_play() {
         findViewById(R.id.play).setOnClickListener(view -> {
             Toast.makeText(context, "Play", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(context, PlayActivity.class));
+            startActivity(new Intent(context, LGPC.class));
         });
     }
 

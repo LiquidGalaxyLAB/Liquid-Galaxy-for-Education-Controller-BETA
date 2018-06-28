@@ -1,4 +1,10 @@
 apply plugin: 'com.android.application'
+repositories {
+    mavenCentral()
+    maven {
+        url "https://jitpack.io"
+    }
+}
 
 android {
     compileSdkVersion 27
@@ -25,10 +31,21 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation(name: 'uribeacon-library-release', ext: 'aar')
     implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:design:27.1.1'
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
+    implementation 'com.android.support:cardview-v7:27.1.1'
+    implementation 'com.mcxiaoke.volley:library-aar:1.0.1'
+    implementation 'com.google.android.gms:play-services:12.0.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation 'io.github.controlwear:virtualjoystick:1.9.2'
+    /**For the tree view**/
+    implementation 'com.github.bmelnychuk:atv:1.2.9'
+    /** ********************/
+    implementation files('libs/jsch-0.1.53.jar')
+    implementation files('libs/jzlib-1.1.1.jar')
+    implementation 'com.github.kanytu:android-parallax-recyclerview:v1.7'
 }
