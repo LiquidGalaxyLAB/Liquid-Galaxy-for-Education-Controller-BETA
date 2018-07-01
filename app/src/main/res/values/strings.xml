@@ -143,6 +143,7 @@
     <string name="add_poi_tour">Add POI to Tour</string>
     <string name="please_enter_password">Please, enter the password:</string>
     <string name="search_some_place">Search some place on Liquid Galaxy…</string>
+    <string name="search_some_quiz">Find Quiz…</string>
     <string name="seconds">(s)</string>
     <string name="import_pois">Import POIs</string>
     <string name="password">Password</string>

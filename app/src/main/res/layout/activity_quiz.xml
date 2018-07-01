@@ -37,23 +37,24 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:background="#ABC000"
         android:gravity="center"
         android:orientation="horizontal"
-        android:weightSum="1"
-        android:background="#ABC000">
+        android:weightSum="1">
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="previous question" />
+            android:text="previous question"
+            android:background="@drawable/round_edged_button"/>
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.5"
+            android:background="#A00000"
             android:gravity="center"
-            android:orientation="vertical"
-            android:background="#A00000">
+            android:orientation="vertical">
 
             <Button
                 android:id="@+id/answerFirst"
@@ -61,17 +62,19 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="120dp"
+                android:background="@drawable/round_edged_button"
+                android:gravity="center_horizontal"
                 android:paddingTop="256dp"
                 android:text="answer 1"
-                android:textSize="24sp"
-                android:gravity="center_horizontal"/>
+                android:textSize="24sp" />
 
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="256dp"
                 android:text="answer 3"
-                android:textSize="24sp"/>
+                android:textSize="24sp"
+                android:background="@drawable/round_edged_button"/>
 
         </LinearLayout>
 
@@ -79,16 +82,17 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.5"
+            android:background="#1050FF"
             android:gravity="center"
-            android:orientation="vertical"
-            android:background="#1050FF">
+            android:orientation="vertical">
 
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="256dp"
                 android:text="answer 2"
-                android:textSize="24sp"/>
+                android:textSize="24sp"
+                android:background="@drawable/round_edged_button"/>
 
             <Button
                 android:layout_width="match_parent"
@@ -96,7 +100,8 @@
                 android:layout_marginTop="120dp"
                 android:paddingBottom="256dp"
                 android:text="answer 4"
-                android:textSize="24sp"/>
+                android:textSize="24sp"
+                android:background="@drawable/round_edged_button"/>
 
         </LinearLayout>
 
@@ -104,7 +109,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
-            android:text="next question" />
+            android:text="next question"
+            android:background="@drawable/round_edged_button"/>
     </LinearLayout>
 
 </LinearLayout>
