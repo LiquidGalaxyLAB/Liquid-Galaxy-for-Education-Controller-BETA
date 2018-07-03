@@ -19,7 +19,6 @@ public class PlayActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(R.string.play);
-        startViews();
     }
 
     @Override
@@ -28,12 +27,5 @@ public class PlayActivity extends AppCompatActivity {
         return true;
     }
 
-    public void startViews(){
 
-        ImageView homeImage = findViewById(R.id.homeIcon);
-        homeImage.setOnClickListener(view -> {
-            Intent intent = new Intent(PlayActivity.this, QuizActivity.class);
-            startActivity(intent);
-        });
-    }
 }
