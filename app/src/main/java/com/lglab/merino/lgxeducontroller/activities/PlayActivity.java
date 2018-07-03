@@ -30,13 +30,10 @@ public class PlayActivity extends AppCompatActivity {
 
     public void startViews(){
 
-        ImageView homeImage = (ImageView)findViewById(R.id.homeIcon);
-        homeImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(PlayActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
+        ImageView homeImage = findViewById(R.id.homeIcon);
+        homeImage.setOnClickListener(view -> {
+            Intent intent = new Intent(PlayActivity.this, QuizActivity.class);
+            startActivity(intent);
         });
     }
 }
