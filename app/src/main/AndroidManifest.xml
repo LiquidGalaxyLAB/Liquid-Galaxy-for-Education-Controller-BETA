@@ -53,7 +53,7 @@
 
         <provider
             android:name=".legacy.data.POIsProvider"
-            android:authorities="com.gsoc.ijosa.liquidgalaxycontroller"
+            android:authorities="com.lglab.merino.lgxeducontroller"
             android:enabled="true"
             android:exported="true" />
 
