@@ -7,25 +7,7 @@
     android:orientation="vertical"
     tools:context=".activities.NavigateActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="horizontal"
-        android:background="#FFFFAA">
         <!-- A MENU FOR POIS AND TOURS!!!-->
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="4"
-        android:orientation="vertical"
-        >
-
-
-
-    </LinearLayout>
 
     <TextView
         android:id="@+id/gestureStatus"
