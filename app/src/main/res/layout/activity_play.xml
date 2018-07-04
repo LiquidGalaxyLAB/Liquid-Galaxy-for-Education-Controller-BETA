@@ -6,5 +6,18 @@
     android:orientation="vertical"
     tools:context=".activities.PlayActivity">
 
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:text="Category:"
+        android:layout_marginBottom="5dp"
+        />
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        />
 
 </LinearLayout>
