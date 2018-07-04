@@ -1,8 +1,7 @@
-package com.lgxedu.ivan.excelgetter.games.quiz;
+package com.lglab.merino.lgxeducontroller.games.quiz;
 
-import com.lgxedu.ivan.excelgetter.beans.POI;
-import com.lgxedu.ivan.excelgetter.interfaces.IJsonPacker;
-
+import com.lglab.merino.lgxeducontroller.interfaces.IJsonPacker;
+import com.lglab.merino.lgxeducontroller.legacy.beans.POI;
 import org.json.JSONException;
 import org.json.JSONObject;
 

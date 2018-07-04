@@ -1,9 +1,11 @@
 package com.lglab.merino.lgxeducontroller.legacy.beans;
 
-/**
- * Created by Ivan Josa on 7/07/16.
- */
-public class POI {
+import com.lglab.merino.lgxeducontroller.interfaces.IJsonPacker;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class POI implements IJsonPacker {
 
     private long id;
     private String name;
@@ -112,5 +114,43 @@ public class POI {
 
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
+    }
+
+    @Override
+    public JSONObject pack() throws JSONException {
+        JSONObject obj = new JSONObject();
+
+        obj.put("id", id);
+        obj.put("name", name);
+        obj.put("visited_place", visited_place);
+        obj.put("longitude", longitude);
+        obj.put("latitude", latitude);
+        obj.put("altitude", altitude);
+        obj.put("heading", heading);
+        obj.put("tilt", tilt);
+        obj.put("range", range);
+        obj.put("altitudeMode", altitudeMode);
+        obj.put("hidden", hidden);
+        obj.put("categoryId", categoryId);
+
+        return obj;
+    }
+
+    @Override
+    public POI unpack(JSONObject obj) throws JSONException {
+        id = obj.getLong("id");
+        name = obj.getString("name");
+        visited_place = obj.getString("visited_place");
+        longitude = obj.getDouble("longitude");
+        latitude = obj.getDouble("latitude");
+        altitude = obj.getDouble("altitude");
+        heading = obj.getDouble("heading");
+        tilt = obj.getDouble("tilt");
+        range = obj.getDouble("range");
+        altitudeMode = obj.getString("altitudeMode");
+        hidden = obj.getBoolean("hidden");
+        categoryId = obj.getInt("categoryId");
+
+        return this;
     }
 }

@@ -3,12 +3,12 @@ package com.lglab.merino.lgxeducontroller.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
 
+import android.widget.Toast;
 import com.lglab.merino.lgxeducontroller.R;
 
-public class MainActivity extends AppCompatActivity {
+
+public class MainActivity extends GoogleDriveActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
     private Context context;
@@ -20,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
         context = MainActivity.this;
         button_navigate();
         button_play();
+
+        signIn();
     }
 
     private void button_navigate() {
@@ -36,4 +38,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void handleStringFromDrive(String input) {
+        //Nothing here...
+    }
 }
