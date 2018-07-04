@@ -1,12 +1,9 @@
 package com.lglab.merino.lgxeducontroller.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.Spinner;
 
 import com.lglab.merino.lgxeducontroller.R;
 
@@ -19,6 +16,8 @@ public class PlayActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(R.string.play);
+
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
     }
 
     @Override
