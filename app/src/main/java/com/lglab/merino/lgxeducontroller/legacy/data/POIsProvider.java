@@ -96,6 +96,30 @@ public class POIsProvider extends ContentProvider {
         return mOpenHelper.getReadableDatabase().rawQuery(sql, new String[]{String.valueOf(poiId)});
     }
 
+    public static Cursor getAllQuizes() {
+        String sql = "SELECT q._id, q.Data FROM quiz q";
+        return mOpenHelper.getReadableDatabase().rawQuery(sql, new String[]{});
+    }
+
+    public static Cursor queryQuiz(int quizId) {
+        String sql = "SELECT q._id, q.Data FROM quiz q WHERE q._ID = ?";
+        return mOpenHelper.getReadableDatabase().rawQuery(sql, new String[]{String.valueOf(quizId)});
+    }
+
+    public static void updateQuizById(int quizId, String data) {
+        mOpenHelper.getReadableDatabase().execSQL("UPDATE quiz SET data = '?' WHERE _id = ?", new String[]{data, String.valueOf(quizId)});
+    }
+
+    public static void removeQuizById(int quizId) {
+        mOpenHelper.getReadableDatabase().execSQL("DELETE FROM quiz WHERE _ID = ?", new String[]{String.valueOf(quizId)});
+    }
+
+    public static long insertQuiz(String data) {
+        ContentValues values = new ContentValues();
+        values.put("data", data);
+        return mOpenHelper.getReadableDatabase().insert("quiz", "", values);
+    }
+
     public boolean onCreate() {
         mOpenHelper = new POIsDbHelper(getContext());
         return true;

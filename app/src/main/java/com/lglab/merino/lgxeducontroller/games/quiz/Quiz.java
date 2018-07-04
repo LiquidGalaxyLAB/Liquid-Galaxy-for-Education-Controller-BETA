@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class Quiz implements IJsonPacker {
     private ArrayList<Question> questions;
     private String name;
+    public long id;
 
     public Quiz() {
         questions = new ArrayList<>();

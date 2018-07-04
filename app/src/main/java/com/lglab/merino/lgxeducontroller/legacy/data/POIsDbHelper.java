@@ -25,6 +25,7 @@ public class POIsDbHelper extends SQLiteOpenHelper {
         db.execSQL(createTourEntryTable());
         db.execSQL(createTourPOIsEntryTable());
         db.execSQL(createTasksEntryTable());
+        db.execSQL(createQuizTable());
         createBaseCategories(db);
         createDefaultLgTasks(db);
         insertDefaultData(db);
@@ -133,12 +134,18 @@ public class POIsDbHelper extends SQLiteOpenHelper {
         return "CREATE TABLE LG_TASK (_id INTEGER PRIMARY KEY AUTOINCREMENT,Title TEXT NOT NULL, Description TEXT, Script TEXT NOT NULL, Shutdown_Script TEXT NOT NULL, Image BLOB, IP TEXT, User TEXT, Password TEXT,URL TEXT, isRunning INTEGER);";
     }
 
+    private String createQuizTable() {
+        return "CREATE TABLE quiz (_id INTEGER PRIMARY KEY AUTOINCREMENT, Data TEXT NOT NULL);";
+    }
+
+
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS category");
         db.execSQL("DROP TABLE IF EXISTS poi");
         db.execSQL("DROP TABLE IF EXISTS tour");
         db.execSQL("DROP TABLE IF EXISTS Tour_POIs");
         db.execSQL("DROP TABLE IF EXISTS LG_TASK");
+        db.execSQL("DROP TABLE IF EXISTS quiz");
         onCreate(db);
     }
 
@@ -149,6 +156,7 @@ public class POIsDbHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS tour");
         db.execSQL("DROP TABLE IF EXISTS Tour_POIs");
         db.execSQL("DROP TABLE IF EXISTS LG_TASK");
+        db.execSQL("DROP TABLE IF EXISTS quiz");
         onCreate(db);
     }
 }

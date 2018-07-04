@@ -68,6 +68,9 @@ public abstract class GoogleDriveActivity extends AppCompatActivity {
     }
 
     public void signIn() {
+        if(GoogleDriveManager.GoogleSignInClient != null && GoogleDriveManager.DriveClient != null && GoogleDriveManager.DriveResourceClient != null)
+            return;
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .requestScopes(Drive.SCOPE_FILE)
