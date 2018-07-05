@@ -20,8 +20,6 @@ public class MainActivity extends GoogleDriveActivity {
         context = MainActivity.this;
         button_navigate();
         button_play();
-
-        signIn();
     }
 
     private void button_navigate() {
