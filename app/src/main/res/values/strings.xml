@@ -266,5 +266,7 @@
     <string name="taskIpDefault">$serverIp</string>
     <string name="taskBrowserUrlDefault">$serverIp:$serverPort</string>
     <string name="clean_KML">Clean KMLS</string>
+    <string name="app_label">LGxEDU</string>
+    <string name="search_hint">Search a quiz</string>
     <!-- Legacy -->
 </resources>

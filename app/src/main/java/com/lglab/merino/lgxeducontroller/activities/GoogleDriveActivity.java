@@ -3,9 +3,11 @@ package com.lglab.merino.lgxeducontroller.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -61,13 +63,16 @@ public abstract class GoogleDriveActivity extends AppCompatActivity {
                     mOpenItemTaskSource.setResult(data.getParcelableExtra(
                             OpenFileActivityOptions.EXTRA_RESPONSE_DRIVE_ID));
                 } else {
-                    mOpenItemTaskSource.setException(new RuntimeException("Unable to open file"));
+                     //mOpenItemTaskSource.setException(new RuntimeException("Unable to open file"));
                 }
                 break;
         }
     }
 
-    public void signIn() {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
         if(GoogleDriveManager.GoogleSignInClient != null && GoogleDriveManager.DriveClient != null && GoogleDriveManager.DriveResourceClient != null)
             return;
 
@@ -176,8 +181,8 @@ public abstract class GoogleDriveActivity extends AppCompatActivity {
                         Task<Void> discardTask = GoogleDriveManager.DriveResourceClient.discardContents(contents);
                         return discardTask;
                     })
-                    .addOnSuccessListener(this,
-                            driveFile -> showMessage("File imported successfully"))
+                    /*.addOnSuccessListener(this,
+                            driveFile -> showMessage("File imported successfully"))*/
                     .addOnFailureListener(e -> {
                         Log.e(GoogleDriveManager.TAG, e.toString());
                     });
@@ -213,11 +218,9 @@ public abstract class GoogleDriveActivity extends AppCompatActivity {
     }
 
 
-    private void showMessage(String message){
-        Snackbar snackbar = Snackbar
-                .make(findViewById(R.id.snackbarPosition), message, Snackbar.LENGTH_LONG);
-
-        snackbar.show();
+    protected void showMessage(String message){
+        Toast.makeText(this, message,
+                Toast.LENGTH_LONG).show();
     }
 
     public abstract void handleStringFromDrive(String input);
