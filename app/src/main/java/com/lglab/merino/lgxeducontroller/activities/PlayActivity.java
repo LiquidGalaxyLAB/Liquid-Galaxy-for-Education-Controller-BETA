@@ -1,47 +1,92 @@
 package com.lglab.merino.lgxeducontroller.activities;
 
+import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.BaseColumns;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
+import android.support.v7.widget.SearchView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.SearchView;
-import android.widget.Toast;
 
 import com.lglab.merino.lgxeducontroller.R;
+import com.lglab.merino.lgxeducontroller.games.quiz.Quiz;
+import com.lglab.merino.lgxeducontroller.legacy.data.POIsDbHelper;
+import com.lglab.merino.lgxeducontroller.legacy.data.POIsProvider;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class PlayActivity extends AppCompatActivity {
+public class PlayActivity extends GoogleDriveActivity {
 
-    ArrayAdapter<String> adapter;
+    ArrayAdapter<Quiz> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
        super.onCreate(savedInstanceState);
+
        setContentView(R.layout.activity_play);
        ActionBar actionBar = getSupportActionBar();
        actionBar.setDisplayHomeAsUpEnabled(true);
        actionBar.setTitle(R.string.play);
 
         ListView lv = findViewById(R.id.listViewQuiz);
-        ArrayList<String> arrayCountry = new ArrayList<>();
 
+        reloadListView();
 
+        lv.setClickable(true);
+        lv.setOnItemClickListener((arg0, arg1, position, arg3) -> {
 
-        adapter = new ArrayAdapter<>(
-                PlayActivity.this,
-                android.R.layout.simple_list_item_1,
-                arrayCountry);
-        lv.setAdapter(adapter);
+            Quiz quiz = (Quiz)lv.getItemAtPosition(position);
+            showMessage(quiz.getNameForExporting());
+        });
+
+        findViewById(R.id.import_from_drive).setOnClickListener(view -> importQuiz());
 
    }
+
+   public void reloadListView() {
+       ListView lv = findViewById(R.id.listViewQuiz);
+       ArrayList<Quiz> arrayQuiz = new ArrayList<>();
+
+       Cursor cursor = POIsProvider.getAllQuizes();
+       while (cursor.moveToNext()) {
+           long quizId = cursor.getLong(cursor.getColumnIndexOrThrow("_id"));
+           String questData = cursor.getString(cursor.getColumnIndexOrThrow("Data"));
+           try {
+               Quiz newQuiz = new Quiz().unpack(new JSONObject(questData));
+               newQuiz.id = quizId;
+               arrayQuiz.add(newQuiz);
+           }
+           catch(Exception e) {
+
+           }
+       }
+
+       adapter = new ArrayAdapter<>(
+               PlayActivity.this,
+               android.R.layout.simple_list_item_1,
+               arrayQuiz);
+
+       lv.setAdapter(adapter);
+   }
+
+    @Override
+    public void handleStringFromDrive(String input) {
+        try {
+            new Quiz().unpack(new JSONObject(input)); //Checking if the json is fine ;)
+
+            POIsProvider.insertQuiz(input);
+            reloadListView();
+            showMessage("Quiz imported successfully");
+        }
+        catch(Exception e) {
+            showMessage("Couldn't import the file");
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -49,6 +94,7 @@ public class PlayActivity extends AppCompatActivity {
         inflater.inflate(R.menu.search, menu);
         MenuItem item = menu.findItem(R.id.menuSearch);
         SearchView searchView = (SearchView)item.getActionView();
+        searchView.setMaxWidth(Integer.MAX_VALUE);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
