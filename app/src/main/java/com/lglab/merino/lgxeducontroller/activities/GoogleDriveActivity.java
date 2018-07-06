@@ -53,7 +53,7 @@ public abstract class GoogleDriveActivity extends AppCompatActivity {
                     return;
                 }
 
-                Log.e(GoogleDriveManager.TAG, "Sign-in failed.");
+                Log.e(GoogleDriveManager.TAG, "Sign-in failed with requestCode = " + String.valueOf(requestCode));
                 finish();
                 break;
             case GoogleDriveManager.RC_OPEN_ITEM:
