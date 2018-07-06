@@ -16,6 +16,8 @@ public class QuizActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
+
+
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();

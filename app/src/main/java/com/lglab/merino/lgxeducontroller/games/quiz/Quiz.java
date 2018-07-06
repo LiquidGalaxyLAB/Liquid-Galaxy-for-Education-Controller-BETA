@@ -14,6 +14,8 @@ public class Quiz implements IJsonPacker {
     public long id;
 
     public Quiz() {
+        id = 0;
+        name = "";
         questions = new ArrayList<>();
     }
 
@@ -45,5 +47,10 @@ public class Quiz implements IJsonPacker {
 
     public String getNameForExporting() {
         return name.replaceAll("[:\\/*\"?|<> ]", "_") + ".json";
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }
