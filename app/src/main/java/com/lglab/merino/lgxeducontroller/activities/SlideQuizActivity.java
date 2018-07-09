@@ -1,30 +1,25 @@
 package com.lglab.merino.lgxeducontroller.activities;
 
-import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.provider.BaseColumns;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.support.v7.widget.SearchView;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.lglab.merino.lgxeducontroller.R;
 import com.lglab.merino.lgxeducontroller.games.quiz.ArrayAlternateAdapter;
 import com.lglab.merino.lgxeducontroller.games.quiz.Quiz;
-import com.lglab.merino.lgxeducontroller.legacy.data.POIsDbHelper;
 import com.lglab.merino.lgxeducontroller.legacy.data.POIsProvider;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class PlayActivity extends GoogleDriveActivity {
+public class SlideQuizActivity extends GoogleDriveActivity {
 
     ArrayAdapter<Quiz> adapter;
 
@@ -46,7 +41,6 @@ public class PlayActivity extends GoogleDriveActivity {
 
             Quiz quiz = (Quiz)lv.getItemAtPosition(position);
             showMessage(quiz.getNameForExporting());
-            startActivity(new Intent(PlayActivity.this, QuizActivity.class));
         });
 
         findViewById(R.id.import_from_drive).setOnClickListener(view -> importQuiz());
@@ -72,7 +66,7 @@ public class PlayActivity extends GoogleDriveActivity {
        }
 
        adapter = new ArrayAlternateAdapter<>(
-               PlayActivity.this,
+               SlideQuizActivity.this,
                android.R.layout.simple_list_item_1,
                arrayQuiz);
 
