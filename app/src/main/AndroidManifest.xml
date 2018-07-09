@@ -45,6 +45,7 @@
         </activity>
         <activity android:name=".activities.NavigateActivity" />
         <activity android:name=".activities.PlayActivity" />
+        <activity android:name=".activities.CreateQuestionActivity" />
 
         <!-- Google Maps Fragment API Key Data -->
         <meta-data
