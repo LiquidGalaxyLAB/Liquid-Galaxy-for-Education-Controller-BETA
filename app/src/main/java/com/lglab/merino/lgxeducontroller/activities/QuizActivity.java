@@ -28,7 +28,7 @@ public class QuizActivity extends AppCompatActivity {
     private LinearLayout dotsLayout;
     private TextView[] dots;
     private int[] layouts;
-    private Button btnSkip, btnNext;
+    private Button btnLeft, btnRight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +40,8 @@ public class QuizActivity extends AppCompatActivity {
 
         viewPager = findViewById(R.id.view_pager);
         dotsLayout = findViewById(R.id.layoutDots);
-        btnSkip = findViewById(R.id.btn_skip);
-        btnNext = findViewById(R.id.btn_next);
+        btnLeft = findViewById(R.id.btn_left);
+        btnRight = findViewById(R.id.btn_right);
 
         layouts = new int[]{
                 R.layout.activity_slide_quiz,
@@ -49,29 +49,27 @@ public class QuizActivity extends AppCompatActivity {
                 R.layout.activity_slide_quiz,
         };
 
-        // adding bottom dots
-        addBottomDots(0);
-
-        // making notification bar transparent
-        changeStatusBarColor();
+        viewPagerPageChangeListener.onPageSelected(0);
 
         myViewPagerAdapter = new MyViewPagerAdapter();
         viewPager.setAdapter(myViewPagerAdapter);
 
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
 
-        btnSkip.setOnClickListener(v -> finish());
+        btnLeft.setOnClickListener(v -> {
 
-        btnNext.setOnClickListener(v -> {
-            // checking for last page
-            // if last page home screen will be launched
-            int current = getItem(+1);
+            int current = getItem(-1);
+            if (current >= 0) {
+                viewPager.setCurrentItem(current);
+            }
+        });
+
+        btnRight.setOnClickListener(v -> {
+
+            int current = getItem(1);
             if (current < layouts.length) {
-                // move to next screen
                 viewPager.setCurrentItem(current);
             } else {
-                //launchHomeScreen();
-                //return
                 finish();
             }
         });
@@ -100,22 +98,31 @@ public class QuizActivity extends AppCompatActivity {
         return viewPager.getCurrentItem() + i;
     }
 
-    //	viewpager change listener
     ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
 
         @Override
         public void onPageSelected(int position) {
             addBottomDots(position);
 
-            // changing the next button text 'NEXT' / 'GOT IT'
-            if (position == layouts.length - 1) {
-                // last page. make button text to GOT IT
-                btnNext.setText("Start");
-                btnSkip.setVisibility(View.GONE);
-            } else {
-                // still pages are left
-                btnNext.setText("Next");
-                btnSkip.setVisibility(View.VISIBLE);
+            if(position == layouts.length - 1) {
+                btnRight.setText("Finish");
+                btnRight.setVisibility(View.VISIBLE);
+
+                btnLeft.setText("Previous");
+                btnLeft.setVisibility(View.VISIBLE);
+            }
+            else if(position == 0) {
+                btnRight.setText("Next");
+                btnRight.setVisibility(View.VISIBLE);
+
+                btnLeft.setVisibility(View.GONE);
+            }
+            else {
+                btnRight.setText("Next");
+                btnRight.setVisibility(View.VISIBLE);
+
+                btnLeft.setText("Previous");
+                btnLeft.setVisibility(View.VISIBLE);
             }
         }
 
@@ -129,17 +136,6 @@ public class QuizActivity extends AppCompatActivity {
 
         }
     };
-
-    /**
-     * Making notification bar transparent
-     */
-    private void changeStatusBarColor() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.TRANSPARENT);
-        }
-    }
 
     @Override
     public boolean onSupportNavigateUp() {
