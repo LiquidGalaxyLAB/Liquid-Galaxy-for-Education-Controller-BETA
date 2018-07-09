@@ -19,5 +19,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:src="@drawable/ic_add_white_24dp"
+        android:backgroundTint="@android:color/holo_blue_bright"
         android:layout_margin="24dp"></android.support.design.widget.FloatingActionButton>
 </LinearLayout>
