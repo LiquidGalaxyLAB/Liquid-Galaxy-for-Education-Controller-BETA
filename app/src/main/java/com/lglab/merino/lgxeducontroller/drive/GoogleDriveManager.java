@@ -15,4 +15,5 @@ public class GoogleDriveManager {
     public static GoogleSignInClient GoogleSignInClient;
     public static DriveClient DriveClient;
     public static DriveResourceClient DriveResourceClient;
+    
 }

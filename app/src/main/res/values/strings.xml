@@ -3,6 +3,11 @@
     <string name="navigate">Navigate</string>
     <string name="play">Play</string>
 
+    <!-- Create Question -->
+    <string name="question_text_edit">Question</string>
+    <string name="correct_answer">Correct answer:</string>
+    <string name="question_POI">Question POI</string>
+    <string name="bubble_text">Additional information for the answer</string>
 
     <!-- Legacy -->
     <string name="tittle">Liquid Galaxy Controller</string>
@@ -269,4 +274,6 @@
     <string name="app_label">LGxEDU</string>
     <string name="search_hint">Search a quiz</string>
     <!-- Legacy -->
+
+
 </resources>

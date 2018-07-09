@@ -1,6 +1,7 @@
 package com.lglab.merino.lgxeducontroller.activities;
 
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.support.v7.app.ActionBar;
@@ -8,10 +9,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.support.v7.widget.SearchView;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.lglab.merino.lgxeducontroller.R;
+import com.lglab.merino.lgxeducontroller.games.quiz.ArrayAlternateAdapter;
 import com.lglab.merino.lgxeducontroller.games.quiz.Quiz;
 import com.lglab.merino.lgxeducontroller.legacy.data.POIsDbHelper;
 import com.lglab.merino.lgxeducontroller.legacy.data.POIsProvider;
@@ -66,10 +69,12 @@ public class PlayActivity extends GoogleDriveActivity {
            }
        }
 
-       adapter = new ArrayAdapter<>(
+       adapter = new ArrayAlternateAdapter<>(
                PlayActivity.this,
                android.R.layout.simple_list_item_1,
                arrayQuiz);
+
+
 
        lv.setAdapter(adapter);
    }
