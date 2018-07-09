@@ -1,4 +1,5 @@
 <resources>
+    <string name="server_client_id">570014662901-v9p1r3dqtfspmisad8o5gp264o7r181q.apps.googleusercontent.com</string>
     <string name="app_name">LGxEdu Controller</string>
     <string name="navigate">Navigate</string>
     <string name="play">Play</string>

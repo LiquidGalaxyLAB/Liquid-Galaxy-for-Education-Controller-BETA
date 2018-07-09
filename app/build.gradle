@@ -7,6 +7,14 @@ repositories {
 }
 
 android {
+    signingConfigs {
+        DebugSignIn {
+            keyAlias 'Testing'
+            keyPassword 'LGxEDU'
+            storeFile file('C:/Users/Andreu/key.jks')
+            storePassword 'LGxEDU'
+        }
+    }
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.lglab.merino.lgxeducontroller"
@@ -21,6 +29,9 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            signingConfig signingConfigs.DebugSignIn
         }
     }
     buildToolsVersion '27.0.3'
