@@ -12,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="4dp"
-        android:layout_marginTop="8dp"
         android:layout_weight="5"
         android:gravity="center"
         android:orientation="horizontal"
@@ -152,35 +151,25 @@
     </LinearLayout>
 
     <!-- Buttons Cancel & Accept -->
-    <RelativeLayout
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/main_content"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="end">
+        android:layout_weight="1">
+
 
         <android.support.design.widget.FloatingActionButton
-            android:src="@drawable/ic_close_white_24dp"
-            android:backgroundTint="@color/red"
-            android:id="@+id/cancelButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="8dp"
-            android:text="cancel"/>
+            android:layout_gravity="bottom|right"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_add_circle_black_48dp"
+            app:layout_anchorGravity="bottom|right|end" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:src="@drawable/ic_check_white_24dp"
-            android:backgroundTint="@color/green"
-            android:id="@+id/acceptButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_toStartOf="@id/cancelButton"
-            android:onClick="acceptAction"
-            android:text="accept"/>
+    </android.support.design.widget.CoordinatorLayout>
 
-
-    </RelativeLayout>
 
 </LinearLayout>
 
