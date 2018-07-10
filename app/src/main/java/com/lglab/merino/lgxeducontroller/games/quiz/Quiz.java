@@ -1,5 +1,8 @@
 package com.lglab.merino.lgxeducontroller.games.quiz;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.lglab.merino.lgxeducontroller.interfaces.IJsonPacker;
 
 import org.json.JSONArray;
@@ -8,22 +11,42 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class Quiz implements IJsonPacker {
+public class Quiz implements IJsonPacker, Parcelable {
     private ArrayList<Question> questions;
     private String name;
     public long id;
+    public String category;
 
     public Quiz() {
         id = 0;
         name = "";
+        category = "";
         questions = new ArrayList<>();
     }
+
+    protected Quiz(Parcel in) {
+        /*name = in.readString();
+        id = in.readLong();*/
+    }
+
+    public static final Creator<Quiz> CREATOR = new Creator<Quiz>() {
+        @Override
+        public Quiz createFromParcel(Parcel in) {
+            return new Quiz(in);
+        }
+
+        @Override
+        public Quiz[] newArray(int size) {
+            return new Quiz[size];
+        }
+    };
 
     @Override
     public JSONObject pack() throws JSONException {
         JSONObject obj = new JSONObject();
 
         obj.put("name", name);
+        obj.put("category", category);
 
         JSONArray array = new JSONArray();
         for(int i = 0; i < questions.size(); i++) {
@@ -37,6 +60,7 @@ public class Quiz implements IJsonPacker {
     @Override
     public Quiz unpack(JSONObject obj) throws JSONException {
         name = obj.getString("name");
+        category = obj.getString("category");
 
         JSONArray array = obj.getJSONArray("questions");
         for(int i = 0; i < array.length(); i++) {
@@ -52,5 +76,15 @@ public class Quiz implements IJsonPacker {
     @Override
     public String toString() {
         return name;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(name);
     }
 }
