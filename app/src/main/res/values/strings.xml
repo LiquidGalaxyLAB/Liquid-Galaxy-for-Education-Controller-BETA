@@ -3,6 +3,7 @@
     <string name="app_name">LGxEdu Controller</string>
     <string name="navigate">Navigate</string>
     <string name="play">Play</string>
+    <string name="create_question">Create Question</string>
 
     <!-- Create Question -->
     <string name="question_text_edit">Question</string>
