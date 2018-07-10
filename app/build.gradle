@@ -11,7 +11,7 @@ android {
         DebugSignIn {
             keyAlias 'Testing'
             keyPassword 'LGxEDU'
-            storeFile file('C:/Users/Pau/key.jks')
+            storeFile file('C:/Users/Andreu/key.jks')
             storePassword 'LGxEDU'
         }
     }
