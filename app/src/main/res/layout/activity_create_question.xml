@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="8dp"
     android:orientation="vertical"
     tools:context=".activities.CreateQuestionActivity">
 
@@ -22,7 +23,6 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginTop="8dp"
             android:layout_weight="2"
             android:gravity="center"
             android:orientation="vertical">
@@ -31,31 +31,33 @@
                 android:id="@+id/questionTextEdit"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="7"
+                android:layout_weight="5.5"
                 android:background="#f1f1f1"
                 android:gravity="top"
                 android:hint="@string/question_text_edit"/>
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:layout_weight="0.5"
+                android:layout_marginBottom="8dp"
+
+                android:gravity="bottom"
                 android:text="@string/correct_answer"
                 android:textColor="#000000"/>
 
             <!-- Buttons & initial POI -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="2"
+                android:layout_height="wrap_content"
+
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <RadioGroup
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:layout_weight="2.5"
                     android:orientation="horizontal">
 
                     <RadioButton
@@ -120,7 +122,6 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginTop="8dp"
             android:layout_weight="2"
             android:background="#ffee00"/>
 
@@ -134,7 +135,7 @@
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="4dp"
-        android:layout_weight="4"
+        android:layout_weight="3"
         android:gravity="center"
         android:orientation="horizontal"
         android:weightSum="5">
@@ -152,21 +153,30 @@
 
     <!-- Buttons Cancel & Accept -->
     <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/main_content"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/main_content"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="wrap_content"
+        >
 
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/cancel_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:src="@drawable/ic_close_white_24dp"
+            app:backgroundTint="@color/red" />
 
         <android.support.design.widget.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_add_circle_black_48dp"
-            app:layout_anchorGravity="bottom|right|end" />
+            android:layout_gravity="start"
+            android:src="@drawable/ic_check_white_24dp"
+            app:backgroundTint="@color/green"
+            app:layout_anchor="@id/cancel_button" />
+
 
     </android.support.design.widget.CoordinatorLayout>
 
