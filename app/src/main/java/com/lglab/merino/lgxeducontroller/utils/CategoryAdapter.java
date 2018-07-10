@@ -19,13 +19,13 @@ public class CategoryAdapter extends ExpandableRecyclerViewAdapter<CategoryViewH
 
     @Override
     public CategoryViewHolder onCreateGroupViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_quiz, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_category, parent, false);
         return new CategoryViewHolder(view);
     }
 
     @Override
     public QuizViewHolder onCreateChildViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_category, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_quiz, parent, false);
         return new QuizViewHolder(view);
     }
 

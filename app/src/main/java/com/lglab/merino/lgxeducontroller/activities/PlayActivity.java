@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -48,7 +49,7 @@ public class PlayActivity extends GoogleDriveActivity {
        actionBar.setDisplayHomeAsUpEnabled(true);
        actionBar.setTitle(R.string.play);
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
 
         // RecyclerView has some built in animations to it, using the DefaultItemAnimator.
@@ -62,18 +63,24 @@ public class PlayActivity extends GoogleDriveActivity {
         adapter = new CategoryAdapter(makeCategories());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+
+        adapter.setChildClickListener(new OnCheckChildClickListener() {
+            @Override
+            public void onCheckChildCLick(View v, boolean checked, CheckedExpandableGroup group,
+                                          int childIndex) {
+            }
+        });
    }
 
 
    public List<Category> makeCategories() {
 
-       HashMap<String, Category> categories = new HashMap<String, Category>();
+       HashMap<String, Category> categories = new HashMap<>();
 
        Cursor category_cursor = POIsProvider.getAllCategories();
        while (category_cursor.moveToNext()) {
            long categoryId = category_cursor.getLong(category_cursor.getColumnIndexOrThrow("_id"));
            String categoryName = category_cursor.getString(category_cursor.getColumnIndexOrThrow("Name"));
-
            categories.put(categoryName.toLowerCase(), new Category(categoryId, categoryName, new ArrayList<>()));
        }
 
@@ -84,9 +91,8 @@ public class PlayActivity extends GoogleDriveActivity {
            try {
                Quiz newQuiz = new Quiz().unpack(new JSONObject(questData));
                newQuiz.id = quizId;
-
                Category category = categories.get(newQuiz.category.toLowerCase());
-               if(category != null) {
+               if(category == null) {
                    long id = POIsProvider.insertCategory(newQuiz.category);
                    categories.put(newQuiz.category.toLowerCase(), new Category(id, newQuiz.category, Arrays.asList(newQuiz)));
                }
@@ -95,12 +101,13 @@ public class PlayActivity extends GoogleDriveActivity {
                }
            }
            catch(Exception e) {
-
+               Log.e("TAG", e.toString());
            }
        }
 
        ArrayList<Category> orderedCategories = new ArrayList<>(categories.values());
        Collections.sort(orderedCategories, (p1, p2) -> new Long(p1.id).compareTo(p2.id));
+
        return orderedCategories;
    }
 
