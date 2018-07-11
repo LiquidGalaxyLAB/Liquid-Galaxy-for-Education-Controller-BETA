@@ -39,8 +39,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
 
                 android:gravity="bottom"
                 android:text="@string/correct_answer"
@@ -55,6 +55,7 @@
                 android:orientation="horizontal">
 
                 <RadioGroup
+                    android:id="@+id/radio_group_correct_answer"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2.5"
@@ -101,7 +102,8 @@
                     android:layout_weight="2"
                     android:background="#f1f1f1"
                     android:gravity="center"
-                    android:hint="@string/question_POI"/>
+                    android:hint="@string/question_POI"
+                    android:singleLine="true"/>
 
                 <ImageButton
                     android:id="@+id/addQuestionPOIButton"
@@ -123,8 +125,179 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2"
-            android:background="#ffee00"/>
+            android:orientation="vertical">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/answer1TextEdit"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:background="#f1f1f1"
+                    android:hint="@string/answer_1"
+                    android:singleLine="true"/>
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5" />
+
+                <EditText
+                    android:id="@+id/answer1POITextEdit"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:background="#f1f1f1"
+                    android:hint="@string/answer_1_POI"
+                    android:singleLine="true"/>
+                <ImageButton
+                    android:id="@+id/addAnswer1POIButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_add_location_black_36dp"
+                    android:tint="@color/green"/>
+
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"/>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/answer2TextEdit"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:background="#f1f1f1"
+                    android:hint="@string/answer_2"
+                    android:singleLine="true"/>
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5" />
+                <EditText
+                    android:id="@+id/answer2POITextEdit"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:background="#f1f1f1"
+                    android:hint="@string/answer_2_POI"
+                    android:singleLine="true"/>
+                <ImageButton
+                    android:id="@+id/addAnswer2POIButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_add_location_black_36dp"
+                    android:tint="@color/green" />
+
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/answer3TextEdit"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:background="#f1f1f1"
+                    android:hint="@string/answer_3"
+                    android:singleLine="true"/>
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5" />
+
+                <EditText
+                    android:id="@+id/answer3POITextEdit"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:background="#f1f1f1"
+                    android:hint="@string/answer_3_POI"
+                    android:singleLine="true"/>
+                <ImageButton
+                    android:id="@+id/addAnswer3POIButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_add_location_black_36dp"
+                    android:tint="@color/green" />
+
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/answer4TextEdit"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:background="#f1f1f1"
+                    android:hint="@string/answer_4"
+                    android:singleLine="true"/>
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5" />
+
+                <EditText
+                    android:id="@+id/answer4POITextEdit"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:background="#f1f1f1"
+                    android:hint="@string/answer_4_POI"
+                    android:singleLine="true"/>
+                <ImageButton
+                    android:id="@+id/addAnswer4POIButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_add_location_black_36dp"
+                    android:tint="@color/green" />
+
+            </LinearLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -170,6 +343,7 @@
             app:backgroundTint="@color/red" />
 
         <android.support.design.widget.FloatingActionButton
+            android:id="@+id/accept_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
