@@ -82,7 +82,7 @@ public class CreateItemFragment extends Fragment implements OnMapReadyCallback, 
     public static void setPOItoTourPOIsList(TourPOI tourPOI) throws Exception {
 
         String global_interval = viewHolderTour.globalInterval.getText().toString();
-        if (isNumeric(global_interval)) {//Frist of all, user must type the global interval time value.
+        if (isNumeric(global_interval)) {//First of all, user must type the global interval time value.
             if (!tourPOIS.contains(tourPOI)) {
 
                 FragmentActivity activity = (FragmentActivity) rootView.getContext();
@@ -189,11 +189,8 @@ public class CreateItemFragment extends Fragment implements OnMapReadyCallback, 
             getActivity().setTitle(getResources().getString(R.string.new_poi));
             //If admin user is creating a POI, first of all layout settings are shown on the screen.
             final ViewHolderPoi viewHolder = setPOILayoutSettings(inflater, container);
-            viewHolder.createPOI.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {//When POIs Creation button is clicked
-                    createPOI(viewHolder);
-                }
+            viewHolder.createPOI.setOnClickListener(v -> {//When POIs Creation button is clicked
+                createPOI(viewHolder);
             });
 
             SupportMapFragment fragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
@@ -232,8 +229,10 @@ public class CreateItemFragment extends Fragment implements OnMapReadyCallback, 
 
 
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DISTANCE, this); //You can also use LocationManager.GPS_PROVIDER and LocationManager.PASSIVE_PROVIDER
-
+        try {
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DISTANCE, this); //You can also use LocationManager.GPS_PROVIDER and LocationManager.PASSIVE_PROVIDER
+        } catch (SecurityException e){
+        }
         return rootView;
     }
 
@@ -244,7 +243,10 @@ public class CreateItemFragment extends Fragment implements OnMapReadyCallback, 
         map.getUiSettings().setRotateGesturesEnabled(true);
         map.getUiSettings().setZoomControlsEnabled(true);
         map.getUiSettings().setMapToolbarEnabled(true);
-        map.setMyLocationEnabled(true);
+        try {
+            map.setMyLocationEnabled(true);
+        } catch (SecurityException e){
+        }
         map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         map.setOnMapLongClickListener(this);
         map.setOnMarkerDragListener(this);
@@ -418,7 +420,9 @@ public class CreateItemFragment extends Fragment implements OnMapReadyCallback, 
                 }
             }
         } else {
-            fillCategorySpinner(viewHolder.categoryID);
+            try {
+            fillCategorySpinner(viewHolder.categoryID); }
+            catch(Exception e){}
         }
         //On the screen there is a button to cancel the creation and return to the main administration view
         setCancelComeBackBehaviour(viewHolder.cancel);

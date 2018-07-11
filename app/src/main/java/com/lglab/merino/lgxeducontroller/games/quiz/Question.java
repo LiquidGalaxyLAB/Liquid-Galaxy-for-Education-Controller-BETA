@@ -21,6 +21,16 @@ public class Question implements IJsonPacker {
         pois = new POI[MAX_ANSWERS];
     }
 
+    public Question(int id, String question, int correctAnswer, String[] answers, String information, POI[] answer_pois, POI initialPOI) {
+        this.id = id;
+        this.question = question;
+        this.correctAnswer = correctAnswer;
+        System.arraycopy(answers, 0, this.answers, 0, answers.length);
+        this.information = information;
+        System.arraycopy(answer_pois, 0, this.pois, 0, answer_pois.length);
+        this.initialPOI = initialPOI;
+    }
+
     @Override
     public JSONObject pack() throws JSONException {
         JSONObject obj = new JSONObject();

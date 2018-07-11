@@ -55,6 +55,7 @@
                 android:orientation="horizontal">
 
                 <RadioGroup
+                    android:id="@+id/radio_group_correct_answer"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2.5"
@@ -342,7 +343,7 @@
             app:backgroundTint="@color/red" />
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/accepr_button"
+            android:id="@+id/accept_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
