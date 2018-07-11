@@ -25,6 +25,7 @@ import com.lglab.merino.lgxeducontroller.legacy.data.POIsDbHelper;
 import com.lglab.merino.lgxeducontroller.legacy.data.POIsProvider;
 import com.lglab.merino.lgxeducontroller.utils.Category;
 import com.lglab.merino.lgxeducontroller.utils.CategoryAdapter;
+import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 
 import org.json.JSONObject;
 
@@ -33,12 +34,17 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class PlayActivity extends GoogleDriveActivity {
 
     public CategoryAdapter adapter;
+    RecyclerView recyclerView;
+
+    private String searchInput = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +55,7 @@ public class PlayActivity extends GoogleDriveActivity {
        actionBar.setDisplayHomeAsUpEnabled(true);
        actionBar.setTitle(R.string.play);
 
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        recyclerView = findViewById(R.id.recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
 
         // RecyclerView has some built in animations to it, using the DefaultItemAnimator.
@@ -60,16 +66,11 @@ public class PlayActivity extends GoogleDriveActivity {
             ((DefaultItemAnimator) animator).setSupportsChangeAnimations(false);
         }
 
-        adapter = new CategoryAdapter(makeCategories());
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
 
-        adapter.setChildClickListener(new OnCheckChildClickListener() {
-            @Override
-            public void onCheckChildCLick(View v, boolean checked, CheckedExpandableGroup group,
-                                          int childIndex) {
-            }
-        });
+        reloadAdapter();
+
+        findViewById(R.id.import_from_drive).setOnClickListener(view -> importQuiz());
    }
 
 
@@ -91,6 +92,10 @@ public class PlayActivity extends GoogleDriveActivity {
            try {
                Quiz newQuiz = new Quiz().unpack(new JSONObject(questData));
                newQuiz.id = quizId;
+
+               if(searchInput != "" && !newQuiz.toString().toLowerCase().startsWith(searchInput.toLowerCase()))
+                   continue;
+
                Category category = categories.get(newQuiz.category.toLowerCase());
                if(category == null) {
                    long id = POIsProvider.insertCategory(newQuiz.category);
@@ -105,6 +110,16 @@ public class PlayActivity extends GoogleDriveActivity {
            }
        }
 
+       //REMOVE EMPTY CATEGORIES
+       Iterator<Map.Entry<String,Category>> iter = categories.entrySet().iterator();
+       while (iter.hasNext()) {
+           Map.Entry<String,Category> entry = iter.next();
+           if(entry.getValue().getItems().size() == 0){
+               iter.remove();
+           }
+       }
+
+       //ORDER CATEGORIES BY ID
        ArrayList<Category> orderedCategories = new ArrayList<>(categories.values());
        Collections.sort(orderedCategories, (p1, p2) -> new Long(p1.id).compareTo(p2.id));
 
@@ -121,11 +136,12 @@ public class PlayActivity extends GoogleDriveActivity {
             new Quiz().unpack(new JSONObject(input)); //Checking if the json is fine ;)
 
             POIsProvider.insertQuiz(input);
-            //Reload Adapter
+            reloadAdapter();
 
             showMessage("Quiz imported successfully");
         }
         catch(Exception e) {
+            showMessage(e.toString());
             showMessage("Couldn't import the file");
         }
     }
@@ -147,13 +163,28 @@ public class PlayActivity extends GoogleDriveActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 //adapter.getFilter().filter(newText);
-
+                searchInput = newText;
+                reloadAdapter();
                 return false;
             }
         });
 
 
         return super.onCreateOptionsMenu(menu);
+    }
+
+    private void reloadAdapter() {
+        List<Category> categories = makeCategories();
+        adapter = new CategoryAdapter(categories);
+        recyclerView.setAdapter(adapter);
+
+        for (int i = adapter.getGroups().size()-1; i >=0 ; i--) {
+            if(adapter.isGroupExpanded(i)){
+                continue;
+            }
+            adapter.toggleGroup(i);
+        }
+
     }
    
     @Override

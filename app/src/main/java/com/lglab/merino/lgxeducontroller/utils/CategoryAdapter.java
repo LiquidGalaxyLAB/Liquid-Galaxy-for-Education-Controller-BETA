@@ -34,6 +34,7 @@ public class CategoryAdapter extends ExpandableRecyclerViewAdapter<CategoryViewH
                                       int childIndex) {
         final Quiz quiz = ((Category) group).getItems().get(childIndex);
         holder.onBind(quiz);
+
     }
 
     @Override

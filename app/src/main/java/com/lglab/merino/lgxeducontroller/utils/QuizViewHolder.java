@@ -10,6 +10,7 @@ import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder;
 public class QuizViewHolder extends ChildViewHolder {
 
     private TextView quizName;
+    public Quiz quiz;
 
     public QuizViewHolder(View itemView) {
         super(itemView);
@@ -18,5 +19,6 @@ public class QuizViewHolder extends ChildViewHolder {
 
     public void onBind(Quiz quiz) {
         quizName.setText(quiz.toString());
+        this.quiz = quiz;
     }
 }
