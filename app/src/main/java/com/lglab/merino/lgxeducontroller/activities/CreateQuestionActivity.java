@@ -49,14 +49,11 @@ public class CreateQuestionActivity extends AppCompatActivity {
 
     private void questionPOIButton() {
         findViewById(R.id.addQuestionPOIButton).setOnClickListener(view -> {
-            try {
+
                 Intent createPoiIntent = new Intent(this, CreateItemActivity.class);
                 createPoiIntent.putExtra("CREATION_TYPE", "POI");
                 startActivity(createPoiIntent);
-            }
-            catch(Exception e) {
-                Log.d("HEYHEY", e.toString());
-            }
+
         });
     }
 

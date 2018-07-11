@@ -421,7 +421,7 @@ public class CreateItemFragment extends Fragment implements OnMapReadyCallback, 
             }
         } else {
             try {
-            fillCategorySpinner(viewHolder.categoryID); }
+                fillCategorySpinner(viewHolder.categoryID); }
             catch(Exception e){}
         }
         //On the screen there is a button to cancel the creation and return to the main administration view

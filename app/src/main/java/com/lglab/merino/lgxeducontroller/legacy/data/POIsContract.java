@@ -18,7 +18,7 @@ public class POIsContract {
     // relationship between a domain name and its website.  A convenient string to use for the
     // content authority is the package name for the app, which is guaranteed to be unique on the
     // device.
-    public static final String CONTENT_AUTHORITY = "com.gsoc.ijosa.liquidgalaxycontroller";
+    public static final String CONTENT_AUTHORITY = "com.lglab.merino.lgxeducontroller";
 
     // Use CONTENT_AUTHORITY to create the base of all URI's which apps will use to contact
     // the content provider.
@@ -41,7 +41,7 @@ public class POIsContract {
 
     public static final class POIEntry implements BaseColumns {
 
-        //CONTENT_URI = content://com.gsoc.ijosa.liquidgalaxycontroller/poi/
+        //CONTENT_URI = content://com.lglab.merino.lgxeducontroller/poi/
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_POI).build();
 
         public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_POI;
@@ -175,7 +175,7 @@ public class POIsContract {
 
     public static final class CategoryEntry implements BaseColumns {
 
-        //CONTENT_URI = content://com.gsoc.ijosa.liquidgalaxycontroller/category/
+        //CONTENT_URI = content://com.lglab.merino.lgxeducontroller/category/
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_CATEGORY).build();
 
         public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CATEGORY;
@@ -394,7 +394,7 @@ public class POIsContract {
     //TAULA TOURS
     public static final class TourEntry implements BaseColumns {
 
-        //CONTENT_URI = content://com.gsoc.ijosa.liquidgalaxycontroller/tour/
+        //CONTENT_URI = content://com.lglab.merino.lgxeducontroller/tour/
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_TOUR).build();
 
         public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TOUR;
@@ -476,7 +476,7 @@ public class POIsContract {
 
     //TAULA TOURPOI
     public static final class TourPOIsEntry implements BaseColumns {
-        //CONTENT_URI = content://com.gsoc.ijosa.liquidgalaxycontroller/tourPois/
+        //CONTENT_URI = content://com.lglab.merino.lgxeducontroller/tourPois/
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_TOUR_POIS).build();
 
         public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TOUR_POIS;
@@ -526,7 +526,7 @@ public class POIsContract {
 
     //TAULA LG_TASKS
     public static final class LGTaskEntry implements BaseColumns {
-        //CONTENT_URI = content://com.gsoc.ijosa.liquidgalaxycontroller/lgTask/
+        //CONTENT_URI = content://com.lglab.merino.lgxeducontroller/lgTask/
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_LG_TASK).build();
 
         public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_LG_TASK;
