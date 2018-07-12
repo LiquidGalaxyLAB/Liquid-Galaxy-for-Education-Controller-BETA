@@ -10,6 +10,7 @@ import com.lglab.merino.lgxeducontroller.activities.GoogleDriveActivity;
 import com.lglab.merino.lgxeducontroller.activities.PlayActivityOld;
 import com.lglab.merino.lgxeducontroller.activities.QuizActivity;
 import com.lglab.merino.lgxeducontroller.games.quiz.Quiz;
+import com.lglab.merino.lgxeducontroller.games.quiz.QuizManager;
 import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder;
 
 public class QuizViewHolder extends ChildViewHolder {
@@ -27,8 +28,12 @@ public class QuizViewHolder extends ChildViewHolder {
         this.quiz = quiz;
         this.itemView.setOnClickListener(arg0 -> {
             GoogleDriveActivity activity = (GoogleDriveActivity) itemView.getContext();
-            activity.showMessage(quiz.getNameForExporting());
-            activity.startActivity(new Intent(activity, QuizActivity.class));
+
+            QuizManager.getInstance().startQuiz(quiz);
+
+            Intent intent = new Intent(activity, QuizActivity.class);
+            activity.startActivity(intent);
+
         });
     }
 }
