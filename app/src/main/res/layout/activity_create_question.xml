@@ -96,12 +96,8 @@
                     android:id="@+id/questionPOITextEdit"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginTop="8dp"
                     android:layout_weight="2"
                     android:background="#f1f1f1"
-                    android:gravity="center"
                     android:hint="@string/question_POI"
                     android:singleLine="true"/>
 
@@ -306,18 +302,15 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="4dp"
         android:layout_weight="3"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:weightSum="5">
+        android:weightSum="5"
+        android:gravity="center">
 
         <EditText
             android:id="@+id/informationTextEdit"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
             android:layout_weight="4.25"
+            android:layout_height="match_parent"
             android:background="#f1f1f1"
             android:gravity="top"
             android:hint="@string/bubble_text"/>
@@ -328,28 +321,37 @@
     <android.support.design.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/main_content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/cancel_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:src="@drawable/ic_close_white_24dp"
-            app:backgroundTint="@color/red" />
+        android:layout_height="0dp"
+        android:layout_weight="0.7"
+        android:layout_margin="8dp">
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/accept_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
             android:src="@drawable/ic_check_white_24dp"
             app:backgroundTint="@color/green"
-            app:layout_anchor="@id/cancel_button" />
+            android:id="@+id/accept_button"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            app:layout_anchor="@id/cancel_button"
+            app:layout_anchorGravity="center_vertical"
+
+            android:layout_gravity="center_vertical"
+
+            />
+
+        <android.support.design.widget.FloatingActionButton
+            android:src="@drawable/ic_close_white_24dp"
+            android:id="@+id/cancel_button"
+            app:backgroundTint="@color/red"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_gravity="right|center_vertical"
+
+            />
 
 
     </android.support.design.widget.CoordinatorLayout>

@@ -19,6 +19,9 @@
     <string name="answer_3_POI">Answer 3 POI</string>
     <string name="answer_4_POI">Answer 4 POI</string>
 
+    <string name="missing_info_exception">Missing the following input: </string>
+    <!-- End Create Question -->
+
     <!-- Legacy -->
     <string name="tittle">Liquid Galaxy Controller</string>
     <string name="action_settings">Settings</string>
