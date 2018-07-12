@@ -61,10 +61,10 @@ public class PlayActivity extends GoogleDriveActivity {
         // RecyclerView has some built in animations to it, using the DefaultItemAnimator.
         // Specifically when you call notifyItemChanged() it does a fade animation for the changing
         // of the data in the ViewHolder. If you would like to disable this you can use the following:
-        RecyclerView.ItemAnimator animator = recyclerView.getItemAnimator();
+        /*RecyclerView.ItemAnimator animator = recyclerView.getItemAnimator();
         if (animator instanceof DefaultItemAnimator) {
             ((DefaultItemAnimator) animator).setSupportsChangeAnimations(false);
-        }
+        }*/
 
         recyclerView.setLayoutManager(layoutManager);
 
@@ -125,9 +125,6 @@ public class PlayActivity extends GoogleDriveActivity {
 
        return orderedCategories;
    }
-
-
-
 
 
     @Override
