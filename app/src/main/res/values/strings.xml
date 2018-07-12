@@ -3,12 +3,21 @@
     <string name="app_name">LGxEdu Controller</string>
     <string name="navigate">Navigate</string>
     <string name="play">Play</string>
+    <string name="create_question">Create Question</string>
 
     <!-- Create Question -->
     <string name="question_text_edit">Question</string>
     <string name="correct_answer">Correct answer:</string>
     <string name="question_POI">Question POI</string>
     <string name="bubble_text">Additional information for the answer</string>
+    <string name="answer_1">Answer 1</string>
+    <string name="answer_2">Answer 2</string>
+    <string name="answer_3">Answer 3</string>
+    <string name="answer_4">Answer 4</string>
+    <string name="answer_1_POI">Answer 1 POI</string>
+    <string name="answer_2_POI">Answer 2 POI</string>
+    <string name="answer_3_POI">Answer 3 POI</string>
+    <string name="answer_4_POI">Answer 4 POI</string>
 
     <!-- Legacy -->
     <string name="tittle">Liquid Galaxy Controller</string>
