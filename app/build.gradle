@@ -7,6 +7,14 @@ repositories {
 }
 
 android {
+    signingConfigs {
+        DebugSignIn {
+            keyAlias 'Testing'
+            keyPassword 'LGxEDU'
+            storeFile file('/home/merino/key.jks')
+            storePassword 'LGxEDU'
+        }
+    }
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.lglab.merino.lgxeducontroller"
@@ -21,6 +29,9 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            signingConfig signingConfigs.DebugSignIn
         }
     }
     buildToolsVersion '27.0.3'
@@ -49,4 +60,5 @@ dependencies {
     implementation files('libs/jsch-0.1.53.jar')
     implementation files('libs/jzlib-1.1.1.jar')
     implementation 'com.github.kanytu:android-parallax-recyclerview:v1.7'
+    implementation 'com.thoughtbot:expandablerecyclerview:1.3'
 }

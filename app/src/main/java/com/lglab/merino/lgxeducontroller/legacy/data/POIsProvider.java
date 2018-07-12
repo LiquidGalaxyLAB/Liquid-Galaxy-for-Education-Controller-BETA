@@ -101,6 +101,11 @@ public class POIsProvider extends ContentProvider {
         return mOpenHelper.getReadableDatabase().rawQuery(sql, new String[]{});
     }
 
+    public static Cursor getAllCategories() {
+        String sql = "SELECT c._id, c.Name FROM quiz_category c";
+        return mOpenHelper.getReadableDatabase().rawQuery(sql, new String[]{});
+    }
+
     public static Cursor queryQuiz(int quizId) {
         String sql = "SELECT q._id, q.Data FROM quiz q WHERE q._ID = ?";
         return mOpenHelper.getReadableDatabase().rawQuery(sql, new String[]{String.valueOf(quizId)});
@@ -118,6 +123,12 @@ public class POIsProvider extends ContentProvider {
         ContentValues values = new ContentValues();
         values.put("data", data);
         return mOpenHelper.getReadableDatabase().insert("quiz", "", values);
+    }
+
+    public static long insertCategory(String data) {
+        ContentValues values = new ContentValues();
+        values.put("Name", data);
+        return mOpenHelper.getReadableDatabase().insert("quiz_category", "", values);
     }
 
     public boolean onCreate() {

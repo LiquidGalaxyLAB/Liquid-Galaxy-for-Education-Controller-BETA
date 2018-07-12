@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 import com.lglab.merino.lgxeducontroller.R;
 
@@ -20,6 +22,30 @@ public class MainActivity extends GoogleDriveActivity {
         context = MainActivity.this;
         button_navigate();
         button_play();
+        button_prova_ALEKS();
+        button_albert();
+    }
+
+    private void button_prova_ALEKS() {
+        Button aleks = (Button)findViewById(R.id.aleks_button);
+        aleks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, CreateQuestionActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void button_albert() {
+        Button albert = (Button)findViewById(R.id.albert_button);
+        albert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, GameManagerActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void button_navigate() {
