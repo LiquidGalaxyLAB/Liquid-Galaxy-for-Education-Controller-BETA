@@ -3,6 +3,7 @@ package com.lglab.merino.lgxeducontroller.activities;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -25,10 +26,15 @@ import github.chenupt.springindicator.viewpager.ScrollerViewPager;
 
 import com.lglab.merino.lgxeducontroller.R;
 import com.lglab.merino.lgxeducontroller.fragments.QuestionFragment;
+import com.lglab.merino.lgxeducontroller.games.quiz.Quiz;
+import com.lglab.merino.lgxeducontroller.games.quiz.QuizManager;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class QuizActivity extends AppCompatActivity {
 
@@ -42,11 +48,12 @@ public class QuizActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        viewPager = (ScrollerViewPager) findViewById(R.id.view_pager);
-        SpringIndicator springIndicator = (SpringIndicator) findViewById(R.id.indicator);
+        viewPager = findViewById(R.id.view_pager);
+        SpringIndicator springIndicator = findViewById(R.id.indicator);
 
         PagerModelManager manager = new PagerModelManager();
-        manager.addCommonFragment(QuestionFragment.class, getBgRes(), getTitles());
+        manager.addCommonFragment(QuestionFragment.class, getQuestionsIds(), getTitles());
+
         ModelPagerAdapter adapter = new ModelPagerAdapter(getSupportFragmentManager(), manager);
         viewPager.setAdapter(adapter);
         viewPager.fixScrollSpeed();
@@ -56,11 +63,27 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private List<String> getTitles(){
-        return Arrays.asList("1", "2", "3", "4");
+        int size = QuizManager.getInstance().getQuiz().questions.size();
+
+        ArrayList<String> list = new ArrayList<>(size);
+
+        for(int i = 0; i < size; i++) {
+            list.add(String.valueOf(i + 1));
+        }
+
+        return list;
     }
 
-    private List<Integer> getBgRes(){
-        return Arrays.asList(R.drawable.bg1, R.drawable.bg2, R.drawable.bg3, R.drawable.bg4);
+    private List<Integer> getQuestionsIds(){
+        int size = QuizManager.getInstance().getQuiz().questions.size();
+
+        ArrayList<Integer> list = new ArrayList<>(size);
+
+        for(int i = 0; i < size; i++) {
+            list.add(i);
+        }
+
+        return list;
     }
 
     @Override

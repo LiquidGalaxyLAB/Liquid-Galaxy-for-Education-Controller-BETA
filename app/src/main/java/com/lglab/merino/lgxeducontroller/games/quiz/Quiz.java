@@ -12,7 +12,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class Quiz implements IJsonPacker, Parcelable {
-    private ArrayList<Question> questions;
+    public ArrayList<Question> questions;
     private String name;
     public long id;
     public String category;

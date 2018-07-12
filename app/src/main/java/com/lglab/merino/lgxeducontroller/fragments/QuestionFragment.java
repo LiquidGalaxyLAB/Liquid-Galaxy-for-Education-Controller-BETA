@@ -11,13 +11,12 @@ import android.widget.ImageView;
 import com.lglab.merino.lgxeducontroller.R;
 
 public class QuestionFragment extends Fragment{
-    private int bgRes;
-    private ImageView imageView;
+    private int questionNumber;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        bgRes = getArguments().getInt("data");
+        questionNumber = getArguments().getInt("data");
     }
 
     @Override
@@ -29,7 +28,7 @@ public class QuestionFragment extends Fragment{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        imageView = getView().findViewById(R.id.image);
-        imageView.setBackgroundResource(bgRes);
+        //imageView = getView().findViewById(R.id.image);
+        //imageView.setBackgroundResource(bgRes);
     }
 }
