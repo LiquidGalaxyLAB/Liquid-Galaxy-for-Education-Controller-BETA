@@ -18,17 +18,21 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import github.chenupt.multiplemodel.viewpager.ModelPagerAdapter;
+import github.chenupt.multiplemodel.viewpager.PagerModelManager;
+import github.chenupt.springindicator.SpringIndicator;
+import github.chenupt.springindicator.viewpager.ScrollerViewPager;
 
 import com.lglab.merino.lgxeducontroller.R;
+import com.lglab.merino.lgxeducontroller.fragments.QuestionFragment;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class QuizActivity extends AppCompatActivity {
 
-    private ViewPager viewPager;
-    private MyViewPagerAdapter myViewPagerAdapter;
-    private LinearLayout dotsLayout;
-    private TextView[] dots;
-    private int[] layouts;
-    private Button btnLeft, btnRight;
+    ScrollerViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,146 +42,31 @@ public class QuizActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        viewPager = findViewById(R.id.view_pager);
-        dotsLayout = findViewById(R.id.layoutDots);
-        btnLeft = findViewById(R.id.btn_left);
-        btnRight = findViewById(R.id.btn_right);
+        viewPager = (ScrollerViewPager) findViewById(R.id.view_pager);
+        SpringIndicator springIndicator = (SpringIndicator) findViewById(R.id.indicator);
 
-        layouts = new int[]{
-                R.layout.activity_slide_quiz,
-                R.layout.activity_slide_quiz,
-                R.layout.activity_slide_quiz,
-        };
+        PagerModelManager manager = new PagerModelManager();
+        manager.addCommonFragment(QuestionFragment.class, getBgRes(), getTitles());
+        ModelPagerAdapter adapter = new ModelPagerAdapter(getSupportFragmentManager(), manager);
+        viewPager.setAdapter(adapter);
+        viewPager.fixScrollSpeed();
 
-        viewPagerPageChangeListener.onPageSelected(0);
-
-        myViewPagerAdapter = new MyViewPagerAdapter();
-        viewPager.setAdapter(myViewPagerAdapter);
-
-        viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
-
-        btnLeft.setOnClickListener(v -> {
-
-            int current = getItem(-1);
-            if (current >= 0) {
-                viewPager.setCurrentItem(current);
-            }
-        });
-
-        btnRight.setOnClickListener(v -> {
-
-            int current = getItem(1);
-            if (current < layouts.length) {
-                viewPager.setCurrentItem(current);
-            } else {
-                finish();
-            }
-        });
+        // just set viewPager
+        springIndicator.setViewPager(viewPager);
     }
 
-    private void addBottomDots(int currentPage) {
-        dots = new TextView[layouts.length];
-
-        int[] colorsActive = getResources().getIntArray(R.array.array_dot_active);
-        int[] colorsInactive = getResources().getIntArray(R.array.array_dot_inactive);
-
-        dotsLayout.removeAllViews();
-        for (int i = 0; i < dots.length; i++) {
-            dots[i] = new TextView(this);
-            dots[i].setText(Html.fromHtml("&#8226;"));
-            dots[i].setTextSize(35);
-            dots[i].setTextColor(colorsInactive[currentPage]);
-            dotsLayout.addView(dots[i]);
-        }
-
-        if (dots.length > 0)
-            dots[currentPage].setTextColor(colorsActive[currentPage]);
+    private List<String> getTitles(){
+        return Arrays.asList("1", "2", "3", "4");
     }
 
-    private int getItem(int i) {
-        return viewPager.getCurrentItem() + i;
+    private List<Integer> getBgRes(){
+        return Arrays.asList(R.drawable.bg1, R.drawable.bg2, R.drawable.bg3, R.drawable.bg4);
     }
-
-    ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
-
-        @Override
-        public void onPageSelected(int position) {
-            addBottomDots(position);
-
-            if(position == layouts.length - 1) {
-                btnRight.setText("Finish");
-                btnRight.setVisibility(View.VISIBLE);
-
-                btnLeft.setText("Previous");
-                btnLeft.setVisibility(View.VISIBLE);
-            }
-            else if(position == 0) {
-                btnRight.setText("Next");
-                btnRight.setVisibility(View.VISIBLE);
-
-                btnLeft.setVisibility(View.GONE);
-            }
-            else {
-                btnRight.setText("Next");
-                btnRight.setVisibility(View.VISIBLE);
-
-                btnLeft.setText("Previous");
-                btnLeft.setVisibility(View.VISIBLE);
-            }
-        }
-
-        @Override
-        public void onPageScrolled(int arg0, float arg1, int arg2) {
-
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int arg0) {
-
-        }
-    };
 
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
-    }
-
-    /**
-     * View pager adapter
-     */
-    public class MyViewPagerAdapter extends PagerAdapter {
-        private LayoutInflater layoutInflater;
-
-        public MyViewPagerAdapter() {
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-            View view = layoutInflater.inflate(layouts[position], container, false);
-            container.addView(view);
-
-            return view;
-        }
-
-        @Override
-        public int getCount() {
-            return layouts.length;
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object obj) {
-            return view == obj;
-        }
-
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            View view = (View) object;
-            container.removeView(view);
-        }
     }
 }
 

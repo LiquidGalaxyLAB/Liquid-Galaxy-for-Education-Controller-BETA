@@ -23,8 +23,8 @@ public class LGUtils {
     public static Session getSession(Activity activity) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         String user = prefs.getString("User", "lg");
-        String password = prefs.getString("Password", "lqgalaxy");
-        String hostname = prefs.getString("HostName", "172.26.17.21");
+        String password = prefs.getString("Password", "lg");
+        String hostname = prefs.getString("HostName", "10.160.67.56");
         int port = Integer.parseInt(prefs.getString("Port", "22"));
 
         JSch jsch = new JSch();
@@ -67,6 +67,4 @@ public class LGUtils {
 
         return baos.toString();
     }
-
-
 }
