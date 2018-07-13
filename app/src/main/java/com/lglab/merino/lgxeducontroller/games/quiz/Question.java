@@ -9,7 +9,7 @@ public class Question implements IJsonPacker {
     public static final int MAX_ANSWERS = 4;
 
     private int id;
-    private String question;
+    public String question;
     private int correctAnswer;
     private String[] answers;
     private String information;

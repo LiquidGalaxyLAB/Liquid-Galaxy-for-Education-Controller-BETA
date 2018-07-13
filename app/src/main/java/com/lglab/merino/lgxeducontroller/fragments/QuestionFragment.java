@@ -7,16 +7,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.lglab.merino.lgxeducontroller.R;
+import com.lglab.merino.lgxeducontroller.games.quiz.Question;
+import com.lglab.merino.lgxeducontroller.games.quiz.QuizManager;
 
 public class QuestionFragment extends Fragment{
     private int questionNumber;
+    private Question question;
+    private TextView textView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         questionNumber = getArguments().getInt("data");
+        question = QuizManager.getInstance().getQuiz().questions.get(questionNumber);
     }
 
     @Override
@@ -28,7 +34,7 @@ public class QuestionFragment extends Fragment{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //imageView = getView().findViewById(R.id.image);
-        //imageView.setBackgroundResource(bgRes);
+        textView = getView().findViewById(R.id.question_title);
+        textView.setText(question.question);
     }
 }
