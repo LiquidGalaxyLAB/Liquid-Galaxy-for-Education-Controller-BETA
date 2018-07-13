@@ -96,6 +96,11 @@ public class POIsProvider extends ContentProvider {
         return mOpenHelper.getReadableDatabase().rawQuery(sql, new String[]{String.valueOf(poiId)});
     }
 
+    public static Cursor allPOIs() {
+        String sql = "SELECT p.* FROM POI p";
+        return mOpenHelper.getReadableDatabase().rawQuery(sql, new String[]{});
+    }
+
     public static Cursor getAllQuizes() {
         String sql = "SELECT q._id, q.Data FROM quiz q";
         return mOpenHelper.getReadableDatabase().rawQuery(sql, new String[]{});

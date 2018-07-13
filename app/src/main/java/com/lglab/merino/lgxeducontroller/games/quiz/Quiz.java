@@ -87,4 +87,8 @@ public class Quiz implements IJsonPacker, Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(name);
     }
+
+    public void addQuestion(Question question) {
+        questions.add(question);
+    }
 }
