@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:layout_margin="8dp"
     android:orientation="vertical"
+    android:imeOptions="flagNoExtractUi"
     tools:context=".activities.CreateQuestionActivity">
 
 
@@ -143,7 +144,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="0.5" />
 
-                <EditText
+                <AutoCompleteTextView
                     android:id="@+id/answer1POITextEdit"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"

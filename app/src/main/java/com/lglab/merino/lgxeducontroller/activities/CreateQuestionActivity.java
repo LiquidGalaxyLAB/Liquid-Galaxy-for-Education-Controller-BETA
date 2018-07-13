@@ -2,25 +2,41 @@ package com.lglab.merino.lgxeducontroller.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.common.internal.Hide;
 import com.lglab.merino.lgxeducontroller.R;
 import com.lglab.merino.lgxeducontroller.games.quiz.Question;
 import com.lglab.merino.lgxeducontroller.games.quiz.Quiz;
 import com.lglab.merino.lgxeducontroller.legacy.CreateItemActivity;
+import com.lglab.merino.lgxeducontroller.legacy.data.POIsProvider;
+import com.lglab.merino.lgxeducontroller.utils.Category;
 import com.lglab.merino.lgxeducontroller.utils.Exceptions.MissingInformationException;
 import com.lglab.merino.lgxeducontroller.legacy.beans.POI;
+
+import org.json.JSONObject;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class CreateQuestionActivity extends AppCompatActivity {
 
     private Context context;
     private Quiz quiz;
+    private HashMap<Long, POI> poiList;
+    private ArrayAdapter poiStringList;
 
     private EditText questionEditText;
     private RadioGroup correctAnswerRadioButton;
@@ -31,7 +47,7 @@ public class CreateQuestionActivity extends AppCompatActivity {
     private EditText textAnswer3;
     private EditText textAnswer4;
 
-    private EditText textPOI1;
+    private AutoCompleteTextView textPOI1;
     private EditText textPOI2;
     private EditText textPOI3;
     private EditText textPOI4;
@@ -47,6 +63,13 @@ public class CreateQuestionActivity extends AppCompatActivity {
         actionBar.setTitle(R.string.create_question);
         context = CreateQuestionActivity.this;
 
+        poiStringList = new ArrayAdapter(context, android.R.layout.select_dialog_item);
+
+        getPOIStringsFromDatabase();
+        textPOI1 = (AutoCompleteTextView) findViewById(R.id.answer1POITextEdit);
+        textPOI1.setAdapter(poiStringList);
+
+
         questionPOIButton();
         answer1POIButton();
         answer2POIButton();
@@ -55,6 +78,39 @@ public class CreateQuestionActivity extends AppCompatActivity {
 
         acceptButton();
 
+    }
+
+    private void getPOIStringsFromDatabase() {
+        poiList = new HashMap<>();
+        Cursor poiCursor = POIsProvider.getAllPOIs();
+        while (poiCursor.moveToNext()) {
+            long poiID = poiCursor.getLong(poiCursor.getColumnIndexOrThrow("_id"));
+            String name = poiCursor.getString(poiCursor.getColumnIndexOrThrow("Name"));
+            String visitedPlace = poiCursor.getString(poiCursor.getColumnIndexOrThrow("Visited_Place"));
+            long longitude = poiCursor.getLong(poiCursor.getColumnIndexOrThrow("Longitude"));
+            long altitude = poiCursor.getLong(poiCursor.getColumnIndexOrThrow("Altitude"));
+            long latitude = poiCursor.getLong(poiCursor.getColumnIndexOrThrow("Heading"));
+            long tilt = poiCursor.getLong(poiCursor.getColumnIndexOrThrow("Tilt"));
+            long range = poiCursor.getLong(poiCursor.getColumnIndexOrThrow("Range"));
+            String altitudeMode = poiCursor.getString(poiCursor.getColumnIndexOrThrow("Altitude_Mode"));
+            boolean hidden = poiCursor.getInt(poiCursor.getColumnIndexOrThrow("Hide")) == 1;
+            int categoryID = poiCursor.getInt(poiCursor.getColumnIndexOrThrow("Category"));
+
+            try {
+                POI newPOI = new POI(poiID, name, visitedPlace, longitude, latitude, altitude, tilt, range, altitudeMode, hidden, categoryID);
+                poiList.put(poiID, newPOI);
+            }
+            catch(Exception e) {
+                Log.e("BRUH", e.toString());
+            }
+
+            Iterator it = poiList.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry) it.next();
+                POI temp = (POI) pair.getValue();
+                poiStringList.add(temp.getName());
+            }
+        }
     }
 
     private void questionPOIButton() {
@@ -103,7 +159,7 @@ public class CreateQuestionActivity extends AppCompatActivity {
         textAnswer3 = (EditText) findViewById(R.id.answer3TextEdit);
         textAnswer4 = (EditText) findViewById(R.id.answer4TextEdit);
 
-        textPOI1 = (EditText) findViewById(R.id.answer1POITextEdit);
+        textPOI1 = (AutoCompleteTextView) findViewById(R.id.answer1POITextEdit);
         textPOI2 = (EditText) findViewById(R.id.answer2POITextEdit);
         textPOI3 = (EditText) findViewById(R.id.answer3POITextEdit);
         textPOI4 = (EditText) findViewById(R.id.answer4POITextEdit);

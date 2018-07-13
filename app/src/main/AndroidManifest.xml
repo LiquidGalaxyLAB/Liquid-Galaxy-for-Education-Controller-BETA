@@ -45,7 +45,7 @@
         </activity>
         <activity android:name=".activities.NavigateActivity" android:screenOrientation="sensorLandscape"/>
         <activity android:name=".activities.PlayActivity" android:screenOrientation="sensorLandscape"/>
-        <activity android:name=".activities.CreateQuestionActivity" android:screenOrientation="sensorLandscape"/>
+        <activity android:name=".activities.CreateQuestionActivity" />
         <activity android:name=".legacy.CreateItemActivity" android:screenOrientation="sensorLandscape"/>
 
         <!-- Google Maps Fragment API Key Data -->
