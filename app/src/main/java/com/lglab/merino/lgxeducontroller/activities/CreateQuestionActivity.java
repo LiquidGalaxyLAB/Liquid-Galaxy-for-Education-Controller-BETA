@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.lglab.merino.lgxeducontroller.R;
 import com.lglab.merino.lgxeducontroller.games.quiz.Question;
+import com.lglab.merino.lgxeducontroller.games.quiz.Quiz;
 import com.lglab.merino.lgxeducontroller.legacy.CreateItemActivity;
 import com.lglab.merino.lgxeducontroller.utils.Exceptions.MissingInformationException;
 import com.lglab.merino.lgxeducontroller.legacy.beans.POI;
@@ -19,6 +20,8 @@ import com.lglab.merino.lgxeducontroller.legacy.beans.POI;
 public class CreateQuestionActivity extends AppCompatActivity {
 
     private Context context;
+    private Quiz quiz;
+
     private EditText questionEditText;
     private RadioGroup correctAnswerRadioButton;
     private EditText questionPOI;
@@ -56,11 +59,9 @@ public class CreateQuestionActivity extends AppCompatActivity {
 
     private void questionPOIButton() {
         findViewById(R.id.addQuestionPOIButton).setOnClickListener(view -> {
-
                 Intent createPoiIntent = new Intent(context, CreateItemActivity.class);
                 createPoiIntent.putExtra("CREATION_TYPE", "POI");
                 startActivity(createPoiIntent);
-
         });
     }
 
@@ -92,7 +93,7 @@ public class CreateQuestionActivity extends AppCompatActivity {
         });
     }
 
-    private Question acceptButton() {
+    private void acceptButton() {
         questionEditText = (EditText) findViewById(R.id.questionTextEdit);
         correctAnswerRadioButton = (RadioGroup) findViewById(R.id.radio_group_correct_answer);
         questionPOI = (EditText) findViewById(R.id.questionPOITextEdit);
@@ -109,11 +110,8 @@ public class CreateQuestionActivity extends AppCompatActivity {
 
         additionalInformation = (EditText) findViewById(R.id.informationTextEdit);
 
-        final Question[] q = {};
-
         findViewById(R.id.accept_button).setOnClickListener(view -> {
             try {
-
                 //Id question (need Intend from Game Manager)
                 int id = 5;
 
@@ -136,21 +134,15 @@ public class CreateQuestionActivity extends AppCompatActivity {
                 String information = getTextFromEditText(additionalInformation, getString(R.string.more_information));
 
                 //POIs stuff
-
-                POI[] pois = {new POI(),
-                                new POI(),
-                                new POI(),
-                                new POI()};
+                POI[] pois = {new POI(), new POI(), new POI(), new POI()};
                 POI initial = new POI();
 
-                q[0] = new Question(id, question, correctAnswer, answers, information, pois, initial);
-
+                quiz.addQuestion(new Question(id, question, correctAnswer, answers, information, pois, initial));
 
             } catch (MissingInformationException e) {
                 Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
             }
         });
-        return q[0];
     }
 
     private String getTextFromEditText(EditText editText, String whichTextEdit) throws MissingInformationException {
