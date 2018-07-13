@@ -11,7 +11,7 @@ public class Question implements IJsonPacker {
     private int id;
     public String question;
     private int correctAnswer;
-    private String[] answers;
+    public String[] answers;
     private String information;
     private POI[] pois;
     private POI initialPOI;
