@@ -7,7 +7,6 @@ import android.widget.TextView;
 
 import com.lglab.merino.lgxeducontroller.R;
 import com.lglab.merino.lgxeducontroller.activities.GoogleDriveActivity;
-import com.lglab.merino.lgxeducontroller.activities.PlayActivityOld;
 import com.lglab.merino.lgxeducontroller.activities.QuizActivity;
 import com.lglab.merino.lgxeducontroller.games.quiz.Quiz;
 import com.lglab.merino.lgxeducontroller.games.quiz.QuizManager;

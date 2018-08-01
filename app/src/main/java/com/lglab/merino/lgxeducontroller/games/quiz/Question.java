@@ -10,11 +10,15 @@ public class Question implements IJsonPacker {
 
     private int id;
     public String question;
-    private int correctAnswer;
+    public int correctAnswer;
     public String[] answers;
     private String information;
     private POI[] pois;
     private POI initialPOI;
+
+
+    //Additional for game-use only
+    public int selectedAnswer = 0;
 
     public Question() {
         answers = new String[MAX_ANSWERS];

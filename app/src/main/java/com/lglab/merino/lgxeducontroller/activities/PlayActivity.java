@@ -43,17 +43,18 @@ public class PlayActivity extends GoogleDriveActivity {
 
     public CategoryAdapter adapter;
     RecyclerView recyclerView;
+    HashMap<String, Category> categories;
 
     private String searchInput = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-       super.onCreate(savedInstanceState);
-       setContentView(R.layout.activity_play);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_play);
 
-       ActionBar actionBar = getSupportActionBar();
-       actionBar.setDisplayHomeAsUpEnabled(true);
-       actionBar.setTitle(R.string.play);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle(R.string.play);
 
         recyclerView = findViewById(R.id.recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -71,60 +72,65 @@ public class PlayActivity extends GoogleDriveActivity {
         reloadAdapter();
 
         findViewById(R.id.import_from_drive).setOnClickListener(view -> importQuiz());
-   }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        reloadAdapter();
+    }
 
 
-   public List<Category> makeCategories() {
+    public List<Category> makeCategories() {
 
-       HashMap<String, Category> categories = new HashMap<>();
+        categories = new HashMap<>();
 
-       Cursor category_cursor = POIsProvider.getAllCategories();
-       while (category_cursor.moveToNext()) {
-           long categoryId = category_cursor.getLong(category_cursor.getColumnIndexOrThrow("_id"));
-           String categoryName = category_cursor.getString(category_cursor.getColumnIndexOrThrow("Name"));
-           categories.put(categoryName.toLowerCase(), new Category(categoryId, categoryName, new ArrayList<>()));
-       }
+        Cursor category_cursor = POIsProvider.getAllCategories();
+        while (category_cursor.moveToNext()) {
+            long categoryId = category_cursor.getLong(category_cursor.getColumnIndexOrThrow("_id"));
+            String categoryName = category_cursor.getString(category_cursor.getColumnIndexOrThrow("Name"));
+            categories.put(categoryName.toLowerCase(), new Category(categoryId, categoryName, new ArrayList<>()));
+        }
 
-       Cursor quiz_cursor = POIsProvider.getAllQuizes();
-       while (quiz_cursor.moveToNext()) {
-           long quizId = quiz_cursor.getLong(quiz_cursor.getColumnIndexOrThrow("_id"));
-           String questData = quiz_cursor.getString(quiz_cursor.getColumnIndexOrThrow("Data"));
-           try {
-               Quiz newQuiz = new Quiz().unpack(new JSONObject(questData));
-               newQuiz.id = quizId;
 
-               if(searchInput != "" && !newQuiz.toString().toLowerCase().startsWith(searchInput.toLowerCase()))
-                   continue;
+        Cursor quiz_cursor = POIsProvider.getAllQuizes();
+        while (quiz_cursor.moveToNext()) {
+            long quizId = quiz_cursor.getLong(quiz_cursor.getColumnIndexOrThrow("_id"));
+            String questData = quiz_cursor.getString(quiz_cursor.getColumnIndexOrThrow("Data"));
+            try {
+                Quiz newQuiz = new Quiz().unpack(new JSONObject(questData));
+                newQuiz.id = quizId;
 
-               Category category = categories.get(newQuiz.category.toLowerCase());
-               if(category == null) {
-                   long id = POIsProvider.insertCategory(newQuiz.category);
-                   categories.put(newQuiz.category.toLowerCase(), new Category(id, newQuiz.category, Arrays.asList(newQuiz)));
-               }
-                else {
-                   category.getItems().add(newQuiz);
-               }
-           }
-           catch(Exception e) {
-               Log.e("TAG", e.toString());
-           }
-       }
+                if (searchInput != "" && !newQuiz.toString().toLowerCase().startsWith(searchInput.toLowerCase()))
+                    continue;
 
-       //REMOVE EMPTY CATEGORIES
-       Iterator<Map.Entry<String,Category>> iter = categories.entrySet().iterator();
-       while (iter.hasNext()) {
-           Map.Entry<String,Category> entry = iter.next();
-           if(entry.getValue().getItems().size() == 0){
-               iter.remove();
-           }
-       }
+                Category category = categories.get(newQuiz.category.toLowerCase());
+                if (category == null) {
+                    long id = POIsProvider.insertCategory(newQuiz.category);
+                    categories.put(newQuiz.category.toLowerCase(), new Category(id, newQuiz.category, Arrays.asList(newQuiz)));
+                } else {
+                    category.getItems().add(newQuiz);
+                }
+            } catch (Exception e) {
+                Log.e("TAG", e.toString());
+            }
+        }
 
-       //ORDER CATEGORIES BY ID
-       ArrayList<Category> orderedCategories = new ArrayList<>(categories.values());
-       Collections.sort(orderedCategories, (p1, p2) -> new Long(p1.id).compareTo(p2.id));
+        //REMOVE EMPTY CATEGORIES
+        Iterator<Map.Entry<String, Category>> iter = categories.entrySet().iterator();
+        while (iter.hasNext()) {
+            Map.Entry<String, Category> entry = iter.next();
+            if (entry.getValue().getItems().size() == 0) {
+                iter.remove();
+            }
+        }
 
-       return orderedCategories;
-   }
+        //ORDER CATEGORIES BY ID
+        ArrayList<Category> orderedCategories = new ArrayList<>(categories.values());
+        Collections.sort(orderedCategories, (p1, p2) -> new Long(p1.id).compareTo(p2.id));
+
+        return orderedCategories;
+    }
 
 
     @Override
@@ -136,8 +142,7 @@ public class PlayActivity extends GoogleDriveActivity {
             reloadAdapter();
 
             showMessage("Quiz imported successfully");
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             showMessage(e.toString());
             showMessage("Couldn't import the file");
         }
@@ -148,7 +153,7 @@ public class PlayActivity extends GoogleDriveActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.search, menu);
         MenuItem item = menu.findItem(R.id.menuSearch);
-        SearchView searchView = (SearchView)item.getActionView();
+        SearchView searchView = (SearchView) item.getActionView();
         searchView.setMaxWidth(Integer.MAX_VALUE);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -175,19 +180,19 @@ public class PlayActivity extends GoogleDriveActivity {
         adapter = new CategoryAdapter(categories);
         recyclerView.setAdapter(adapter);
 
-        for (int i = adapter.getGroups().size()-1; i >=0 ; i--) {
-            if(adapter.isGroupExpanded(i)){
+        for (int i = adapter.getGroups().size() - 1; i >= 0; i--) {
+            if (adapter.isGroupExpanded(i)) {
                 continue;
             }
             adapter.toggleGroup(i);
         }
 
     }
-   
+
     @Override
     public boolean onSupportNavigateUp() {
-       onBackPressed();
-       return true;
-   }
+        onBackPressed();
+        return true;
+    }
 
 }
