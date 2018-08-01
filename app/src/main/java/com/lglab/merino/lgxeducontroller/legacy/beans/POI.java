@@ -169,4 +169,9 @@ public class POI implements IJsonPacker {
 
         return this;
     }
+
+    @Override
+    public String toString() {
+        return this.getName();
+    }
 }
