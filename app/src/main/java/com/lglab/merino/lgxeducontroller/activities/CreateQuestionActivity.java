@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -36,7 +38,7 @@ public class CreateQuestionActivity extends AppCompatActivity {
     private Context context;
     private Quiz quiz;
     private HashMap<Long, POI> poiList;
-    private ArrayAdapter poiStringList;
+    private ArrayAdapter<POI> poiStringList;
 
     private EditText questionEditText;
     private RadioGroup correctAnswerRadioButton;
@@ -54,6 +56,8 @@ public class CreateQuestionActivity extends AppCompatActivity {
 
     private EditText additionalInformation;
 
+    private POI[] pois;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,12 +67,18 @@ public class CreateQuestionActivity extends AppCompatActivity {
         actionBar.setTitle(R.string.create_question);
         context = CreateQuestionActivity.this;
 
-        poiStringList = new ArrayAdapter(context, android.R.layout.select_dialog_item);
+        pois = new POI[4];
+        poiStringList = new ArrayAdapter<>(context, android.R.layout.select_dialog_item);
 
         getPOIStringsFromDatabase();
         textPOI1 = (AutoCompleteTextView) findViewById(R.id.answer1POITextEdit);
         textPOI1.setAdapter(poiStringList);
 
+        textPOI1.setOnItemClickListener((parent, view, position, id) -> {
+                POI poi = poiStringList.getItem(position);
+                pois[0] = poi;
+                Log.d("BRUH", String.valueOf(poi.getId()));
+        });
 
         questionPOIButton();
         answer1POIButton();
@@ -83,6 +93,7 @@ public class CreateQuestionActivity extends AppCompatActivity {
     private void getPOIStringsFromDatabase() {
         poiList = new HashMap<>();
         Cursor poiCursor = POIsProvider.getAllPOIs();
+
         while (poiCursor.moveToNext()) {
             long poiID = poiCursor.getLong(poiCursor.getColumnIndexOrThrow("_id"));
             String name = poiCursor.getString(poiCursor.getColumnIndexOrThrow("Name"));
@@ -104,12 +115,13 @@ public class CreateQuestionActivity extends AppCompatActivity {
                 Log.e("BRUH", e.toString());
             }
 
-            Iterator it = poiList.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry pair = (Map.Entry) it.next();
-                POI temp = (POI) pair.getValue();
-                poiStringList.add(temp.getName());
-            }
+        }
+        Iterator it = poiList.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            POI temp = (POI) pair.getValue();
+            poiStringList.add(temp);
+            //Log.d("BRUH", temp.getName());
         }
     }
 
@@ -190,10 +202,9 @@ public class CreateQuestionActivity extends AppCompatActivity {
                 String information = getTextFromEditText(additionalInformation, getString(R.string.more_information));
 
                 //POIs stuff
-                POI[] pois = {new POI(), new POI(), new POI(), new POI()};
                 POI initial = new POI();
 
-                quiz.addQuestion(new Question(id, question, correctAnswer, answers, information, pois, initial));
+                quiz.addQuestion(new Question(id, question, correctAnswer, answers, information, this.pois, initial));
 
             } catch (MissingInformationException e) {
                 Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
