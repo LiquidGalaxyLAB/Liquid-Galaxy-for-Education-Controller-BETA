@@ -1,11 +1,14 @@
 package com.lglab.merino.lgxeducontroller.activities;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -49,14 +52,12 @@ public class CreateQuestionActivity extends AppCompatActivity {
     private EditText textAnswer3;
     private EditText textAnswer4;
 
-    private AutoCompleteTextView textPOI1;
-    private EditText textPOI2;
-    private EditText textPOI3;
-    private EditText textPOI4;
+    Dialog dialog;
 
     private EditText additionalInformation;
 
     private POI[] pois;
+    private POI initial;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,27 +67,32 @@ public class CreateQuestionActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(R.string.create_question);
         context = CreateQuestionActivity.this;
-
         pois = new POI[4];
+        //Waiting for alberts part
+        this.quiz = new Quiz();
+
         poiStringList = new ArrayAdapter<>(context, android.R.layout.select_dialog_item);
 
         getPOIStringsFromDatabase();
-        textPOI1 = (AutoCompleteTextView) findViewById(R.id.answer1POITextEdit);
-        textPOI1.setAdapter(poiStringList);
 
-        textPOI1.setOnItemClickListener((parent, view, position, id) -> {
-                POI poi = poiStringList.getItem(position);
-                pois[0] = poi;
-                Log.d("BRUH", String.valueOf(poi.getId()));
-        });
+        //Autocomplete text field listeners
+        answerPOIText(0, R.id.answer1POITextEdit);
+        answerPOIText(1, R.id.answer2POITextEdit);
+        answerPOIText(2, R.id.answer3POITextEdit);
+        answerPOIText(3, R.id.answer4POITextEdit);
+        questionPOIText();
 
-        questionPOIButton();
-        answer1POIButton();
-        answer2POIButton();
-        answer3POIButton();
-        answer4POIButton();
+        //POIs Buttons listeners
+        POIButton(R.id.questionPOITextEdit);
+        POIButton(R.id.addAnswer1POIButton);
+        POIButton(R.id.addAnswer2POIButton);
+        POIButton(R.id.addAnswer3POIButton);
+        POIButton(R.id.addAnswer4POIButton);
 
+        //finish buttons listeners
         acceptButton();
+        cancelButton();
+        dialog = new Dialog(this);
 
     }
 
@@ -125,39 +131,36 @@ public class CreateQuestionActivity extends AppCompatActivity {
         }
     }
 
-    private void questionPOIButton() {
-        findViewById(R.id.addQuestionPOIButton).setOnClickListener(view -> {
+    private void POIButton(int id) {
+        findViewById(id).setOnClickListener(view -> {
                 Intent createPoiIntent = new Intent(context, CreateItemActivity.class);
                 createPoiIntent.putExtra("CREATION_TYPE", "POI");
                 startActivity(createPoiIntent);
         });
     }
 
-    private void answer1POIButton() {
-        findViewById(R.id.addAnswer1POIButton).setOnClickListener(view -> {
-            EditText textPOI1 = (EditText) findViewById(R.id.answer1POITextEdit);
-            textPOI1.setText("kalsdh");
-        });
-    }
+    private void answerPOIText(int pos, int layoutID) {
+        AutoCompleteTextView textPOI = (AutoCompleteTextView) findViewById(layoutID);
+        textPOI.setAdapter(poiStringList);
 
-    private void answer2POIButton() {
-        findViewById(R.id.addAnswer2POIButton).setOnClickListener(view -> {
-            EditText textPOI2 = (EditText) findViewById(R.id.answer2POITextEdit);
-            textPOI2.setText("kalsdh");
+        textPOI.setOnItemClickListener((parent, view, position, id) -> {
+            POI poi = poiStringList.getItem(position);
+            pois[pos] = poi;
         });
-    }
 
-    private void answer3POIButton() {
-        findViewById(R.id.addAnswer3POIButton).setOnClickListener(view -> {
-            EditText textPOI3 = (EditText) findViewById(R.id.answer3POITextEdit);
-            textPOI3.setText("kalsdh");
-        });
-    }
-
-    private void answer4POIButton() {
-        findViewById(R.id.addAnswer4POIButton).setOnClickListener(view -> {
-            EditText textPOI4 = (EditText) findViewById(R.id.answer4POITextEdit);
-            textPOI4.setText("kalsdh");
+        AutoCompleteTextView finalTextPOI = textPOI;
+        textPOI.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(pois[pos] == null || !pois[pos].toString().equals(finalTextPOI.getText()))
+                    pois[pos] = null;
+            }
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
         });
     }
 
@@ -170,11 +173,6 @@ public class CreateQuestionActivity extends AppCompatActivity {
         textAnswer2 = (EditText) findViewById(R.id.answer2TextEdit);
         textAnswer3 = (EditText) findViewById(R.id.answer3TextEdit);
         textAnswer4 = (EditText) findViewById(R.id.answer4TextEdit);
-
-        textPOI1 = (AutoCompleteTextView) findViewById(R.id.answer1POITextEdit);
-        textPOI2 = (EditText) findViewById(R.id.answer2POITextEdit);
-        textPOI3 = (EditText) findViewById(R.id.answer3POITextEdit);
-        textPOI4 = (EditText) findViewById(R.id.answer4POITextEdit);
 
         additionalInformation = (EditText) findViewById(R.id.informationTextEdit);
 
@@ -199,10 +197,13 @@ public class CreateQuestionActivity extends AppCompatActivity {
                                     getTextFromEditText(textAnswer2, getString(R.string.answer_2)),
                                     getTextFromEditText(textAnswer3, getString(R.string.answer_3)),
                                     getTextFromEditText(textAnswer4, getString(R.string.answer_4))};
-                String information = getTextFromEditText(additionalInformation, getString(R.string.more_information));
 
-                //POIs stuff
-                POI initial = new POI();
+                for (int i = 0; i < pois.length; i++) {
+                    if (pois[i] == null)
+                        throw new MissingInformationException("Answer " + i+1 + " POI");
+                }
+
+                String information = additionalInformation.getText().toString();
 
                 quiz.addQuestion(new Question(id, question, correctAnswer, answers, information, this.pois, initial));
 
@@ -212,11 +213,47 @@ public class CreateQuestionActivity extends AppCompatActivity {
         });
     }
 
+    private void cancelButton() {
+        findViewById(R.id.cancel_button).setOnClickListener(view -> {
+            dialog.setContentView(R.layout.popup_cancel_question);
+            dialog.show();
+        });
+
+    }
+
     private String getTextFromEditText(EditText editText, String whichTextEdit) throws MissingInformationException {
         String toReturn = editText.getText().toString();
         if (toReturn.equals(""))
             throw new MissingInformationException(whichTextEdit);
         return toReturn;
+    }
+
+    private void questionPOIText() {
+        AutoCompleteTextView textPOI = (AutoCompleteTextView) findViewById(R.id.questionPOITextEdit);
+        textPOI.setAdapter(poiStringList);
+        final POI[] toReturn = new POI[1];
+
+        textPOI.setOnItemClickListener((parent, view, position, id) -> {
+            POI poi = poiStringList.getItem(position);
+            toReturn[0] = poi;
+        });
+
+        AutoCompleteTextView finalTextPOI = textPOI;
+        textPOI.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(toReturn[0] == null || !toReturn[0].toString().equals(finalTextPOI.getText()))
+                    toReturn[0] = null;
+            }
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+
+        this.initial = toReturn[0] == null ? new POI() : toReturn[0];
     }
 
     @Override
