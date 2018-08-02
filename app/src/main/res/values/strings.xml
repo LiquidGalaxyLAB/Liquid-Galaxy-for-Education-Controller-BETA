@@ -7,7 +7,7 @@
 
     <!-- Create Question -->
     <string name="question_text_edit">Question</string>
-    <string name="correct_answer">Correct answer:</string>
+    <string name="correct_answer">Correct answer</string>
     <string name="question_POI">Question POI</string>
     <string name="bubble_text">Additional information for the answer</string>
     <string name="answer_1">Answer 1</string>
@@ -18,8 +18,6 @@
     <string name="answer_2_POI">Answer 2 POI</string>
     <string name="answer_3_POI">Answer 3 POI</string>
     <string name="answer_4_POI">Answer 4 POI</string>
-
-    <string name="missing_info_exception">Missing the following input: </string>
     <!-- End Create Question -->
 
     <!-- Legacy -->
