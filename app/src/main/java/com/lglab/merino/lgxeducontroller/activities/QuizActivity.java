@@ -1,12 +1,16 @@
 package com.lglab.merino.lgxeducontroller.activities;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Build;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
@@ -25,6 +29,7 @@ import github.chenupt.springindicator.SpringIndicator;
 import github.chenupt.springindicator.viewpager.ScrollerViewPager;
 
 import com.lglab.merino.lgxeducontroller.R;
+import com.lglab.merino.lgxeducontroller.fragments.ExitFromQuizFragment;
 import com.lglab.merino.lgxeducontroller.fragments.QuestionFragment;
 import com.lglab.merino.lgxeducontroller.games.quiz.Quiz;
 import com.lglab.merino.lgxeducontroller.games.quiz.QuizManager;
@@ -88,8 +93,11 @@ public class QuizActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        onBackPressed();
+        DialogFragment dialog = new ExitFromQuizFragment();
+        dialog.show(this.getSupportFragmentManager(), "dialog");
         return true;
     }
 }
+
+
 
