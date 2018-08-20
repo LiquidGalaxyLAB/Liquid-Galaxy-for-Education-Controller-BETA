@@ -55,7 +55,7 @@ public class TreeItemHolder extends TreeNode.BaseNodeViewHolder<TreeItemHolder.I
         editButton = (ImageView) view.findViewById(R.id.btn_edit);
 
         if (value.type == 1) {
-            //It's a POI
+            //It's an answer
             arrowView.setVisibility(View.GONE);
             addCategoryButton.setVisibility(View.GONE);
             addPOIButton.setVisibility(View.GONE);

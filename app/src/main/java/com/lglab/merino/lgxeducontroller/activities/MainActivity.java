@@ -8,6 +8,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 import com.lglab.merino.lgxeducontroller.R;
+import com.lglab.merino.lgxeducontroller.legacy.AdminActivity;
+import com.lglab.merino.lgxeducontroller.legacy.LGPC;
+import com.lglab.merino.lgxeducontroller.legacy.LGPCAdminActivity;
 
 
 public class MainActivity extends GoogleDriveActivity {
@@ -42,7 +45,8 @@ public class MainActivity extends GoogleDriveActivity {
         albert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, GameManagerActivity.class);
+                //Intent intent = new Intent(context, GameManagerActivity.class);
+                Intent intent = new Intent(context, LGPCAdminActivity.class);//diria que es getActivity()
                 startActivity(intent);
             }
         });

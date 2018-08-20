@@ -11,7 +11,7 @@ android {
         DebugSignIn {
             keyAlias 'Testing'
             keyPassword 'LGxEDU'
-            storeFile file('/home/merino/key.jks')
+            storeFile file('/C:\\Users\\Albert Planes\\Desktop\\key.jks')
             storePassword 'LGxEDU'
         }
     }
