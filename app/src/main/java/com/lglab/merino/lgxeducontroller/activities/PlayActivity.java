@@ -80,7 +80,6 @@ public class PlayActivity extends GoogleDriveActivity {
         reloadAdapter();
     }
 
-
     public List<Category> makeCategories() {
 
         categories = new HashMap<>();
