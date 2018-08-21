@@ -117,7 +117,7 @@ public class POIsProvider extends ContentProvider {
     }
 
     public static void updateQuizById(int quizId, String data) {
-        mOpenHelper.getReadableDatabase().execSQL("UPDATE quiz SET data = '?' WHERE _id = ?", new String[]{data, String.valueOf(quizId)});
+        mOpenHelper.getReadableDatabase().execSQL("UPDATE quiz SET data = '" + data + "' WHERE _id = ?", new String[]{String.valueOf(quizId)});
     }
 
     public static void removeQuizById(int quizId) {
@@ -130,7 +130,7 @@ public class POIsProvider extends ContentProvider {
     }
 
     public static void updateLGConnectionData(String user, String password, String hostname, int port) {
-        mOpenHelper.getReadableDatabase().execSQL("UPDATE lg_connection_info SET user = '?', password = '?', hostname = '?', port = ?", new String[]{user, password, hostname, String.valueOf(port)});
+        mOpenHelper.getReadableDatabase().execSQL("UPDATE lg_connection_info SET user = '" + user + "', password = '" + password + "', hostname = '" + hostname + "', port = ?", new String[]{String.valueOf(port)});
     }
 
     public static long insertQuiz(String data) {
