@@ -1,6 +1,6 @@
-package com.lglab.merino.lgxeducontroller.activities;
+package com.lglab.merino.lgxeducontroller.utils;
 
-public class PointerDetector {
+public class PointerDetectorCpy {
 
     private long timeUpdated = 0;
 
@@ -48,4 +48,3 @@ public class PointerDetector {
         return isMoving() && System.currentTimeMillis() - timeUpdated < 150;
     }
 }
-
