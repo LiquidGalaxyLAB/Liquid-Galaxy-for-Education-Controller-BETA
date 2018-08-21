@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 
 import com.lglab.merino.lgxeducontroller.R;
+import com.lglab.merino.lgxeducontroller.connection.LGConnectionManager;
 import com.lglab.merino.lgxeducontroller.legacy.utils.LGUtils;
 import com.lglab.merino.lgxeducontroller.utils.PointerDetector;
 
@@ -62,7 +63,8 @@ public class NavigateActivity extends AppCompatActivity {
                 Log.d(DEBUG_TAG, "We're moving 1 finger (" + String.valueOf(pointer.getTraveledAngle()) + "º, " + String.valueOf(pointer.getTraveledDistance()) + ")");
                 //sudo service ssh start
                 //"DISPLAY=3.0 xdotool mousemove 0 0"
-
+                LGConnectionManager.getInstance().setData("lg", "lg", "10.160.67.24", 22);
+                LGConnectionManager.getInstance().sendCommandToLG("DISPLAY=1 xdotool mousemove 0 0")
             }
         }
 
