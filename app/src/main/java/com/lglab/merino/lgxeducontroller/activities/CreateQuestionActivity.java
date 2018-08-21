@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.internal.Hide;
 import com.lglab.merino.lgxeducontroller.R;
+import com.lglab.merino.lgxeducontroller.fragments.ExitFromQuizFragment;
 import com.lglab.merino.lgxeducontroller.games.quiz.Question;
 import com.lglab.merino.lgxeducontroller.games.quiz.Quiz;
 import com.lglab.merino.lgxeducontroller.legacy.CreateItemActivity;
@@ -37,7 +39,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class CreateQuestionActivity extends AppCompatActivity {
-
+//LINES
     private Context context;
     private Quiz quiz;
     private HashMap<Long, POI> poiList;
@@ -68,6 +70,7 @@ public class CreateQuestionActivity extends AppCompatActivity {
         actionBar.setTitle(R.string.create_question);
         context = CreateQuestionActivity.this;
         pois = new POI[4];
+
         //Waiting for alberts part
         this.quiz = new Quiz();
 
@@ -83,11 +86,11 @@ public class CreateQuestionActivity extends AppCompatActivity {
         questionPOIText();
 
         //POIs Buttons listeners
-        POIButton(R.id.questionPOITextEdit);
-        POIButton(R.id.addAnswer1POIButton);
-        POIButton(R.id.addAnswer2POIButton);
-        POIButton(R.id.addAnswer3POIButton);
-        POIButton(R.id.addAnswer4POIButton);
+        POIButton(R.id.addQuestionPOIButton, 0);
+        POIButton(R.id.addAnswer1POIButton, 1);
+        POIButton(R.id.addAnswer2POIButton, 2);
+        POIButton(R.id.addAnswer3POIButton, 3);
+        POIButton(R.id.addAnswer4POIButton, 4);
 
         //finish buttons listeners
         acceptButton();
@@ -104,17 +107,18 @@ public class CreateQuestionActivity extends AppCompatActivity {
             long poiID = poiCursor.getLong(poiCursor.getColumnIndexOrThrow("_id"));
             String name = poiCursor.getString(poiCursor.getColumnIndexOrThrow("Name"));
             String visitedPlace = poiCursor.getString(poiCursor.getColumnIndexOrThrow("Visited_Place"));
-            long longitude = poiCursor.getLong(poiCursor.getColumnIndexOrThrow("Longitude"));
-            long altitude = poiCursor.getLong(poiCursor.getColumnIndexOrThrow("Altitude"));
-            long latitude = poiCursor.getLong(poiCursor.getColumnIndexOrThrow("Heading"));
-            long tilt = poiCursor.getLong(poiCursor.getColumnIndexOrThrow("Tilt"));
-            long range = poiCursor.getLong(poiCursor.getColumnIndexOrThrow("Range"));
+            double longitude = poiCursor.getDouble(poiCursor.getColumnIndexOrThrow("Longitude"));
+            double altitude = poiCursor.getDouble(poiCursor.getColumnIndexOrThrow("Altitude"));
+            double latitude = poiCursor.getDouble(poiCursor.getColumnIndexOrThrow("Latitude"));
+            double heading = poiCursor.getDouble(poiCursor.getColumnIndexOrThrow("Longitude"));
+            double tilt = poiCursor.getDouble(poiCursor.getColumnIndexOrThrow("Tilt"));
+            double range = poiCursor.getDouble(poiCursor.getColumnIndexOrThrow("Range"));
             String altitudeMode = poiCursor.getString(poiCursor.getColumnIndexOrThrow("Altitude_Mode"));
             boolean hidden = poiCursor.getInt(poiCursor.getColumnIndexOrThrow("Hide")) == 1;
             int categoryID = poiCursor.getInt(poiCursor.getColumnIndexOrThrow("Category"));
 
             try {
-                POI newPOI = new POI(poiID, name, visitedPlace, longitude, latitude, altitude, tilt, range, altitudeMode, hidden, categoryID);
+                POI newPOI = new POI(poiID, name, visitedPlace, longitude, latitude, altitude, heading, tilt, range, altitudeMode, hidden, categoryID);
                 poiList.put(poiID, newPOI);
             }
             catch(Exception e) {
@@ -131,10 +135,11 @@ public class CreateQuestionActivity extends AppCompatActivity {
         }
     }
 
-    private void POIButton(int id) {
+    private void POIButton(int id, int button) {
         findViewById(id).setOnClickListener(view -> {
-                Intent createPoiIntent = new Intent(context, CreateItemActivity.class);
+                Intent createPoiIntent = new Intent(context, CreateItemActivity_Copy.class);
                 createPoiIntent.putExtra("CREATION_TYPE", "POI");
+                createPoiIntent.putExtra("Button", button);
                 startActivity(createPoiIntent);
         });
     }
@@ -215,8 +220,8 @@ public class CreateQuestionActivity extends AppCompatActivity {
 
     private void cancelButton() {
         findViewById(R.id.cancel_button).setOnClickListener(view -> {
-            dialog.setContentView(R.layout.popup_cancel_question);
-            dialog.show();
+            DialogFragment dialog = new ExitFromQuizFragment();
+            dialog.show(this.getSupportFragmentManager(), "dialog");
         });
 
     }
@@ -258,7 +263,8 @@ public class CreateQuestionActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        onBackPressed();
+        DialogFragment dialog = new ExitFromQuizFragment();
+        dialog.show(this.getSupportFragmentManager(), "dialog");
         return true;
     }
 

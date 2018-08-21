@@ -1,5 +1,6 @@
-package com.lglab.merino.lgxeducontroller.legacy;
+package com.lglab.merino.lgxeducontroller.activities;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
@@ -14,6 +15,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
@@ -43,6 +45,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.lglab.merino.lgxeducontroller.R;
+import com.lglab.merino.lgxeducontroller.fragments.ExitFromQuizFragment;
+import com.lglab.merino.lgxeducontroller.legacy.LGPCAdminActivity;
+import com.lglab.merino.lgxeducontroller.legacy.POISFragment;
+import com.lglab.merino.lgxeducontroller.legacy.TourPOIsAdapter;
 import com.lglab.merino.lgxeducontroller.legacy.beans.TourPOI;
 import com.lglab.merino.lgxeducontroller.legacy.data.POIsContract;
 
@@ -52,15 +58,14 @@ import java.util.List;
 import java.util.Map;
 
 /*This fragment is the responsible to create POIs, Tours and Categories*/
-public class CreateItemFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerDragListener, LocationListener, GoogleMap.OnMapLongClickListener {
+public class CreateItemFragment_Copy extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerDragListener, LocationListener, GoogleMap.OnMapLongClickListener {
 
     private static final long MIN_TIME = 400;
     private static final float MIN_DISTANCE = 1000;
-    static CreateItemFragment fragment;
+    static CreateItemFragment_Copy fragment;
     private static View rootView = null;
     private static Map<String, String> spinnerIDsAndShownNames;
-    private static ArrayList<TourPOI> tourPOIS;
-    private static ViewHolderTour viewHolderTour;
+
     GoogleMap map;
     private LocationManager locationManager;
     private String creationType;
@@ -68,65 +73,18 @@ public class CreateItemFragment extends Fragment implements OnMapReadyCallback, 
     private Cursor queryCursor;
 
 
-    public CreateItemFragment() {
-        tourPOIS = new ArrayList<>();
+    public CreateItemFragment_Copy() {
+
     }
 
-    public static CreateItemFragment newInstance() {
-        fragment = new CreateItemFragment();
+    public static CreateItemFragment_Copy newInstance() {
+        fragment = new CreateItemFragment_Copy();
         return fragment;
     }
 
     /*    To be able to add one POI inside the Tour POIs List, as it is said inside setTourLayoutSettings method,
          user will select one POI by clicking on one instance of POIsFragment and adding it to the list and
         for this reason is why this method is called by POIsFragment class.*/
-    public static void setPOItoTourPOIsList(TourPOI tourPOI) throws Exception {
-
-        String global_interval = viewHolderTour.globalInterval.getText().toString();
-        if (isNumeric(global_interval)) {//First of all, user must type the global interval time value.
-            if (!tourPOIS.contains(tourPOI)) {
-
-                FragmentActivity activity = (FragmentActivity) rootView.getContext();
-
-                if (viewHolderTour.addedPois.getCount() == 0 || Integer.parseInt(global_interval) != TourPOIsAdapter.getGlobalInterval()) {
-                    TourPOIsAdapter.setGlobalInterval(Integer.parseInt(global_interval));
-                    tourPOI.setOrder(tourPOIS.size());
-                }
-
-                tourPOI.setDuration(Integer.parseInt(global_interval));
-
-                tourPOIS.add(tourPOI);
-
-
-                TourPOIsAdapter.setType("creating");
-                TourPOIsAdapter adapter = new TourPOIsAdapter(activity, tourPOIS);
-
-                viewHolderTour.addedPois.setAdapter(adapter);
-
-            } else {
-                Toast.makeText(rootView.getContext(), "The POI " + tourPOI.getPoiName() + " already exists inside this Tour.", Toast.LENGTH_LONG).show();
-            }
-        } else {
-            throw new Exception("Please, first type a value for the Global POI Interval field.");
-        }
-    }
-
-    public static void deleteButtonTreatment(View view, final TourPOI tourPoi) {
-        //when one POI of the Tours POIs List is deleted, we also have to remove it from the lists
-        //we use to help its functionalities.
-        final ImageView delete = (ImageView) view.findViewById(R.id.delete);
-        screenSizeTreatment(delete);
-        delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                tourPOIS.remove(tourPoi);
-                FragmentActivity activity = (FragmentActivity) rootView.getContext();
-                TourPOIsAdapter.setType("creating");
-                TourPOIsAdapter adapter = new TourPOIsAdapter(activity, tourPOIS);
-                viewHolderTour.addedPois.setAdapter(adapter);
-            }
-        });
-    }
 
     private static void screenSizeTreatment(ImageView delete) {
         DisplayMetrics metrics = new DisplayMetrics();
@@ -202,27 +160,6 @@ public class CreateItemFragment extends Fragment implements OnMapReadyCallback, 
 
             SupportMapFragment fragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
             fragment.getMapAsync(this);
-        } else if (creationType != null && creationType.startsWith("TOUR")) {
-            getActivity().setTitle(getResources().getString(R.string.new_tour));
-            setTourLayoutSettings(inflater, container);
-            viewHolderTour.createTOUR.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        int tourID = createTour();
-
-                        AddTourToDatabase addTourToDatabase = new AddTourToDatabase(tourID);
-                        addTourToDatabase.execute();
-
-                    } catch (NumberFormatException e) {
-                        Toast.makeText(getActivity(), "The duration of each POI must be in seconds (numeric type).", Toast.LENGTH_LONG).show();
-                    } catch (Exception e) {
-                        if (e.getMessage() != null) {
-                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    }
-                }
-            });
         } else {//CATEGORY
             getActivity().setTitle(getResources().getString(R.string.new_category));
             final ViewHolderCategory viewHolder = setCategoryLayoutSettings(inflater, container);
@@ -233,7 +170,6 @@ public class CreateItemFragment extends Fragment implements OnMapReadyCallback, 
                 }
             });
         }
-
 
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         try {
@@ -502,69 +438,6 @@ public class CreateItemFragment extends Fragment implements OnMapReadyCallback, 
         return viewHolder;
     }
 
-    /*TOUR TREATMENT*/
-    private void setTourLayoutSettings(LayoutInflater inflater, ViewGroup container) {
-        rootView = inflater.inflate(R.layout.fragment_create_or_update_tour, container, false);
-        viewHolderTour = new ViewHolderTour(rootView);
-        viewHolderTour.updateTOUR.setVisibility(View.GONE);
-        viewHolderTour.createTOUR.setVisibility(View.VISIBLE);
-        if (creationType.endsWith("HERE")) {
-            viewHolderTour.categoryID.setVisibility(View.INVISIBLE);
-        } else {
-            fillCategorySpinner(viewHolderTour.categoryID);
-        }
-        setCancelComeBackBehaviour(viewHolderTour.cancel);
-
-        //On the screen will be located an instance of POIsFragment, containing the categories and POIs
-        //to add inside the tour to be created.
-        POISFragment fragment = new POISFragment();
-        Bundle args = new Bundle();
-        args.putString("createORupdate", "create");
-        args.putString("EDITABLE", "ADMIN/TOUR_POIS");
-        fragment.setArguments(args);
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_tour_pois, fragment).commit();
-    }
-
-    private int createTour() throws Exception {
-
-        ContentValues contentValues = getContentValuesFromDataFromTourInputForm(viewHolderTour);
-
-        Uri insertedUri = POIsContract.TourEntry.createNewTOUR(getActivity(), contentValues);
-
-        return POIsContract.TourEntry.getIdByUri(insertedUri);
-    }
-
-    private ContentValues getContentValuesFromDataFromTourInputForm(ViewHolderTour viewHolder) throws Exception {
-
-        int categoryID;
-
-        String name = viewHolder.tourName.getText().toString();
-        if (name.equals("")) {
-            throw new Exception(getResources().getString(R.string.TourNameExisting));
-        }
-
-        int hide = getHideValueFromInputForm(viewHolder.switchButtonHide);
-        int interval = Integer.parseInt(viewHolder.globalInterval.getText().toString());
-        TourPOIsAdapter.setGlobalInterval(interval);
-
-        if (creationType.endsWith("HERE")) {
-            categoryID = POISFragment.routeID;
-        } else {
-            String shownName = getShownNameValueFromInputForm(viewHolder.categoryID);
-            categoryID = getFatherIDValueFromInputForm(shownName);
-        }
-
-        ContentValues contentValues = new ContentValues();
-
-        contentValues.put(POIsContract.TourEntry.COLUMN_NAME, name);
-        contentValues.put(POIsContract.TourEntry.COLUMN_HIDE, hide);
-        contentValues.put(POIsContract.TourEntry.COLUMN_CATEGORY_ID, categoryID);
-        contentValues.put(POIsContract.TourEntry.COLUMN_INTERVAL, interval);
-
-        return contentValues;
-    }
-
-
     /*OTHER UTILITIES*/
     private void fillCategorySpinner(Spinner spinner) {
 
@@ -609,15 +482,9 @@ public class CreateItemFragment extends Fragment implements OnMapReadyCallback, 
         }
     }
 
-    private void setCancelComeBackBehaviour(android.support.design.widget.FloatingActionButton cancel) {
+    private void setCancelComeBackBehaviour(FloatingActionButton cancel) {
 
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), LGPCAdminActivity.class);
-                startActivity(intent);
-            }
-        });
+        cancel.setOnClickListener(view -> this.getActivity().onBackPressed());
     }
 
     //These three ViewHolder classes are a kind of containers which contain all the elements related
@@ -683,30 +550,6 @@ public class CreateItemFragment extends Fragment implements OnMapReadyCallback, 
         }
     }
 
-    public static class ViewHolderTour {
-
-        public android.support.design.widget.FloatingActionButton cancel;
-        EditText tourName;
-        Spinner categoryID;
-        android.support.design.widget.FloatingActionButton createTOUR;
-        android.support.design.widget.FloatingActionButton updateTOUR;
-        ListView addedPois;
-        EditText globalInterval;
-        private Switch switchButtonHide;
-
-        ViewHolderTour(View rootView) {
-
-            tourName = (EditText) rootView.findViewById(R.id.tour_name);
-            switchButtonHide = (Switch) rootView.findViewById(R.id.switchButtonHide);
-            categoryID = (Spinner) rootView.findViewById(R.id.categoryID_spinner);
-            createTOUR = (android.support.design.widget.FloatingActionButton) rootView.findViewById(R.id.create_tour);
-            updateTOUR = (android.support.design.widget.FloatingActionButton) rootView.findViewById(R.id.update_tour);
-            addedPois = (ListView) rootView.findViewById(R.id.tour_pois_listview);
-            cancel = (android.support.design.widget.FloatingActionButton) rootView.findViewById(R.id.cancel_come_back);
-            globalInterval = (EditText) rootView.findViewById(R.id.pois_interval);
-        }
-    }
-
     public static class ViewHolderCategory {
 
         public FloatingActionButton cancel;
@@ -726,83 +569,5 @@ public class CreateItemFragment extends Fragment implements OnMapReadyCallback, 
             cancel = (FloatingActionButton) rootView.findViewById(R.id.cancel_come_back);
         }
 
-    }
-
-    private class AddTourToDatabase extends AsyncTask<Void, Void, Void> {
-
-        private int tourId;
-        private ProgressDialog dialog;
-
-        AddTourToDatabase(int tourId) {
-            this.tourId = tourId;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            if (dialog == null) {
-                dialog = new ProgressDialog(getActivity());
-                dialog.setMessage(getResources().getString(R.string.creating_tour));
-                dialog.setIndeterminate(false);
-                dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                dialog.setCancelable(true);
-                dialog.setCanceledOnTouchOutside(false);
-                dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-                        cancel(true);
-                    }
-                });
-                dialog.show();
-            }
-        }
-
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            addTourPOIsTODataBase(this.tourId);
-            return null;
-        }
-
-        private void addTourPOIsTODataBase(int tourID) {
-
-            ContentValues contentValues = new ContentValues();
-            int sec;
-            int i = 1, pois_number = viewHolderTour.addedPois.getCount(), seconds = 0;
-            try {
-                int global_interval = Integer.parseInt(viewHolderTour.globalInterval.getText().toString());
-                //because all the POIs are inside tourPOIsNames list, we add each one
-                for (TourPOI tourPOI : tourPOIS) {
-                    contentValues.clear();
-                    if (i <= pois_number) {
-                        //we get the POI interval time value
-                        sec = tourPOI.getDuration();
-
-                        if (sec == 0) {
-                            seconds = global_interval;
-                        } else {
-                            try {
-                                seconds = sec;
-                            } catch (NumberFormatException e) {
-                                Toast.makeText(getActivity(), getResources().getString(R.string.durationIntervalNumeric), Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    }
-                    contentValues.put(POIsContract.TourPOIsEntry.COLUMN_POI_ID, tourPOI.getPoiID());
-                    contentValues.put(POIsContract.TourPOIsEntry.COLUMN_TOUR_ID, tourID);
-                    contentValues.put(POIsContract.TourPOIsEntry.COLUMN_POI_ORDER, i);
-                    contentValues.put(POIsContract.TourPOIsEntry.COLUMN_POI_DURATION, seconds);
-                    i++;
-                    POIsContract.TourPOIsEntry.createNewTourPOI(getActivity(), contentValues);
-                }
-
-            } catch (NumberFormatException e) {
-                Toast.makeText(getActivity(), getResources().getString(R.string.typeInterval), Toast.LENGTH_LONG).show();
-            }
-
-            Intent intent = new Intent(getActivity(), LGPCAdminActivity.class);
-            intent.putExtra("comeFrom", "tours");
-            startActivity(intent);
-        }
     }
 }
