@@ -60,7 +60,7 @@ public class LGConnectionManager {
         saveDataToDB();
     }
 
-    private String sendCommandToLG(String command) {
+    public String sendCommandToLG(String command) {
         Session session = getSession();
         try {
             if (session != null && session.isConnected()) {

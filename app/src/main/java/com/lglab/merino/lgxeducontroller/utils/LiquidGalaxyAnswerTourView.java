@@ -14,6 +14,8 @@ import android.util.Log;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.lglab.merino.lgxeducontroller.BuildConfig;
+import com.lglab.merino.lgxeducontroller.connection.LGConnectionManager;
+import com.lglab.merino.lgxeducontroller.fragments.AnswerQuizFragment;
 import com.lglab.merino.lgxeducontroller.games.quiz.Question;
 import com.lglab.merino.lgxeducontroller.games.quiz.QuizManager;
 import com.lglab.merino.lgxeducontroller.legacy.POISFragment;
@@ -31,24 +33,12 @@ import static com.lglab.merino.lgxeducontroller.legacy.data.POIsContract.TourPOI
 
 public class LiquidGalaxyAnswerTourView extends AsyncTask<String, Void, String> {
 
-
-    private static final String TAG;
-
-    static {
-        TAG = LiquidGalaxyAnswerTourView.class.getSimpleName();
-    }
-
-    private Session session;
-    private Activity fragment;
+    private AnswerQuizFragment fragment;
     private int questionNumber;
 
-    public LiquidGalaxyAnswerTourView(Activity fragment, int questionNumber) {
+    public LiquidGalaxyAnswerTourView(AnswerQuizFragment fragment, int questionNumber) {
         this.fragment = fragment;
-        if(this.fragment == null) {
-            Log.d("TAG", "YAEH");
-        }
         this.questionNumber = questionNumber;
-        session = LGUtils.getSession(fragment);
     }
 
     protected String doInBackground(String... params) {
@@ -79,14 +69,6 @@ public class LiquidGalaxyAnswerTourView extends AsyncTask<String, Void, String> 
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
         cancel(true);
-        POISFragment.resetTourSettings();
-        if (s.startsWith("Error")) {
-            Builder alertbox = new Builder(this.fragment);
-            alertbox.setTitle("Error");
-            alertbox.setMessage("There's probably no POI inside this Tour");
-            alertbox.setPositiveButton("OK", new TourDialog());
-            alertbox.show();
-        }
     }
 
     private String buildCommand(POI poi) {
@@ -94,14 +76,14 @@ public class LiquidGalaxyAnswerTourView extends AsyncTask<String, Void, String> 
     }
 
     private void sendTourPOIs(List<String> pois, List<Integer> poisDuration) {
-        sendFirstTourPOI(pois.get(0));
+        sendPOI(0, pois.get(0));
         sendOtherTourPOIs(pois, poisDuration);
     }
 
     private void sendOtherTourPOIs(List<String> pois, List<Integer> poisDuration) {
         int i = 1;
         while (!isCancelled()) {
-            sendTourPOI(Integer.valueOf(poisDuration.get(i).intValue()), pois.get(i));
+            sendPOI(Integer.valueOf(poisDuration.get(i).intValue()), pois.get(i));
             i++;
             if (i == pois.size()) {
                 i = 0;
@@ -109,42 +91,19 @@ public class LiquidGalaxyAnswerTourView extends AsyncTask<String, Void, String> 
         }
     }
 
-    private void sendFirstTourPOI(String firstPoi) {
+    private void sendPOI(Integer duration, String command) {
         try {
-            LGUtils.setConnectionWithLiquidGalaxy(session, firstPoi, fragment);
-            Log.d(TAG, "First send");
-        } catch (JSchException e) {
-            Log.d(TAG, "Error in connection with Liquid Galaxy.");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
-    private void sendTourPOI(Integer duration, String command) {
-        try {
-            Thread.sleep((long) (duration * 1000));
-            LGUtils.setConnectionWithLiquidGalaxy(session, command, fragment);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            Log.d(TAG, "Error in duration of POIs.");
-        } catch (JSchException e2) {
-            Log.d(TAG, "Error connecting with LG.");
-        } catch (IOException e) {
+            if(duration != 0)
+                Thread.sleep((long) (duration * 1000));
+
+            LGConnectionManager.getInstance().sendCommandToLG(command);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     protected void onCancelled() {
         super.onCancelled();
-    }
-
-
-    /* renamed from: legacy.LiquidGalaxyTourView.1 */
-    class TourDialog implements OnClickListener {
-        TourDialog() {
-        }
-
-        public void onClick(DialogInterface arg0, int arg1) {
-        }
     }
 }

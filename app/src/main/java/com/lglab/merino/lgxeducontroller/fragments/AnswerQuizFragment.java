@@ -38,7 +38,7 @@ public class AnswerQuizFragment extends DialogFragment {
 
 
     public void setQuestionNumber(int question) {
-        tour = new LiquidGalaxyAnswerTourView(getActivity(), question);
+        tour = new LiquidGalaxyAnswerTourView(this, question);
         tour.execute();
     }
 
