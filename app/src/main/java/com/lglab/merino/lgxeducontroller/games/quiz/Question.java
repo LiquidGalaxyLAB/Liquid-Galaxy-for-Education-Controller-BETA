@@ -13,7 +13,7 @@ public class Question implements IJsonPacker {
     public int correctAnswer;
     public String[] answers;
     private String information;
-    private POI[] pois;
+    public POI[] pois;
     private POI initialPOI;
 
 

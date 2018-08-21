@@ -3,6 +3,7 @@ package com.lglab.merino.lgxeducontroller.fragments;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lglab.merino.lgxeducontroller.R;
 import com.lglab.merino.lgxeducontroller.games.quiz.Question;
@@ -66,6 +68,7 @@ public class QuestionFragment extends Fragment {
         view.findViewById(R.id.answerCard1 + i).setOnClickListener(v -> {
             if(!hasClicked) {
                 hasClicked = true;
+                boolean hadAlreadyClicked = question.selectedAnswer != 0;
                 question.selectedAnswer = i + 1;
                 view.findViewById(R.id.answerCard1 + question.correctAnswer - 1).setBackgroundColor(Color.parseColor("#5cd65c"));
                 answerViews[question.correctAnswer - 1].setTextColor(Color.parseColor("#000000"));
@@ -74,6 +77,20 @@ public class QuestionFragment extends Fragment {
                     v.setBackgroundColor(Color.parseColor("#ff3333"));
                     answerViews[i].setTextColor(Color.parseColor("#000000"));
                 }
+
+                if(!hadAlreadyClicked) {
+
+                    AnswerQuizFragment dialog = new AnswerQuizFragment();
+                    dialog.setQuestionNumber(questionNumber);
+                    dialog.show(this.getFragmentManager(), "dialog_answer");
+                }
+
+                /*if(QuizManager.getInstance().hasAnsweredAllQuestions()){
+
+                    //He has answered all the questions, we must show something of his score...
+                    Toast.makeText(this.getContext(), "Answered all questions", Toast.LENGTH_LONG).show();
+
+                }*/
             }
         });
 

@@ -22,13 +22,14 @@ public class POI implements IJsonPacker {
 
     public POI() { }
 
-    public POI(long id, String name, String visited_place, double longitude, double latitude, double altitude, double tilt, double range, String altitudeMode, boolean hidden, int categoryId) {
+    public POI(long id, String name, String visited_place, double longitude, double latitude, double altitude, double heading, double tilt, double range, String altitudeMode, boolean hidden, int categoryId) {
         this.id = id;
         this.name = name;
         this.visited_place = visited_place;
         this.longitude = longitude;
         this.latitude = latitude;
         this.altitude = altitude;
+        this.heading = heading;
         this.tilt = tilt;
         this.range = range;
         this.altitudeMode = altitudeMode;
