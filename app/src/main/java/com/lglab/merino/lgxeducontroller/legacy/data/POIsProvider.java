@@ -124,6 +124,15 @@ public class POIsProvider extends ContentProvider {
         mOpenHelper.getReadableDatabase().execSQL("DELETE FROM quiz WHERE _ID = ?", new String[]{String.valueOf(quizId)});
     }
 
+    public static Cursor getLGConnectionData() {
+        String sql = "SELECT c.user, c.password, c.hostname, c.port FROM lg_connection_info c";
+        return mOpenHelper.getReadableDatabase().rawQuery(sql, new String[]{});
+    }
+
+    public static void updateLGConnectionData(String user, String password, String hostname, int port) {
+        mOpenHelper.getReadableDatabase().execSQL("UPDATE lg_connection_info SET user = '?', password = '?', hostname = '?', port = ?", new String[]{user, password, hostname, String.valueOf(port)});
+    }
+
     public static long insertQuiz(String data) {
         ContentValues values = new ContentValues();
         values.put("data", data);
