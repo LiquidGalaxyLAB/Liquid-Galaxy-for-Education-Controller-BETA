@@ -20,4 +20,12 @@ public class QuizManager {
     public Quiz getQuiz() {
         return quiz;
     }
+
+    public boolean hasAnsweredAllQuestions() {
+        boolean allAnswered = true;
+        for(int i = 0; allAnswered && i < quiz.questions.size(); i++)
+            allAnswered = quiz.questions.get(i).selectedAnswer != 0;
+
+        return allAnswered;
+    }
 }
