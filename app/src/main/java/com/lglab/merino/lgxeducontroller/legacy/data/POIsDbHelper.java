@@ -27,6 +27,7 @@ public class POIsDbHelper extends SQLiteOpenHelper {
         db.execSQL(createTasksEntryTable());
         db.execSQL(createQuizTable());
         db.execSQL(createQuizCategoryTable());
+        db.execSQL(createLGConnectionTable());
         createBaseCategories(db);
         createDefaultLgTasks(db);
         insertDefaultData(db);
@@ -143,6 +144,10 @@ public class POIsDbHelper extends SQLiteOpenHelper {
         return "CREATE TABLE quiz_category (_id INTEGER PRIMARY KEY AUTOINCREMENT, Name TEXT NOT NULL);";
     }
 
+    private String createLGConnectionTable() {
+        return "CREATE TABLE lg_connection_info (_id INTEGER PRIMARY KEY AUTOINCREMENT, user TEXT NOT NULL, password TEXT NOT NULL, hostname TEXT NOT NULL, port INTEGER);";
+    }
+
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS category");
@@ -152,6 +157,7 @@ public class POIsDbHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS LG_TASK");
         db.execSQL("DROP TABLE IF EXISTS quiz");
         db.execSQL("DROP TABLE IF EXISTS quiz_category");
+        db.execSQL("DROP TABLE IF EXISTS lg_connection_info");
         onCreate(db);
     }
 
@@ -164,6 +170,7 @@ public class POIsDbHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS LG_TASK");
         db.execSQL("DROP TABLE IF EXISTS quiz");
         db.execSQL("DROP TABLE IF EXISTS quiz_category");
+        db.execSQL("DROP TABLE IF EXISTS lg_connection_info");
         onCreate(db);
     }
 }
