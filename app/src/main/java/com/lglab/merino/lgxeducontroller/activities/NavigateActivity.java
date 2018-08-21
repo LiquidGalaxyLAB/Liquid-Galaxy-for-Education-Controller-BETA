@@ -64,7 +64,7 @@ public class NavigateActivity extends AppCompatActivity {
                 //sudo service ssh start
                 //"DISPLAY=3.0 xdotool mousemove 0 0"
                 LGConnectionManager.getInstance().setData("lg", "lg", "10.160.67.24", 22);
-                LGConnectionManager.getInstance().sendCommandToLG("DISPLAY=1 xdotool mousemove 0 0");
+                LGConnectionManager.getInstance().sendCommandToLG("DISPLAY=:1 xdotool mousemove 0 0");
             }
         }
 
