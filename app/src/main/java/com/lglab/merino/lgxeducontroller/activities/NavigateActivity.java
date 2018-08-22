@@ -27,6 +27,8 @@ public class NavigateActivity extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         setContentView(R.layout.activity_navigate);
+
+        LGConnectionManager.getInstance().setData("lg", "lqgalaxy", "10.160.67.159", 22);
     }
 
     @Override
@@ -63,8 +65,12 @@ public class NavigateActivity extends AppCompatActivity {
                 Log.d(DEBUG_TAG, "We're moving 1 finger (" + String.valueOf(pointer.getTraveledAngle()) + "º, " + String.valueOf(pointer.getTraveledDistance()) + ")");
                 //sudo service ssh start
                 //"DISPLAY=3.0 xdotool mousemove 0 0"
-                LGConnectionManager.getInstance().setData("lg", "lg", "10.160.67.24", 22);
-                LGConnectionManager.getInstance().sendCommandToLG("DISPLAY=:1 xdotool mousemove 0 0");
+                LGConnectionManager.getInstance().sendCommandToLG("export DISPLAY=:0; " +
+                        "xdotool mouseup 1; " +
+                        "xdotool mousemove --polar 0 0; " +
+                        "xdotool mousedown 1; " +
+                        "xdotool mousemove --polar " + (int)pointer.getTraveledAngle() + " " + (int)Math.min(pointer.getTraveledDistance(), 250) + ";"
+                );
             }
         }
 

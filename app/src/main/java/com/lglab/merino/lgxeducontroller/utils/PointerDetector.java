@@ -19,19 +19,24 @@ public class PointerDetector {
 
     public double getTraveledAngle(){
         double angle = Math.toDegrees(Math.atan2(yAfter - yBefore, xAfter - xBefore));
+        angle -= 270;
+        angle %= 360;
         if(angle < 0) {
             angle += 360;
         }
+
 
         return angle;
     }
 
     public void update(float x, float y) {
-        xBefore = xAfter;
-        yBefore = yAfter;
+        if(Math.sqrt( Math.pow(xAfter - x, 2) + Math.pow(yAfter - y, 2)) >= 10) {
+            xBefore = xAfter;
+            yBefore = yAfter;
 
-        xAfter = x;
-        yAfter = y;
+            xAfter = x;
+            yAfter = y;
+        }
     }
 
     public boolean isMoving() {
