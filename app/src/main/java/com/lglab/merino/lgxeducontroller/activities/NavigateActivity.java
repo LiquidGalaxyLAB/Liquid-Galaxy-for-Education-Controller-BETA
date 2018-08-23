@@ -13,6 +13,7 @@ import com.lglab.merino.lgxeducontroller.utils.PointerDetector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class NavigateActivity extends AppCompatActivity {
@@ -39,6 +40,7 @@ public class NavigateActivity extends AppCompatActivity {
             if(pointers.size() < 2) {
                 index = event.getActionIndex();
                 pointers.put(event.getPointerId(index), new PointerDetector(event.getX(index), event.getY(index)));
+
             }
         } else if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_POINTER_UP) {
             pointers.remove(event.getPointerId(event.getActionIndex()));
@@ -56,11 +58,7 @@ public class NavigateActivity extends AppCompatActivity {
             return true;
 
         if(pointers.size() == 1) {
-            PointerDetector pointer = null;
-            for (Map.Entry<Integer, PointerDetector> entry : pointers.entrySet()) {
-                pointer = entry.getValue();
-            }
-
+            PointerDetector pointer = pointers.entrySet().iterator().next().getValue();
             if(pointer.isMoving()) {
                 //sudo service ssh start
                 //"DISPLAY=3.0 xdotool mousemove 0 0"
@@ -73,7 +71,21 @@ public class NavigateActivity extends AppCompatActivity {
             }
         }
         else if(pointers.size() == 2) {
-            
+            Iterator<Map.Entry<Integer, PointerDetector>> iterator = pointers.entrySet().iterator();
+            PointerDetector pointer1 = iterator.next().getValue();
+            PointerDetector pointer2 =iterator.next().getValue();
+            if(pointer1.isMoving() && pointer2.isMoving()){
+                short interaction = pointer1.getInteraction(pointer2);
+                if(interaction != 0) {
+                    LGConnectionManager.getInstance().addCommandToLG("export DISPLAY=:0; " +
+                            "xdotool mouseup 1; " +
+                            "xdotool mousemove --polar 0 0; " +
+                            "xdotool mouseclick " + (interaction == PointerDetector.JOINING ? 4 : 5) + ";"
+                    );
+                }
+            }
+
+
         }
 
 
