@@ -2,19 +2,27 @@ package com.lglab.merino.lgxeducontroller.utils;
 
 public class PointerDetector {
 
-    public static final short JOINING = 1;
-    public static final short SEPARATING = 2;
+    public static final String KEY_ZOOM_IN = "Page_Up";
+    public static final String KEY_ZOOM_OUT = "Page_Down";
 
-    private float xAfter = -1;
-    private float yAfter = -1;
+    public static final short ZOOM_NONE = 0;
+    public static final short ZOOM_IN = 1;
+    public static final short ZOOM_OUT = 2;
 
-    private float xBefore = -1;
-    private float yBefore = -1;
+    public static boolean isZoomingIn = false;
+    public static boolean isZoomingOut = false;
+
+    private float xAfter;
+    private float yAfter;
+
+    private float xBefore;
+    private float yBefore;
 
     public PointerDetector(float x, float y){
+        xAfter = -1;
+        yAfter = -1;
         update(x, y);
     }
-
 
     public double getTraveledDistance(){
         return Math.sqrt( Math.pow(xAfter - xBefore, 2) + Math.pow(yAfter - yBefore, 2));
@@ -54,9 +62,9 @@ public class PointerDetector {
         return Math.sqrt( Math.pow(xBefore - pointer.xBefore, 2) + Math.pow(yBefore - pointer.yBefore, 2));
     }
 
-    public short getInteraction(PointerDetector pointer) {
+    public short getZoomInteractionType(PointerDetector pointer) {
         double distance = getDistanceFromPointerAfter(pointer) - getDistanceFromPointerBefore(pointer);
-        return distance >= 10 ? SEPARATING : distance <= -10 ? JOINING : 0;
+        return distance >= 10 ? ZOOM_IN : distance <= -10 ? ZOOM_OUT : ZOOM_NONE;
     }
 }
 
