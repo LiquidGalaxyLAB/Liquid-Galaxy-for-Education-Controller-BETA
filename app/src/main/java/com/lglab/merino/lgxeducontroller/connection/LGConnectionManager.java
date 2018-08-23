@@ -9,12 +9,16 @@ import com.lglab.merino.lgxeducontroller.legacy.data.POIsProvider;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Properties;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
 
-public class LGConnectionManager {
+public class LGConnectionManager implements Runnable {
     private static LGConnectionManager instance = null;
     public static LGConnectionManager getInstance() {
-        if(instance == null)
+        if(instance == null) {
             instance = new LGConnectionManager();
+            new Thread(instance).start();
+        }
         return instance;
     }
 
@@ -25,6 +29,7 @@ public class LGConnectionManager {
     private int port;
 
     private Session session;
+    private BlockingQueue<String> queue;
 
     public LGConnectionManager() {
         user = "lg";
@@ -33,6 +38,7 @@ public class LGConnectionManager {
         port = 22;
 
         session = null;
+        queue = new LinkedBlockingDeque<>();
 
         loadDataFromDB();
     }
@@ -60,7 +66,7 @@ public class LGConnectionManager {
         saveDataToDB();
     }
 
-    public String sendCommandToLG(String command) {
+    private String sendCommandToLG(String command) {
         Session session = getSession();
         try {
             if (session != null && session.isConnected()) {
@@ -104,5 +110,25 @@ public class LGConnectionManager {
             e.printStackTrace();
         }
         return session;
+    }
+
+    public void addCommandToLG(String message) {
+        try {
+            queue.offer(message);
+        }
+        catch(Exception e) {
+
+        }
+    }
+
+    @Override
+    public void run() {
+        try {
+            while(true){
+                sendCommandToLG(queue.take());
+            }
+        } catch(InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

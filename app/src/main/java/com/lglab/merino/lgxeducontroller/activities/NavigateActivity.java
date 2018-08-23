@@ -65,7 +65,7 @@ public class NavigateActivity extends AppCompatActivity {
                 Log.d(DEBUG_TAG, "We're moving 1 finger (" + String.valueOf(pointer.getTraveledAngle()) + "º, " + String.valueOf(pointer.getTraveledDistance()) + ")");
                 //sudo service ssh start
                 //"DISPLAY=3.0 xdotool mousemove 0 0"
-                LGConnectionManager.getInstance().sendCommandToLG("export DISPLAY=:0; " +
+                LGConnectionManager.getInstance().addCommandToLG("export DISPLAY=:0; " +
                         "xdotool mouseup 1; " +
                         "xdotool mousemove --polar 0 0; " +
                         "xdotool mousedown 1; " +
