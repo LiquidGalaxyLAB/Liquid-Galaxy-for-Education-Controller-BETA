@@ -62,7 +62,6 @@ public class NavigateActivity extends AppCompatActivity {
             }
 
             if(pointer.isMoving()) {
-                Log.d(DEBUG_TAG, "We're moving 1 finger (" + String.valueOf(pointer.getTraveledAngle()) + "º, " + String.valueOf(pointer.getTraveledDistance()) + ")");
                 //sudo service ssh start
                 //"DISPLAY=3.0 xdotool mousemove 0 0"
                 LGConnectionManager.getInstance().addCommandToLG("export DISPLAY=:0; " +
@@ -72,6 +71,9 @@ public class NavigateActivity extends AppCompatActivity {
                         "xdotool mousemove --polar " + (int)pointer.getTraveledAngle() + " " + (int)Math.min(pointer.getTraveledDistance(), 250) + ";"
                 );
             }
+        }
+        else if(pointers.size() == 2) {
+            
         }
 
 

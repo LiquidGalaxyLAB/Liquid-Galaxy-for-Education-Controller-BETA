@@ -97,7 +97,7 @@ public class LiquidGalaxyAnswerTourView extends AsyncTask<String, Void, String> 
             if(duration != 0)
                 Thread.sleep((long) (duration * 1000));
 
-            LGConnectionManager.getInstance().sendCommandToLG(command);
+            LGConnectionManager.getInstance().addCommandToLG(command);
         } catch (Exception e) {
             e.printStackTrace();
         }
