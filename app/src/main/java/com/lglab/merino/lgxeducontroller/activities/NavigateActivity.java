@@ -125,6 +125,8 @@ public class NavigateActivity extends AppCompatActivity {
             PointerDetector pointer1 = iterator.next().getValue();
             PointerDetector pointer2 =iterator.next().getValue();
 
+
+
             short zoomInteractionType = pointer1.getZoomInteractionType(pointer2);
             if(zoomInteractionType == PointerDetector.ZOOM_IN && !PointerDetector.isZoomingIn){
                 if(PointerDetector.isZoomingOut) {
@@ -142,13 +144,25 @@ public class NavigateActivity extends AppCompatActivity {
                 PointerDetector.isZoomingOut = true;
                 updateKeyToLG(PointerDetector.isZoomingOut, PointerDetector.KEY_ZOOM_OUT);
             }
-            else if(pointer1.isMoving() && pointer2.isMoving()){
+
+            double angleDiff = getAngleDiff(pointer1.getTraveledAngle(), pointer2.getTraveledAngle());
+            if(angleDiff <= 30 && pointer1.isMoving() && pointer2.isMoving() && zoomInteractionType == PointerDetector.ZOOM_NONE){
+                if(PointerDetector.isZoomingIn) {
+                    PointerDetector.isZoomingIn = false;
+                    updateKeyToLG(PointerDetector.isZoomingIn, PointerDetector.KEY_ZOOM_IN);
+                }
+                if(PointerDetector.isZoomingOut) {
+                    PointerDetector.isZoomingOut = false;
+                    updateKeyToLG(PointerDetector.isZoomingOut, PointerDetector.KEY_ZOOM_OUT);
+                }
                 LGConnectionManager.getInstance().addCommandToLG(new LGCommand("export DISPLAY=:0; " +
-                        "xdotool mouseup 1 " +
+                        "xdotool keydown " + PointerDetector.KEY_CONTROL + " " +
+                        "mouseup 1 " +
                         "mousemove --polar 0 0 " +
-                        "mousedown 3 " +
-                        "mousemove --polar " + getAverageAngle(pointer1.getTraveledAngle(), pointer2.getTraveledAngle(), getAngleDiff(pointer1.getTraveledAngle(), pointer2.getTraveledAngle())) + " " + (int)Math.min(pointer1.getTraveledDistance(), 250) + " " +
-                        "mouseup 3;", LGCommand.NON_CRITICAL_MESSAGE)
+                        "mousedown 1 " +
+                        "mousemove --polar " + (int)getAverageAngle(pointer1.getTraveledAngle(), pointer2.getTraveledAngle(),angleDiff) + " " + (int)Math.min(pointer1.getTraveledDistance() + pointer2.getTraveledDistance(), 250) + " " +
+                        "mouseup 1 " +
+                        "keyup " + PointerDetector.KEY_CONTROL + ";", LGCommand.NON_CRITICAL_MESSAGE)
                 );
             }
 
