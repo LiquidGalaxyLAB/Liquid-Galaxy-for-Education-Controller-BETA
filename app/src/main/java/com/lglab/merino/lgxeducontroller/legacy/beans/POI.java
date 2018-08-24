@@ -1,11 +1,15 @@
 package com.lglab.merino.lgxeducontroller.legacy.beans;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.google.android.gms.plus.model.people.Person;
 import com.lglab.merino.lgxeducontroller.interfaces.IJsonPacker;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class POI implements IJsonPacker {
+public class POI implements IJsonPacker, Parcelable {
 
     private long id;
     private String name;
@@ -35,6 +39,21 @@ public class POI implements IJsonPacker {
         this.altitudeMode = altitudeMode;
         this.hidden = hidden;
         this.categoryId = categoryId;
+    }
+
+    public POI(Parcel in) {
+        this.id = in.readLong();
+        this.name = in.readString();
+        this.visited_place = in.readString();
+        this.longitude = in.readLong();
+        this.latitude = in.readLong();
+        this.altitude = in.readLong();
+        this.heading = in.readLong();
+        this.tilt = in.readLong();
+        this.range = in.readLong();
+        this.altitudeMode = in.readString();
+        this.hidden = in.readInt() != 0;
+        this.categoryId = in.readInt();
     }
 
     public long getId() {
@@ -175,4 +194,34 @@ public class POI implements IJsonPacker {
     public String toString() {
         return this.getName();
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeLong(id);
+        parcel.writeString(name);
+        parcel.writeString(visited_place);
+        parcel.writeDouble(longitude);
+        parcel.writeDouble(latitude);
+        parcel.writeDouble(altitude);
+        parcel.writeDouble(heading);
+        parcel.writeDouble(tilt);
+        parcel.writeDouble(range);
+        parcel.writeString(altitudeMode);
+        parcel.writeInt(hidden ? 1 : 0);
+        parcel.writeInt(categoryId);
+    }
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public POI createFromParcel(Parcel in) {
+            return new POI(in);
+        }
+        public POI[] newArray(int size) {
+            return new POI[size];
+        }
+    };
 }
