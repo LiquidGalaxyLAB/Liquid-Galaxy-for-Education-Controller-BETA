@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import com.lglab.merino.lgxeducontroller.R;
 import com.lglab.merino.lgxeducontroller.connection.LGConnectionManager;
 import com.lglab.merino.lgxeducontroller.legacy.utils.LGUtils;
+import com.lglab.merino.lgxeducontroller.utils.LGCommand;
 import com.lglab.merino.lgxeducontroller.utils.PointerDetector;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class NavigateActivity extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
         setContentView(R.layout.activity_navigate);
 
-        LGConnectionManager.getInstance().setData("lg", "lqgalaxy", "10.160.67.159", 22);
+        LGConnectionManager.getInstance().setData("lg", "lqgalaxy", "10.160.67.54", 22);
     }
 
     @Override
@@ -54,6 +55,17 @@ public class NavigateActivity extends AppCompatActivity {
             }
         }
 
+        if(pointers.size() != 2) {
+            if(PointerDetector.isZoomingIn) {
+                PointerDetector.isZoomingIn = false;
+                updateKeyToLG(PointerDetector.isZoomingIn, PointerDetector.KEY_ZOOM_IN);
+            }
+            if(PointerDetector.isZoomingOut) {
+                PointerDetector.isZoomingOut = false;
+                updateKeyToLG(PointerDetector.isZoomingOut, PointerDetector.KEY_ZOOM_OUT);
+            }
+        }
+
         if (pointers.size() == 0)
             return true;
 
@@ -62,11 +74,12 @@ public class NavigateActivity extends AppCompatActivity {
             if(pointer.isMoving()) {
                 //sudo service ssh start
                 //"DISPLAY=3.0 xdotool mousemove 0 0"
-                LGConnectionManager.getInstance().addCommandToLG("export DISPLAY=:0; " +
-                        "xdotool mouseup 1; " +
-                        "xdotool mousemove --polar 0 0; " +
-                        "xdotool mousedown 1; " +
-                        "xdotool mousemove --polar " + (int)pointer.getTraveledAngle() + " " + (int)Math.min(pointer.getTraveledDistance(), 250) + ";"
+                LGConnectionManager.getInstance().addCommandToLG(new LGCommand("export DISPLAY=:0; " +
+                        "xdotool mouseup 1 " +
+                        "mousemove --polar 0 0 " +
+                        "mousedown 1 " +
+                        "mousemove --polar " + (int)pointer.getTraveledAngle() + " " + (int)Math.min(pointer.getTraveledDistance(), 250) + " " +
+                        "mouseup 1;", LGCommand.NON_CRITICAL_MESSAGE)
                 );
             }
         }
@@ -74,22 +87,35 @@ public class NavigateActivity extends AppCompatActivity {
             Iterator<Map.Entry<Integer, PointerDetector>> iterator = pointers.entrySet().iterator();
             PointerDetector pointer1 = iterator.next().getValue();
             PointerDetector pointer2 =iterator.next().getValue();
-            if(pointer1.isMoving() && pointer2.isMoving()){
-                short interaction = pointer1.getInteraction(pointer2);
-                if(interaction != 0) {
-                    LGConnectionManager.getInstance().addCommandToLG("export DISPLAY=:0; " +
-                            "xdotool mouseup 1; " +
-                            "xdotool mousemove --polar 0 0; " +
-                            "xdotool mouseclick " + (interaction == PointerDetector.JOINING ? 4 : 5) + ";"
-                    );
-                }
-            }
 
+            short zoomInteractionType = pointer1.getZoomInteractionType(pointer2);
+            if(zoomInteractionType == PointerDetector.ZOOM_IN && !PointerDetector.isZoomingIn){
+                if(PointerDetector.isZoomingOut) {
+                    PointerDetector.isZoomingOut = false;
+                    updateKeyToLG(PointerDetector.isZoomingOut, PointerDetector.KEY_ZOOM_OUT);
+                }
+                PointerDetector.isZoomingIn = true;
+                updateKeyToLG(PointerDetector.isZoomingIn, PointerDetector.KEY_ZOOM_IN);
+            }
+            else if(zoomInteractionType == PointerDetector.ZOOM_OUT && !PointerDetector.isZoomingOut){
+                if(PointerDetector.isZoomingIn) {
+                    PointerDetector.isZoomingIn = false;
+                    updateKeyToLG(PointerDetector.isZoomingIn, PointerDetector.KEY_ZOOM_IN);
+                }
+                PointerDetector.isZoomingOut = true;
+                updateKeyToLG(PointerDetector.isZoomingOut, PointerDetector.KEY_ZOOM_OUT);
+            }
 
         }
 
 
         return true;
+    }
+
+    private void updateKeyToLG(boolean isActive, String key) {
+        LGConnectionManager.getInstance().addCommandToLG(new LGCommand("export DISPLAY=:0; " +
+                "xdotool key" + (isActive ? "down" : "up") + " " + key + ";", LGCommand.CRITICAL_MESSAGE)
+        );
     }
 
     private double getAngleDiff(double alpha, double beta) {

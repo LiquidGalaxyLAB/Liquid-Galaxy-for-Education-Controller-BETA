@@ -6,6 +6,7 @@ import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 import com.lglab.merino.lgxeducontroller.legacy.data.POIsProvider;
+import com.lglab.merino.lgxeducontroller.utils.LGCommand;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Properties;
@@ -14,14 +15,6 @@ import java.util.concurrent.LinkedBlockingDeque;
 
 public class LGConnectionManager implements Runnable {
     private static LGConnectionManager instance = null;
-    public static LGConnectionManager getInstance() {
-        if(instance == null) {
-            instance = new LGConnectionManager();
-            new Thread(instance).start();
-        }
-        return instance;
-    }
-
 
     private String user;
     private String password;
@@ -29,7 +22,11 @@ public class LGConnectionManager implements Runnable {
     private int port;
 
     private Session session;
-    private BlockingQueue<String> queue;
+
+    private BlockingQueue<LGCommand> queue;
+
+    private int itemsToDequeue;
+    private LGCommand lgCommandToReSend;
 
     public LGConnectionManager() {
         user = "lg";
@@ -39,8 +36,18 @@ public class LGConnectionManager implements Runnable {
 
         session = null;
         queue = new LinkedBlockingDeque<>();
+        itemsToDequeue = 0;
+        lgCommandToReSend = null;
 
         loadDataFromDB();
+    }
+
+    public static LGConnectionManager getInstance() {
+        if (instance == null) {
+            instance = new LGConnectionManager();
+            new Thread(instance).start();
+        }
+        return instance;
     }
 
     private void loadDataFromDB() {
@@ -57,6 +64,75 @@ public class LGConnectionManager implements Runnable {
         POIsProvider.updateLGConnectionData(user, password, hostname, port);
     }
 
+    private Session getSession() {
+        if (session == null || !session.isConnected()) {
+            JSch jsch = new JSch();
+            try {
+                session = jsch.getSession(user, hostname, port);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+
+            session.setPassword(password);
+
+            Properties prop = new Properties();
+            prop.put("StrictHostKeyChecking", "no");
+            session.setConfig(prop);
+
+            try {
+                session.connect(Integer.MAX_VALUE);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+            return session;
+        }
+
+
+        try {
+            session.sendKeepAliveMsg();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return session;
+    }
+
+    private boolean sendLGCommand(LGCommand lgCommand) {
+        lgCommandToReSend = lgCommand;
+
+        Session session = getSession();
+        if(session == null || !session.isConnected()) {
+            return false;
+        }
+
+        ChannelExec channelSsh;
+        try {
+            channelSsh = (ChannelExec) session.openChannel("exec");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        channelSsh.setOutputStream(baos);
+
+        channelSsh.setCommand(lgCommand.getCommand());
+
+        try {
+            channelSsh.connect();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        channelSsh.disconnect();
+        //baos.toString();
+        return true;
+    }
+
     public void setData(String user, String password, String hostname, int port) {
         this.user = user;
         this.password = password;
@@ -66,57 +142,10 @@ public class LGConnectionManager implements Runnable {
         saveDataToDB();
     }
 
-    private String sendCommandToLG(String command) {
-        Session session = getSession();
+    public void addCommandToLG(LGCommand lgCommand) {
         try {
-            if (session != null && session.isConnected()) {
-                ChannelExec channelssh = (ChannelExec) session.openChannel("exec");
-
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-                channelssh.setOutputStream(baos);
-
-                channelssh.setCommand(command);
-                channelssh.connect();
-                channelssh.disconnect();
-
-                return baos.toString();
-            }
+            queue.offer(lgCommand);
         } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return "";
-    }
-
-    private Session getSession() {
-        try {
-            if (session == null || !session.isConnected()) {
-                JSch jsch = new JSch();
-
-                session = jsch.getSession(user, hostname, port);
-                session.setPassword(password);
-
-                Properties prop = new Properties();
-                prop.put("StrictHostKeyChecking", "no");
-                session.setConfig(prop);
-                session.connect(Integer.MAX_VALUE);
-
-                return session;
-            }
-
-            session.sendKeepAliveMsg();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return session;
-    }
-
-    public void addCommandToLG(String message) {
-        try {
-            queue.offer(message);
-        }
-        catch(Exception e) {
 
         }
     }
@@ -124,10 +153,38 @@ public class LGConnectionManager implements Runnable {
     @Override
     public void run() {
         try {
-            while(true){
-                sendCommandToLG(queue.take());
+            while (true) {
+
+                LGCommand lgCommand = lgCommandToReSend;
+                if(lgCommand == null) {
+                    lgCommand = queue.take();
+
+                    if(itemsToDequeue > 0) {
+                        itemsToDequeue--;
+                        if(lgCommand.getPriorityType() == LGCommand.CRITICAL_MESSAGE) {
+                            lgCommandToReSend = lgCommand;
+                        }
+                        continue;
+                    }
+                }
+
+                long timeBefore = System.currentTimeMillis();
+
+                if(!sendLGCommand(lgCommand)) {
+                    //Command not sent
+                    itemsToDequeue = queue.size();
+                }
+                else if(System.currentTimeMillis() - timeBefore >= 2000) {
+                    //Command sent but took more than 2 seconds
+                    lgCommandToReSend = null;
+                    itemsToDequeue = queue.size();
+                }
+                else {
+                    //Command sent in less than 3 seconds
+                    lgCommandToReSend = null;
+                }
             }
-        } catch(InterruptedException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }

@@ -11,8 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -20,46 +18,42 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.google.android.gms.common.internal.Hide;
 import com.lglab.merino.lgxeducontroller.R;
 import com.lglab.merino.lgxeducontroller.fragments.ExitFromQuizFragment;
 import com.lglab.merino.lgxeducontroller.games.quiz.Question;
 import com.lglab.merino.lgxeducontroller.games.quiz.Quiz;
-import com.lglab.merino.lgxeducontroller.legacy.CreateItemActivity;
-import com.lglab.merino.lgxeducontroller.legacy.data.POIsProvider;
-import com.lglab.merino.lgxeducontroller.utils.Category;
-import com.lglab.merino.lgxeducontroller.utils.Exceptions.MissingInformationException;
 import com.lglab.merino.lgxeducontroller.legacy.beans.POI;
+import com.lglab.merino.lgxeducontroller.legacy.data.POIsProvider;
+import com.lglab.merino.lgxeducontroller.utils.Exceptions.MissingInformationException;
 
-import org.json.JSONObject;
-
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 public class CreateQuestionActivity extends AppCompatActivity {
-//LINES
+    private final int BUTTON_0 = 0;
+    private final int BUTTON_1 = 1;
+    private final int BUTTON_2 = 2;
+    private final int BUTTON_3 = 3;
+    private final int BUTTON_4 = 4;
+    //LINES
     private Context context;
     private Quiz quiz;
     private HashMap<Long, POI> poiList;
     private ArrayAdapter<POI> poiStringList;
-
     private EditText questionEditText;
     private RadioGroup correctAnswerRadioButton;
     private EditText questionPOI;
-
     private EditText textAnswer1;
     private EditText textAnswer2;
     private EditText textAnswer3;
     private EditText textAnswer4;
-
-    Dialog dialog;
+    private Dialog dialog;
 
     private EditText additionalInformation;
 
     private POI[] pois;
-    private POI initial;
+    private POI initialPOI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +65,7 @@ public class CreateQuestionActivity extends AppCompatActivity {
         context = CreateQuestionActivity.this;
         pois = new POI[4];
 
-        //Waiting for alberts part
+        //Waiting for Manager part
         this.quiz = new Quiz();
 
         poiStringList = new ArrayAdapter<>(context, android.R.layout.select_dialog_item);
@@ -120,8 +114,7 @@ public class CreateQuestionActivity extends AppCompatActivity {
             try {
                 POI newPOI = new POI(poiID, name, visitedPlace, longitude, latitude, altitude, heading, tilt, range, altitudeMode, hidden, categoryID);
                 poiList.put(poiID, newPOI);
-            }
-            catch(Exception e) {
+            } catch (Exception e) {
                 Log.e("BRUH", e.toString());
             }
 
@@ -131,17 +124,65 @@ public class CreateQuestionActivity extends AppCompatActivity {
             Map.Entry pair = (Map.Entry) it.next();
             POI temp = (POI) pair.getValue();
             poiStringList.add(temp);
-            //Log.d("BRUH", temp.getName());
         }
     }
 
     private void POIButton(int id, int button) {
         findViewById(id).setOnClickListener(view -> {
-                Intent createPoiIntent = new Intent(context, CreateItemActivity_Copy.class);
-                createPoiIntent.putExtra("CREATION_TYPE", "POI");
-                createPoiIntent.putExtra("Button", button);
-                startActivity(createPoiIntent);
+            Intent createPoiIntent = new Intent(context, CreateItemActivity_Copy.class);
+            createPoiIntent.putExtra("CREATION_TYPE", "POI");
+            createPoiIntent.putExtra("Button", button);
+            startActivity(createPoiIntent);
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            POI returnedPOI = data.getParcelableExtra("poi");
+            String namePOI = returnedPOI.getName();
+            poiList.put(returnedPOI.getId(), returnedPOI);
+            poiStringList.add(returnedPOI);
+
+            AutoCompleteTextView textQuestionPOI = findViewById(R.id.questionPOITextEdit);
+            AutoCompleteTextView textAnswer1 = (AutoCompleteTextView) findViewById(R.id.answer1POITextEdit);
+            AutoCompleteTextView textAnswer2 = (AutoCompleteTextView) findViewById(R.id.answer2POITextEdit);
+            AutoCompleteTextView textAnswer3 = (AutoCompleteTextView) findViewById(R.id.answer3POITextEdit);
+            AutoCompleteTextView textAnswer4 = (AutoCompleteTextView) findViewById(R.id.answer4POITextEdit);
+
+
+            switch (requestCode) {
+                case BUTTON_0:
+                    initialPOI = returnedPOI;
+                    textQuestionPOI.setText(namePOI);
+
+                case BUTTON_1:
+                    pois[0] = returnedPOI;
+                    textAnswer1.setText(namePOI);
+                    break;
+
+                case BUTTON_2:
+                    pois[1] = returnedPOI;
+                    textAnswer2.setText(namePOI);
+                    break;
+
+                case BUTTON_3:
+                    pois[2] = returnedPOI;
+                    textAnswer3.setText(namePOI);
+                    break;
+
+                case BUTTON_4:
+                    pois[3] = returnedPOI;
+                    textAnswer4.setText(namePOI);
+                    break;
+
+                case 6:
+                    //Code for intent from Manager (get the quiz Quiz and if editing only one question or the whole quiz Boolean)
+                    break;
+            }
+        }
     }
 
     private void answerPOIText(int pos, int layoutID) {
@@ -157,12 +198,14 @@ public class CreateQuestionActivity extends AppCompatActivity {
         textPOI.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(pois[pos] == null || !pois[pos].toString().equals(finalTextPOI.getText()))
+                if (pois[pos] == null || !pois[pos].toString().equals(finalTextPOI.getText()))
                     pois[pos] = null;
             }
+
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
+
             @Override
             public void afterTextChanged(Editable editable) {
             }
@@ -184,6 +227,7 @@ public class CreateQuestionActivity extends AppCompatActivity {
         findViewById(R.id.accept_button).setOnClickListener(view -> {
             try {
                 //Id question (need Intend from Game Manager)
+                //If edit question, id := question id. Else add new id := last quiz id + 1
                 int id = 5;
 
                 //Question stuff
@@ -199,18 +243,18 @@ public class CreateQuestionActivity extends AppCompatActivity {
 
                 //Answers
                 String[] answers = {getTextFromEditText(textAnswer1, getString(R.string.answer_1)),
-                                    getTextFromEditText(textAnswer2, getString(R.string.answer_2)),
-                                    getTextFromEditText(textAnswer3, getString(R.string.answer_3)),
-                                    getTextFromEditText(textAnswer4, getString(R.string.answer_4))};
+                        getTextFromEditText(textAnswer2, getString(R.string.answer_2)),
+                        getTextFromEditText(textAnswer3, getString(R.string.answer_3)),
+                        getTextFromEditText(textAnswer4, getString(R.string.answer_4))};
 
                 for (int i = 0; i < pois.length; i++) {
                     if (pois[i] == null)
-                        throw new MissingInformationException("Answer " + i+1 + " POI");
+                        throw new MissingInformationException("Answer " + i + 1 + " POI");
                 }
 
                 String information = additionalInformation.getText().toString();
 
-                quiz.addQuestion(new Question(id, question, correctAnswer, answers, information, this.pois, initial));
+                quiz.addQuestion(new Question(id, question, correctAnswer, answers, information, this.pois, initialPOI));
 
             } catch (MissingInformationException e) {
                 Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
@@ -247,18 +291,20 @@ public class CreateQuestionActivity extends AppCompatActivity {
         textPOI.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(toReturn[0] == null || !toReturn[0].toString().equals(finalTextPOI.getText()))
+                if (toReturn[0] == null || !toReturn[0].toString().equals(finalTextPOI.getText()))
                     toReturn[0] = null;
             }
+
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
+
             @Override
             public void afterTextChanged(Editable editable) {
             }
         });
 
-        this.initial = toReturn[0] == null ? new POI() : toReturn[0];
+        this.initialPOI = toReturn[0] == null ? new POI() : toReturn[0];
     }
 
     @Override
