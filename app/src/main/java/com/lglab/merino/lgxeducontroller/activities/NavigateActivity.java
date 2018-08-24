@@ -30,7 +30,7 @@ public class NavigateActivity extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
         setContentView(R.layout.activity_navigate);
 
-        LGConnectionManager.getInstance().setData("lg", "lqgalaxy", "10.160.67.159", 22);
+        LGConnectionManager.getInstance().setData("lg", "lqgalaxy", "10.160.67.54", 22);
     }
 
     @Override
