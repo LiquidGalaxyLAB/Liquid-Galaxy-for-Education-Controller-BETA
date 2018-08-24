@@ -143,6 +143,16 @@ public class NavigateActivity extends AppCompatActivity {
                 updateKeyToLG(PointerDetector.isZoomingOut, PointerDetector.KEY_ZOOM_OUT);
             }
 
+            if(pointer1.isMoving() && pointer2.isMoving() && pointer1.getZoomInteractionType(pointer2) == PointerDetector.ZOOM_NONE){
+                LGConnectionManager.getInstance().addCommandToLG(new LGCommand("export DISPLAY=:0; " +
+                        "xdotool mouseup 1 " +
+                        "mousemove --polar 0 0 " +
+                        "mousedown 3 " +
+                        "mousemove --polar " + getAverageAngle(pointer1.getTraveledAngle(), pointer2.getTraveledAngle(), getAngleDiff(pointer1.getTraveledAngle(), pointer2.getTraveledAngle())) + " " + (int)Math.min(pointer1.getTraveledDistance(), 250) + " " +
+                        "mouseup 3;", LGCommand.NON_CRITICAL_MESSAGE)
+                );
+            }
+
         }
 
 
