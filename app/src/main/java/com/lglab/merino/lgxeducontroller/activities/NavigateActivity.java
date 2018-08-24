@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import com.lglab.merino.lgxeducontroller.R;
 import com.lglab.merino.lgxeducontroller.connection.LGConnectionManager;
 import com.lglab.merino.lgxeducontroller.legacy.utils.LGUtils;
+import com.lglab.merino.lgxeducontroller.utils.LGCommand;
 import com.lglab.merino.lgxeducontroller.utils.PointerDetector;
 
 import java.util.ArrayList;
@@ -73,12 +74,12 @@ public class NavigateActivity extends AppCompatActivity {
             if(pointer.isMoving()) {
                 //sudo service ssh start
                 //"DISPLAY=3.0 xdotool mousemove 0 0"
-                LGConnectionManager.getInstance().addCommandToLG("export DISPLAY=:0; " +
+                LGConnectionManager.getInstance().addCommandToLG(new LGCommand("export DISPLAY=:0; " +
                         "xdotool mouseup 1 " +
                         "mousemove --polar 0 0 " +
                         "mousedown 1 " +
                         "mousemove --polar " + (int)pointer.getTraveledAngle() + " " + (int)Math.min(pointer.getTraveledDistance(), 250) + " " +
-                        "mouseup 1;"
+                        "mouseup 1;", LGCommand.NON_CRITICAL_MESSAGE)
                 );
             }
         }
@@ -112,8 +113,8 @@ public class NavigateActivity extends AppCompatActivity {
     }
 
     private void updateKeyToLG(boolean isActive, String key) {
-        LGConnectionManager.getInstance().addCommandToLG("export DISPLAY=:0; " +
-                "xdotool key" + (isActive ? "down" : "up") + " " + key + ";"
+        LGConnectionManager.getInstance().addCommandToLG(new LGCommand("export DISPLAY=:0; " +
+                "xdotool key" + (isActive ? "down" : "up") + " " + key + ";", LGCommand.CRITICAL_MESSAGE)
         );
     }
 

@@ -6,6 +6,7 @@ import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 import com.lglab.merino.lgxeducontroller.legacy.data.POIsProvider;
+import com.lglab.merino.lgxeducontroller.utils.LGCommand;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Properties;
@@ -29,7 +30,7 @@ public class LGConnectionManager implements Runnable {
     private int port;
 
     private Session session;
-    private BlockingQueue<String> queue;
+    private BlockingQueue<LGCommand> queue;
 
     public LGConnectionManager() {
         user = "lg";
@@ -112,9 +113,9 @@ public class LGConnectionManager implements Runnable {
         return session;
     }
 
-    public void addCommandToLG(String message) {
+    public void addCommandToLG(LGCommand lgCommand) {
         try {
-            queue.offer(message);
+            queue.offer(lgCommand);
         }
         catch(Exception e) {
 
@@ -125,7 +126,8 @@ public class LGConnectionManager implements Runnable {
     public void run() {
         try {
             while(true){
-                sendCommandToLG(queue.take());
+                LGCommand lgCommand = queue.take();
+                sendCommandToLG(lgCommand.getCommand());
             }
         } catch(InterruptedException e) {
             e.printStackTrace();
