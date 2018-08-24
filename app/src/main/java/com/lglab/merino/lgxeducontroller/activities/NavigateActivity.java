@@ -142,8 +142,7 @@ public class NavigateActivity extends AppCompatActivity {
                 PointerDetector.isZoomingOut = true;
                 updateKeyToLG(PointerDetector.isZoomingOut, PointerDetector.KEY_ZOOM_OUT);
             }
-
-            if(pointer1.isMoving() && pointer2.isMoving() && pointer1.getZoomInteractionType(pointer2) == PointerDetector.ZOOM_NONE){
+            else if(pointer1.isMoving() && pointer2.isMoving()){
                 LGConnectionManager.getInstance().addCommandToLG(new LGCommand("export DISPLAY=:0; " +
                         "xdotool mouseup 1 " +
                         "mousemove --polar 0 0 " +
