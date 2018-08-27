@@ -1,5 +1,8 @@
 package com.lglab.merino.lgxeducontroller.utils;
 
+import android.os.Debug;
+import android.util.Log;
+
 public class PointerDetector {
 
     public static final String KEY_ZOOM_IN = "Page_Up";
@@ -65,7 +68,7 @@ public class PointerDetector {
 
     public short getZoomInteractionType(PointerDetector pointer) {
         double distance = getDistanceFromPointerAfter(pointer) - getDistanceFromPointerBefore(pointer);
-        return distance >= 30 ? ZOOM_IN : distance <= -30 ? ZOOM_OUT : ZOOM_NONE;
+        return xBefore == -1 ? ZOOM_NONE : distance >= 30 ? ZOOM_IN : distance <= -30 ? ZOOM_OUT : ZOOM_NONE;
     }
 }
 

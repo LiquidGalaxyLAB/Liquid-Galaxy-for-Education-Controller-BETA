@@ -7,6 +7,24 @@
     tools:context=".activities.NavigateActivity"
     >
 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0">
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/wifi_gif"
+            android:layout_width="96dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="8dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/wifi"
+            android:scaleType="centerCrop"
+            android:visibility="invisible" />
+    </RelativeLayout>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

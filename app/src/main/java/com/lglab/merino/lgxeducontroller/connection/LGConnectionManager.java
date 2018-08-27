@@ -1,10 +1,16 @@
 package com.lglab.merino.lgxeducontroller.connection;
 
+import android.app.Activity;
 import android.database.Cursor;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
+import com.lglab.merino.lgxeducontroller.R;
+import com.lglab.merino.lgxeducontroller.activities.NavigateActivity;
 import com.lglab.merino.lgxeducontroller.legacy.data.POIsProvider;
 import com.lglab.merino.lgxeducontroller.utils.LGCommand;
 
@@ -12,6 +18,8 @@ import java.io.ByteArrayOutputStream;
 import java.util.Properties;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
+
+import pl.droidsonroids.gif.GifImageView;
 
 public class LGConnectionManager implements Runnable {
     private static LGConnectionManager instance = null;
@@ -27,6 +35,8 @@ public class LGConnectionManager implements Runnable {
 
     private int itemsToDequeue;
     private LGCommand lgCommandToReSend;
+
+    private NavigateActivity activity;
 
     public LGConnectionManager() {
         user = "lg";
@@ -142,9 +152,31 @@ public class LGConnectionManager implements Runnable {
         saveDataToDB();
     }
 
+    public void setNavigateActivity(NavigateActivity activity) {
+        this.activity = activity;
+    }
+
+    private synchronized void setGifWifiVisibility(boolean visibility) {
+        try {
+            if(activity != null) {
+                int newVisibility = visibility ? View.VISIBLE : View.INVISIBLE;
+
+                activity.runOnUiThread(() -> {
+                    if(activity.wifiGif.getVisibility() != newVisibility)
+                        activity.wifiGif.setVisibility(newVisibility);
+                });
+            }
+
+        }
+        catch(Exception e) {
+
+        }
+    }
+
     public void addCommandToLG(LGCommand lgCommand) {
         try {
             queue.offer(lgCommand);
+            setGifWifiVisibility(true);
         } catch (Exception e) {
 
         }
@@ -180,8 +212,12 @@ public class LGConnectionManager implements Runnable {
                     itemsToDequeue = queue.size();
                 }
                 else {
-                    //Command sent in less than 3 seconds
+                    //Command sent in less than 2 seconds
                     lgCommandToReSend = null;
+                }
+
+                if(lgCommandToReSend == null && queue.size() == 0) {
+                    setGifWifiVisibility(false);
                 }
             }
         } catch (InterruptedException e) {

@@ -10,6 +10,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Button;
+import android.widget.MediaController;
 
 import com.lglab.merino.lgxeducontroller.R;
 import com.lglab.merino.lgxeducontroller.connection.LGConnectionManager;
@@ -22,11 +25,18 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import pl.droidsonroids.gif.GifDrawable;
+import pl.droidsonroids.gif.GifImageButton;
+import pl.droidsonroids.gif.GifImageView;
+
 public class NavigateActivity extends AppCompatActivity {
 
     public final String DEBUG_TAG = "HEEEYY IVAAAN";
 
-    HashMap<Integer, PointerDetector> pointers = new HashMap<>();
+    private final HashMap<Integer, PointerDetector> pointers = new HashMap<>();
+    private long canMoveTime = 0;
+
+    public GifImageView wifiGif;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +51,10 @@ public class NavigateActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle("Navigate");
 
-        LGConnectionManager.getInstance().setData("lg", "lqgalaxy", "10.160.67.54", 22);
+        LGConnectionManager.getInstance().setData("lg", "lqgalaxy", "10.160.67.204", 22);
+
+        wifiGif = findViewById(R.id.wifi_gif);
+        LGConnectionManager.getInstance().setNavigateActivity(this);
     }
 
     @Override
@@ -108,14 +121,14 @@ public class NavigateActivity extends AppCompatActivity {
 
         if(pointers.size() == 1) {
             PointerDetector pointer = pointers.entrySet().iterator().next().getValue();
-            if(pointer.isMoving()) {
+            if(pointer.isMoving() && canMove1()) {
                 //sudo service ssh start
                 //"DISPLAY=3.0 xdotool mousemove 0 0"
                 LGConnectionManager.getInstance().addCommandToLG(new LGCommand("export DISPLAY=:0; " +
                         "xdotool mouseup 1 " +
-                        "mousemove --polar 0 0 " +
+                        "mousemove --polar --sync 0 0 " +
                         "mousedown 1 " +
-                        "mousemove --polar " + (int)pointer.getTraveledAngle() + " " + (int)Math.min(pointer.getTraveledDistance(), 250) + " " +
+                        "mousemove --polar --sync " + (int)pointer.getTraveledAngle() + " " + (int)Math.min(pointer.getTraveledDistance(), 250) + " " +
                         "mouseup 1;", LGCommand.NON_CRITICAL_MESSAGE)
                 );
             }
@@ -125,7 +138,7 @@ public class NavigateActivity extends AppCompatActivity {
             PointerDetector pointer1 = iterator.next().getValue();
             PointerDetector pointer2 =iterator.next().getValue();
 
-
+            setNotMovable1(200);
 
             short zoomInteractionType = pointer1.getZoomInteractionType(pointer2);
             if(zoomInteractionType == PointerDetector.ZOOM_IN && !PointerDetector.isZoomingIn){
@@ -155,14 +168,13 @@ public class NavigateActivity extends AppCompatActivity {
                     PointerDetector.isZoomingOut = false;
                     updateKeyToLG(PointerDetector.isZoomingOut, PointerDetector.KEY_ZOOM_OUT);
                 }
+
                 LGConnectionManager.getInstance().addCommandToLG(new LGCommand("export DISPLAY=:0; " +
-                        "xdotool keydown " + PointerDetector.KEY_CONTROL + " " +
-                        "mouseup 1 " +
-                        "mousemove --polar 0 0 " +
-                        "mousedown 1 " +
-                        "mousemove --polar " + (int)getAverageAngle(pointer1.getTraveledAngle(), pointer2.getTraveledAngle(),angleDiff) + " " + (int)Math.min(pointer1.getTraveledDistance() + pointer2.getTraveledDistance(), 250) + " " +
-                        "mouseup 1 " +
-                        "keyup " + PointerDetector.KEY_CONTROL + ";", LGCommand.NON_CRITICAL_MESSAGE)
+                        "xdotool mouseup 1 " +
+                        "mousemove --polar --sync 0 0 " +
+                        "mousedown 2 " +
+                        "mousemove --polar --sync " + (int)getAverageAngle(pointer1.getTraveledAngle(), pointer2.getTraveledAngle(),angleDiff) + " " + (int)Math.min((pointer1.getTraveledDistance() + pointer2.getTraveledDistance()) / 2, 250) + " " +
+                        "mouseup 2;", LGCommand.NON_CRITICAL_MESSAGE)
                 );
             }
 
@@ -185,5 +197,14 @@ public class NavigateActivity extends AppCompatActivity {
 
     private double getAverageAngle(double alpha, double beta, double diff) {
         return alpha > beta ? alpha - (diff / 2) : beta - (diff / 2);
+    }
+
+
+    private void setNotMovable1(int millis) {
+        canMoveTime = System.currentTimeMillis() + millis;
+    }
+
+    private boolean canMove1() {
+        return canMoveTime <= System.currentTimeMillis();
     }
 }

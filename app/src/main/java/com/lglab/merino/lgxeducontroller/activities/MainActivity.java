@@ -20,6 +20,7 @@ public class MainActivity extends GoogleDriveActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = MainActivity.this;
+
         button_navigate();
         button_play();
         button_prova_ALEKS();
