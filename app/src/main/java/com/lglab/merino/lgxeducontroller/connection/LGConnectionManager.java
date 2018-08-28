@@ -49,7 +49,7 @@ public class LGConnectionManager implements Runnable {
         itemsToDequeue = 0;
         lgCommandToReSend = null;
 
-        loadDataFromDB();
+        //loadDataFromDB();
     }
 
     public static LGConnectionManager getInstance() {
@@ -149,7 +149,8 @@ public class LGConnectionManager implements Runnable {
         this.hostname = hostname;
         this.port = port;
 
-        saveDataToDB();
+        Log.d("HEY", password);
+        //saveDataToDB();
     }
 
     public void setNavigateActivity(NavigateActivity activity) {
@@ -223,5 +224,21 @@ public class LGConnectionManager implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getHostname() {
+        return hostname;
+    }
+
+    public int getPort() {
+        return port;
     }
 }

@@ -1,7 +1,9 @@
 package com.lglab.merino.lgxeducontroller.activities;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -40,9 +42,6 @@ public class NavigateActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-
         setContentView(R.layout.activity_navigate);
 
         ActionBar actionBar = getSupportActionBar();
@@ -55,9 +54,10 @@ public class NavigateActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
-        LGConnectionManager.getInstance().setData("lg", "lqgalaxy", "10.160.67.204", 22);
         LGConnectionManager.getInstance().setNavigateActivity(this);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        LGConnectionManager.getInstance().setData(prefs.getString("User", "lg"),  prefs.getString("Password", "lqgalaxy"), prefs.getString("HostName", "10.160.67.204"), Integer.parseInt(prefs.getString("Port", "22")));
     }
 
     @Override

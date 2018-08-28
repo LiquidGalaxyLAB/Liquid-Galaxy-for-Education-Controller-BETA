@@ -11,7 +11,6 @@ public class PointerDetector {
 
     public static final String KEY_ZOOM_IN = "Page_Up";
     public static final String KEY_ZOOM_OUT = "Page_Down";
-    public static final String KEY_CONTROL = "Control_L";
 
     public static final short ZOOM_NONE = 0;
     public static final short ZOOM_IN = 1;

@@ -1,9 +1,11 @@
 package com.lglab.merino.lgxeducontroller.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -19,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.lglab.merino.lgxeducontroller.R;
+import com.lglab.merino.lgxeducontroller.connection.LGConnectionManager;
 import com.lglab.merino.lgxeducontroller.games.quiz.ArrayAlternateAdapter;
 import com.lglab.merino.lgxeducontroller.games.quiz.Quiz;
 import com.lglab.merino.lgxeducontroller.legacy.data.POIsDbHelper;
@@ -78,6 +81,10 @@ public class PlayActivity extends GoogleDriveActivity {
     protected void onStart() {
         super.onStart();
         reloadAdapter();
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        LGConnectionManager.getInstance().setData(prefs.getString("User", "lg"),  prefs.getString("Password", "lqgalaxy"), prefs.getString("HostName", "10.160.67.204"), Integer.parseInt(prefs.getString("Port", "22")));
+
     }
 
     public List<Category> makeCategories() {

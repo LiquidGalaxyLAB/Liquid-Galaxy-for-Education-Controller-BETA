@@ -48,7 +48,7 @@ public class LGPCAdminActivity extends AppCompatActivity implements TabListener 
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         if (Build.VERSION.SDK_INT >= 23) {
-            actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_action_bar));
+            actionBar.setBackgroundDrawable(getDrawable(R.drawable.button_action_bar));
         }
 
 
