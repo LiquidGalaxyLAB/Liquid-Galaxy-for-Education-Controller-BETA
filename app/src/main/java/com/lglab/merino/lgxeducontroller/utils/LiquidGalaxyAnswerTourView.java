@@ -59,6 +59,7 @@ public class LiquidGalaxyAnswerTourView extends AsyncTask<Integer, Integer, Bool
     protected void onPostExecute(Boolean result) {
         super.onPostExecute(result);
         Log.d("TOUR", "onPostExecute");
+        fragment.tourFinished();
     }
 
     @Override

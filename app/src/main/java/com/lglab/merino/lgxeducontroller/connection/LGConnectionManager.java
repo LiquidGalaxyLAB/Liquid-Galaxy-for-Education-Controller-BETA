@@ -149,7 +149,6 @@ public class LGConnectionManager implements Runnable {
         this.hostname = hostname;
         this.port = port;
 
-        Log.d("HEY", password);
         //saveDataToDB();
     }
 
