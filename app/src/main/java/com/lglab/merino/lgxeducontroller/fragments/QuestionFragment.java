@@ -1,10 +1,12 @@
 package com.lglab.merino.lgxeducontroller.fragments;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +19,7 @@ import android.widget.Toast;
 import com.lglab.merino.lgxeducontroller.R;
 import com.lglab.merino.lgxeducontroller.games.quiz.Question;
 import com.lglab.merino.lgxeducontroller.games.quiz.QuizManager;
+import com.lglab.merino.lgxeducontroller.utils.LiquidGalaxyAnswerTourView;
 
 public class QuestionFragment extends Fragment {
     private View view;
@@ -24,6 +27,9 @@ public class QuestionFragment extends Fragment {
     private Question question;
     private TextView textView;
     private TextView[] answerViews;
+
+    LiquidGalaxyAnswerTourView activeTour;
+    AlertDialog activeAlertDialog;
 
     private boolean hasClicked = false;
 
@@ -37,7 +43,6 @@ public class QuestionFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_question, container, false);
-
         return view;
     }
 
@@ -80,9 +85,21 @@ public class QuestionFragment extends Fragment {
 
                 if(!hadAlreadyClicked) {
 
-                    AnswerQuizFragment dialog = new AnswerQuizFragment();
-                    dialog.setQuestionNumber(questionNumber);
-                    dialog.show(this.getFragmentManager(), "dialog_answer");
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    LayoutInflater inflater = getActivity().getLayoutInflater();
+                    builder.setView(inflater.inflate(R.layout.dialog_answer_quiz, null)).setPositiveButton("SKIP", (dialog, id) -> {
+                        dialog.cancel();
+                    });
+
+                    builder.setOnCancelListener(dialog -> {
+                        tourFinished();
+                    });
+
+                    activeAlertDialog = builder.create();
+                    activeAlertDialog.show();
+
+                    activeTour = new LiquidGalaxyAnswerTourView(this);
+                    activeTour.execute(questionNumber);
                 }
 
                 /*if(QuizManager.getInstance().hasAnsweredAllQuestions()){
@@ -97,5 +114,22 @@ public class QuestionFragment extends Fragment {
         if(question.selectedAnswer == i + 1) {
             view.findViewById(R.id.answerCard1 + i).performClick();
         }
+    }
+
+    public void tourFinished() {
+        Log.d("QUESTION_FRAGMENT", "TOUR_FINISHED");
+
+        if(activeTour != null && !activeTour.isCancelled()) {
+            activeTour.cancel(true);
+        }
+    }
+
+    public void changeAlertDialogTitle(String title) {
+        this.getActivity().runOnUiThread(() -> {
+            if(activeAlertDialog != null) {
+                TextView textView = activeAlertDialog.findViewById(R.id.question_title_dialog);
+                textView.setText(title);
+            }
+        });
     }
 }

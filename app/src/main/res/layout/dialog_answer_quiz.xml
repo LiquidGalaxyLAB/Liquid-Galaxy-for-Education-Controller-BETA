@@ -9,7 +9,7 @@
         android:layout_height="0dp">
 
         <TextView
-            android:id="@+id/question_title"
+            android:id="@+id/question_title_dialog"
             android:text="GRID LAYOUT"
             android:textSize="24sp"
             android:textColor="@color/grey_700"
@@ -23,7 +23,8 @@
     <RelativeLayout
         android:layout_weight="4"
         android:layout_width="match_parent"
-        android:layout_height="0dp">
+        android:layout_height="0dp"
+        android:layout_marginTop="5dp">
 
         <ProgressBar
             android:id="@+id/loading_spinner"

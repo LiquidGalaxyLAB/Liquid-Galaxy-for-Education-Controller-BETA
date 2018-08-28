@@ -5,6 +5,10 @@ import android.util.Log;
 
 public class PointerDetector {
 
+    public final static int MINIUM_DISTANCE_MOVE = 8;
+    public final static int MINIUM_DISTANCE_ZOOM = 30;
+
+
     public static final String KEY_ZOOM_IN = "Page_Up";
     public static final String KEY_ZOOM_OUT = "Page_Down";
     public static final String KEY_CONTROL = "Control_L";
@@ -45,7 +49,7 @@ public class PointerDetector {
     }
 
     public void update(float x, float y) {
-        if(Math.sqrt( Math.pow(xAfter - x, 2) + Math.pow(yAfter - y, 2)) >= 10) {
+        if(Math.sqrt( Math.pow(xAfter - x, 2) + Math.pow(yAfter - y, 2)) >= MINIUM_DISTANCE_MOVE) {
             xBefore = xAfter;
             yBefore = yAfter;
 
@@ -68,7 +72,7 @@ public class PointerDetector {
 
     public short getZoomInteractionType(PointerDetector pointer) {
         double distance = getDistanceFromPointerAfter(pointer) - getDistanceFromPointerBefore(pointer);
-        return xBefore == -1 ? ZOOM_NONE : distance >= 30 ? ZOOM_IN : distance <= -30 ? ZOOM_OUT : ZOOM_NONE;
+        return xBefore == -1 ? ZOOM_NONE : distance >= MINIUM_DISTANCE_ZOOM ? ZOOM_IN : distance <= -MINIUM_DISTANCE_ZOOM ? ZOOM_OUT : ZOOM_NONE;
     }
 }
 

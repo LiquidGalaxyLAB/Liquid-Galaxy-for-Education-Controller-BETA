@@ -31,8 +31,6 @@ import pl.droidsonroids.gif.GifImageView;
 
 public class NavigateActivity extends AppCompatActivity {
 
-    public final String DEBUG_TAG = "HEEEYY IVAAAN";
-
     private final HashMap<Integer, PointerDetector> pointers = new HashMap<>();
     private long canMoveTime = 0;
 
@@ -51,9 +49,14 @@ public class NavigateActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle("Navigate");
 
-        LGConnectionManager.getInstance().setData("lg", "lqgalaxy", "10.160.67.204", 22);
-
         wifiGif = findViewById(R.id.wifi_gif);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        LGConnectionManager.getInstance().setData("lg", "lqgalaxy", "10.160.67.204", 22);
         LGConnectionManager.getInstance().setNavigateActivity(this);
     }
 
@@ -122,8 +125,6 @@ public class NavigateActivity extends AppCompatActivity {
         if(pointers.size() == 1) {
             PointerDetector pointer = pointers.entrySet().iterator().next().getValue();
             if(pointer.isMoving() && canMove1()) {
-                //sudo service ssh start
-                //"DISPLAY=3.0 xdotool mousemove 0 0"
                 LGConnectionManager.getInstance().addCommandToLG(new LGCommand("export DISPLAY=:0; " +
                         "xdotool mouseup 1 " +
                         "mousemove --polar --sync 0 0 " +
@@ -206,5 +207,11 @@ public class NavigateActivity extends AppCompatActivity {
 
     private boolean canMove1() {
         return canMoveTime <= System.currentTimeMillis();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LGConnectionManager.getInstance().setNavigateActivity(null);
     }
 }
