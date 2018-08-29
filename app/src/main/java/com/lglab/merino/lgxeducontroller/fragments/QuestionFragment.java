@@ -13,13 +13,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lglab.merino.lgxeducontroller.R;
+import com.lglab.merino.lgxeducontroller.connection.LGConnectionManager;
 import com.lglab.merino.lgxeducontroller.games.quiz.Question;
 import com.lglab.merino.lgxeducontroller.games.quiz.QuizManager;
-import com.lglab.merino.lgxeducontroller.utils.LiquidGalaxyAnswerTourView;
+import com.lglab.merino.lgxeducontroller.legacy.beans.POI;
+import com.lglab.merino.lgxeducontroller.utils.LGCommand;
 
 public class QuestionFragment extends Fragment {
     private View view;
@@ -28,7 +31,7 @@ public class QuestionFragment extends Fragment {
     private TextView textView;
     private TextView[] answerViews;
 
-    LiquidGalaxyAnswerTourView activeTour;
+    //LiquidGalaxyAnswerTourView activeTour;
     AlertDialog activeAlertDialog;
 
     private boolean hasClicked = false;
@@ -69,6 +72,14 @@ public class QuestionFragment extends Fragment {
         }
     }
 
+    @Override
+    public void setMenuVisibility(final boolean visible) {
+        super.setMenuVisibility(visible);
+        if (visible) {
+            //SEND INITIAL POI IF THERE'S ONE
+        }
+    }
+
     public void setClickListener(final int i) {
         view.findViewById(R.id.answerCard1 + i).setOnClickListener(v -> {
             if(!hasClicked) {
@@ -85,21 +96,49 @@ public class QuestionFragment extends Fragment {
 
                 if(!hadAlreadyClicked) {
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    LayoutInflater inflater = getActivity().getLayoutInflater();
-                    builder.setView(inflater.inflate(R.layout.dialog_answer_quiz, null)).setPositiveButton("SKIP", (dialog, id) -> {
-                        dialog.cancel();
-                    });
-
-                    builder.setOnCancelListener(dialog -> {
+                    //AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    //LayoutInflater inflater = getActivity().getLayoutInflater();
+                    /*builder.setView(inflater.inflate(R.layout.dialog_answer_quiz, null))
+                        .setPositiveButton("SHOW CORRECT ANSWER", (dialog, id) -> {
+                            sendPOI(buildCommand(question.pois[question.correctAnswer - 1]));
+                            changeCommentDialog("And now going to " + question.pois[question.correctAnswer - 1].getName());
+                            dialog.dismiss();
+                        })
+                        .setNegativeButton("SKIP", (dialog, id) -> dialog.cancel());
+                        */
+                    /*builder.setOnCancelListener(dialog -> {
                         tourFinished();
-                    });
+                    });*/
 
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                    if(question.selectedAnswer != question.correctAnswer) {
+                        builder.setTitle("Oops! You've chosen a wrong answer!");
+                        builder.setMessage("Going to " + question.pois[question.selectedAnswer - 1].getName());
+                        builder.setPositiveButton("SHOW CORRECT ANSWER", (dialog, id) -> {
+                            //We override this later in order to prevent alertdialog from closing after clicking this button
+                        });
+
+                        sendPOI(buildCommand(question.pois[question.selectedAnswer - 1]));
+                    } else {
+                        builder.setTitle("Great! You're totally right!");
+                        builder.setMessage("Going to " + question.pois[question.correctAnswer - 1].getName());
+                        sendPOI(buildCommand(question.pois[question.correctAnswer - 1]));
+                    }
+
+                    builder.setNegativeButton("SKIP", (dialog, id) -> dialog.cancel());
                     activeAlertDialog = builder.create();
                     activeAlertDialog.show();
 
-                    activeTour = new LiquidGalaxyAnswerTourView(this);
-                    activeTour.execute(questionNumber);
+                    if(question.selectedAnswer != question.correctAnswer) {
+                        activeAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v1 -> {
+                            sendPOI(buildCommand(question.pois[question.correctAnswer - 1]));
+                            activeAlertDialog.setMessage("And now going to " + question.pois[question.correctAnswer - 1].getName());
+                            v1.setEnabled(false);
+                        });
+                    }
+                    //activeTour = new LiquidGalaxyAnswerTourView(this);
+                    //activeTour.execute(questionNumber);
                 }
 
                 /*if(QuizManager.getInstance().hasAnsweredAllQuestions()){
@@ -116,20 +155,12 @@ public class QuestionFragment extends Fragment {
         }
     }
 
-    public void tourFinished() {
-        Log.d("QUESTION_FRAGMENT", "TOUR_FINISHED");
-
-        if(activeTour != null && !activeTour.isCancelled()) {
-            activeTour.cancel(true);
-        }
+    private String buildCommand(POI poi) {
+        return "echo 'flytoview=<LookAt><longitude>" + poi.getLongitude() + "</longitude><latitude>" + poi.getLatitude() + "</latitude><altitude>" + poi.getAltitude() + "</altitude><heading>" + poi.getHeading() + "</heading><tilt>" + poi.getTilt() + "</tilt><range>" + poi.getRange() + "</range><gx:altitudeMode>" + poi.getAltitudeMode() + "</gx:altitudeMode></LookAt>' > /tmp/query.txt";
     }
 
-    public void changeAlertDialogTitle(String title) {
-        this.getActivity().runOnUiThread(() -> {
-            if(activeAlertDialog != null) {
-                TextView textView = activeAlertDialog.findViewById(R.id.question_title_dialog);
-                textView.setText(title);
-            }
-        });
+    private void sendPOI(String command) {
+        LGConnectionManager.getInstance().addCommandToLG(new LGCommand(command, LGCommand.CRITICAL_MESSAGE));
+        Log.d("TOUR", "Sent a POI to LG");
     }
 }
