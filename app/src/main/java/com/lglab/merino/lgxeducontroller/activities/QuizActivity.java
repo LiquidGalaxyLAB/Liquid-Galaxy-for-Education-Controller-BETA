@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Build;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
@@ -14,6 +15,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +46,7 @@ import java.util.stream.IntStream;
 public class QuizActivity extends AppCompatActivity {
 
     ScrollerViewPager viewPager;
+    FloatingActionButton exitButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +68,9 @@ public class QuizActivity extends AppCompatActivity {
 
         // just set viewPager
         springIndicator.setViewPager(viewPager);
+
+        exitButton = findViewById(R.id.exit_from_quiz_button);
+        exitButton.setOnClickListener(view -> exit());
     }
 
     private List<String> getTitles(){
@@ -96,6 +102,14 @@ public class QuizActivity extends AppCompatActivity {
         DialogFragment dialog = new ExitFromQuizFragment();
         dialog.show(this.getSupportFragmentManager(), "dialog");
         return true;
+    }
+
+    public void showFloatingExitButton() {
+        exitButton.setVisibility(View.VISIBLE);
+    }
+
+    public void exit() {
+        Log.d("HEY", "EXIT");
     }
 }
 

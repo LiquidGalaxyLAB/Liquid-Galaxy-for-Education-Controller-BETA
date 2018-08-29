@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lglab.merino.lgxeducontroller.R;
+import com.lglab.merino.lgxeducontroller.activities.QuizActivity;
 import com.lglab.merino.lgxeducontroller.connection.LGConnectionManager;
 import com.lglab.merino.lgxeducontroller.games.quiz.Question;
 import com.lglab.merino.lgxeducontroller.games.quiz.QuizManager;
@@ -30,6 +31,8 @@ public class QuestionFragment extends Fragment {
     private Question question;
     private TextView textView;
     private TextView[] answerViews;
+
+    private boolean sendInitialPOI = false;
 
     //LiquidGalaxyAnswerTourView activeTour;
     AlertDialog activeAlertDialog;
@@ -70,13 +73,25 @@ public class QuestionFragment extends Fragment {
         for(int i = 0; i < answerViews.length; i++) {
             setClickListener(i);
         }
+
+        if(sendInitialPOI == true) {
+            sendInitialPOI = false;
+            if(question.initialPOI.getId() != -1) {
+                sendPOI(buildCommand(question.initialPOI));
+            }
+        }
     }
 
     @Override
     public void setMenuVisibility(final boolean visible) {
         super.setMenuVisibility(visible);
         if (visible) {
-            //SEND INITIAL POI IF THERE'S ONE
+            if(question == null) {
+                sendInitialPOI = true;
+            }
+            else if(question.initialPOI.getId() != -1) {
+                sendPOI(buildCommand(question.initialPOI));
+            }
         }
     }
 
@@ -95,21 +110,6 @@ public class QuestionFragment extends Fragment {
                 }
 
                 if(!hadAlreadyClicked) {
-
-                    //AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    //LayoutInflater inflater = getActivity().getLayoutInflater();
-                    /*builder.setView(inflater.inflate(R.layout.dialog_answer_quiz, null))
-                        .setPositiveButton("SHOW CORRECT ANSWER", (dialog, id) -> {
-                            sendPOI(buildCommand(question.pois[question.correctAnswer - 1]));
-                            changeCommentDialog("And now going to " + question.pois[question.correctAnswer - 1].getName());
-                            dialog.dismiss();
-                        })
-                        .setNegativeButton("SKIP", (dialog, id) -> dialog.cancel());
-                        */
-                    /*builder.setOnCancelListener(dialog -> {
-                        tourFinished();
-                    });*/
-
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
                     if(question.selectedAnswer != question.correctAnswer) {
@@ -127,6 +127,8 @@ public class QuestionFragment extends Fragment {
                     }
 
                     builder.setNegativeButton("SKIP", (dialog, id) -> dialog.cancel());
+                    builder.setOnCancelListener(dialog -> checkQuizProgress());
+
                     activeAlertDialog = builder.create();
                     activeAlertDialog.show();
 
@@ -137,21 +139,18 @@ public class QuestionFragment extends Fragment {
                             v1.setEnabled(false);
                         });
                     }
-                    //activeTour = new LiquidGalaxyAnswerTourView(this);
-                    //activeTour.execute(questionNumber);
                 }
-
-                /*if(QuizManager.getInstance().hasAnsweredAllQuestions()){
-
-                    //He has answered all the questions, we must show something of his score...
-                    Toast.makeText(this.getContext(), "Answered all questions", Toast.LENGTH_LONG).show();
-
-                }*/
             }
         });
 
         if(question.selectedAnswer == i + 1) {
             view.findViewById(R.id.answerCard1 + i).performClick();
+        }
+    }
+
+    private void checkQuizProgress() {
+        if(QuizManager.getInstance().hasAnsweredAllQuestions()){
+            ((QuizActivity)getActivity()).showFloatingExitButton();
         }
     }
 
@@ -161,6 +160,5 @@ public class QuestionFragment extends Fragment {
 
     private void sendPOI(String command) {
         LGConnectionManager.getInstance().addCommandToLG(new LGCommand(command, LGCommand.CRITICAL_MESSAGE));
-        Log.d("TOUR", "Sent a POI to LG");
     }
 }
