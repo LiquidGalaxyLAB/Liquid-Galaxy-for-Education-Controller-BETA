@@ -39,6 +39,15 @@ public class QuestionFragment extends Fragment {
 
     private boolean hasClicked = false;
 
+    private static final POI EARTH_POI = new POI()
+                        .setLongitude(10.52668d)
+                        .setLatitude(40.085941d)
+                        .setAltitude(0.0d)
+                        .setHeading(0.0d)
+                        .setTilt(0.0d)
+                        .setRange(10000000.0d)
+                        .setAltitudeMode("relativeToSeaFloor");
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +88,9 @@ public class QuestionFragment extends Fragment {
             if(question.initialPOI.getId() != -1) {
                 sendPOI(buildCommand(question.initialPOI));
             }
+            else {
+                sendPOI(buildCommand(EARTH_POI));
+            }
         }
     }
 
@@ -91,6 +103,9 @@ public class QuestionFragment extends Fragment {
             }
             else if(question.initialPOI.getId() != -1) {
                 sendPOI(buildCommand(question.initialPOI));
+            }
+            else {
+                sendPOI(buildCommand(EARTH_POI));
             }
         }
     }

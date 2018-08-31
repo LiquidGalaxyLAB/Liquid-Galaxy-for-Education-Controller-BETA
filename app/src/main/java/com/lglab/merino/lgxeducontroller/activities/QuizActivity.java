@@ -3,6 +3,7 @@ package com.lglab.merino.lgxeducontroller.activities;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.design.widget.FloatingActionButton;
@@ -110,6 +111,10 @@ public class QuizActivity extends AppCompatActivity {
 
     public void exit() {
         Log.d("HEY", "EXIT");
+
+        Intent i = new Intent(this, ResultsActivity.class);
+        i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY); //Adds the FLAG_ACTIVITY_NO_HISTORY flag
+        startActivity(i);
     }
 }
 
