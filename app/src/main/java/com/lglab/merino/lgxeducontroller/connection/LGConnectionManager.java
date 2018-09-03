@@ -93,7 +93,7 @@ public class LGConnectionManager implements Runnable {
             try {
                 session.connect(Integer.MAX_VALUE);
             } catch (Exception e) {
-                e.printStackTrace();
+                //e.printStackTrace();
                 return null;
             }
             return session;

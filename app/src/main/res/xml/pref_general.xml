@@ -23,6 +23,11 @@
         android:singleLine="true"
         android:title="Liquid Galaxy connection Host Name (IP)" />
 
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="isOnChromeBook"
+        android:title="On ChromeBook" />
+
     <EditTextPreference
         android:defaultValue="22"
         android:inputType="number"

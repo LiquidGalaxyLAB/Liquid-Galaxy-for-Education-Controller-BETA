@@ -153,7 +153,8 @@ public class QuestionFragment extends Fragment {
                         final Handler handler = new Handler();
                         handler.postDelayed(() -> {
                             //Do something after 15sec
-                            activeAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE).performClick();
+                            if(activeAlertDialog.isShowing())
+                                activeAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE).performClick();
                         }, 15000);
 
                         activeAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v1 -> {
