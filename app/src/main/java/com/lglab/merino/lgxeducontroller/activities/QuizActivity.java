@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -103,6 +104,14 @@ public class QuizActivity extends AppCompatActivity {
         DialogFragment dialog = new ExitFromQuizFragment();
         dialog.show(this.getSupportFragmentManager(), "dialog");
         return true;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0)
+            return onSupportNavigateUp();
+
+        return super.onKeyDown(keyCode, event);
     }
 
     public void showFloatingExitButton() {
