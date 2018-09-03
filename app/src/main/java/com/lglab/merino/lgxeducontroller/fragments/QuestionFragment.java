@@ -55,7 +55,7 @@ public class QuestionFragment extends Fragment {
             .setAltitude(0.0d)
             .setHeading(0.0d)
             .setTilt(0.0d)
-            .setRange(6000000.0d)
+            .setRange(3000000.0d)
             .setAltitudeMode("relativeToSeaFloor");
 
     @Override
