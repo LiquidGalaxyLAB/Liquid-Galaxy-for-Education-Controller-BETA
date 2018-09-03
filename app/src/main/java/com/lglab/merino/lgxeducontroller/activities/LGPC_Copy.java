@@ -127,94 +127,6 @@ public class LGPC_Copy extends AppCompatActivity implements ActionBar.TabListene
         dialog.show();
     }
 
-    private void showAlert() {
-        // prepare the alert box
-        final AlertDialog.Builder alertbox = new AlertDialog.Builder(LGPC_Copy.this);
-
-        // set the message to display
-        alertbox.setMessage("Please, first stop the Tour.");
-
-        // set a positive/yes button and create a listener
-        alertbox.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-            // When button is clicked
-            public void onClick(DialogInterface arg0, int arg1) {
-
-            }
-        });
-        // display box
-        alertbox.show();
-    }
-
-    private void showPasswordAlert() {
-        // prepare the alert box
-        final AlertDialog.Builder alertbox = new AlertDialog.Builder(LGPC_Copy.this);
-        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
-        // set the message to display
-        alertbox.setMessage("Please, enter the password:");
-        final EditText input = new EditText(LGPC_Copy.this);
-        input.setHint("Password");
-        input.setTransformationMethod(PasswordTransformationMethod.getInstance());
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        input.setLayoutParams(lp);
-        alertbox.setView(input);
-
-        // set a positive/yes button and create a listener
-        alertbox.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-
-            // When button is clicked
-            public void onClick(DialogInterface arg0, int arg1) {
-
-                String pass = input.getText().toString();
-                String correct_pass = prefs.getString("AdminPassword", "lg");
-                if (pass.equals(correct_pass)) {
-                    Intent intent = new Intent(LGPC_Copy.this, LGPCAdminActivity.class);
-                    startActivity(intent);
-                } else {
-                    incorrectPasswordAlertMessage();
-                }
-            }
-        });
-
-        // set a negative/no button and create a listener
-        alertbox.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            // When button is clicked
-            public void onClick(DialogInterface arg0, int arg1) {
-            }
-        });
-        // display box
-        alertbox.show();
-    }
-
-    private void incorrectPasswordAlertMessage() {
-        // prepare the alert box
-        final AlertDialog.Builder alertbox = new AlertDialog.Builder(LGPC_Copy.this);
-
-        // set the message to display
-        alertbox.setTitle("Error");
-        alertbox.setMessage("Incorrect password. Please, try it again or cancel the operation.");
-
-        // set a positive/yes button and create a listener
-        alertbox.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
-
-            // When button is clicked
-            public void onClick(DialogInterface arg0, int arg1) {
-                showPasswordAlert();
-            }
-        });
-
-        // set a negative/no button and create a listener
-        alertbox.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            // When button is clicked
-            public void onClick(DialogInterface arg0, int arg1) {
-            }
-        });
-        // display box
-        alertbox.show();
-    }
-
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
         // When the given tab is selected, switch to the corresponding page in
@@ -231,14 +143,20 @@ public class LGPC_Copy extends AppCompatActivity implements ActionBar.TabListene
     }
 
     @Override
-    public void onBackPressed() {
-        //Required for kioskMode
-        numBack++;
-        if (numBack == 4) {
-            finish();
-            System.exit(0);
-        }
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0)
+            return onSupportNavigateUp();
+
+        return super.onKeyDown(keyCode, event);
+    }
+
+
 
     //Required for kioskMode
     @Override
