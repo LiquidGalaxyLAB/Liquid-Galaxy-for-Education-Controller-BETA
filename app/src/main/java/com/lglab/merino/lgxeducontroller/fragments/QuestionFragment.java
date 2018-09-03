@@ -159,12 +159,12 @@ public class QuestionFragment extends Fragment {
 
                     if(question.selectedAnswer != question.correctAnswer) {
 
-                        final Handler handler = new Handler();
+                        /*final Handler handler = new Handler();
                         handler.postDelayed(() -> {
                             //Do something after 15sec
                             if(activeAlertDialog.isShowing())
                                 activeAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE).performClick();
-                        }, 15000);
+                        }, 15000);*/
 
                         activeAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v1 -> {
                             sendPOI(buildCommand(question.pois[question.correctAnswer - 1]));
