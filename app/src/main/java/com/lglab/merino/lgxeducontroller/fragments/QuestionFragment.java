@@ -33,7 +33,7 @@ public class QuestionFragment extends Fragment {
     private TextView textView;
     private TextView[] answerViews;
 
-    private boolean sendInitialPOI = false;
+    private boolean sendInitialPOIOnCreate = false;
 
     //LiquidGalaxyAnswerTourView activeTour;
     AlertDialog activeAlertDialog;
@@ -48,6 +48,15 @@ public class QuestionFragment extends Fragment {
                         .setTilt(0.0d)
                         .setRange(10000000.0d)
                         .setAltitudeMode("relativeToSeaFloor");
+
+    private static final POI EUROPE_POI = new POI()
+            .setLongitude(9.0629d)
+            .setLatitude(47.77d)
+            .setAltitude(0.0d)
+            .setHeading(0.0d)
+            .setTilt(0.0d)
+            .setRange(6000000.0d)
+            .setAltitudeMode("relativeToSeaFloor");
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -84,14 +93,9 @@ public class QuestionFragment extends Fragment {
             setClickListener(i);
         }
 
-        if(sendInitialPOI == true) {
-            sendInitialPOI = false;
-            if(question.initialPOI.getId() != -1) {
-                sendPOI(buildCommand(question.initialPOI));
-            }
-            else {
-                sendPOI(buildCommand(EARTH_POI));
-            }
+        if(sendInitialPOIOnCreate == true) {
+            sendInitialPOIOnCreate = false;
+            sendInitialPoi();
         }
     }
 
@@ -99,16 +103,21 @@ public class QuestionFragment extends Fragment {
     public void setMenuVisibility(final boolean visible) {
         super.setMenuVisibility(visible);
         if (visible) {
-            if(question == null) {
-                sendInitialPOI = true;
-            }
-            else if(question.initialPOI.getId() != -1) {
-                sendPOI(buildCommand(question.initialPOI));
-            }
-            else {
-                sendPOI(buildCommand(EARTH_POI));
-            }
+            if (question == null)
+                sendInitialPOIOnCreate = true;
+            else
+                sendInitialPoi();
         }
+    }
+
+    private void sendInitialPoi() {
+        long poiId = question.initialPOI.getId();
+        if(poiId == -1)
+            sendPOI(buildCommand(EARTH_POI));
+        else if(poiId == -2)
+            sendPOI(buildCommand(EUROPE_POI));
+        else
+            sendPOI(buildCommand(question.initialPOI));
     }
 
     public void setClickListener(final int i) {
