@@ -45,16 +45,16 @@ public class MainActivity extends GoogleDriveActivity {
 
         button_navigate();
         button_play();
-        button_prova_ALEKS();
+        //button_prova();
     }
 
-    private void button_prova_ALEKS() {
-        Button aleks = findViewById(R.id.aleks_button);
-        aleks.setOnClickListener(view -> {
+   /* private void button_prova() {
+        Button button = findViewById(R.id.button_button);
+        button.setOnClickListener(view -> {
             Intent intent = new Intent(context, CreateQuestionActivity.class);
             startActivity(intent);
         });
-    }
+    }*/
 
     private void button_navigate() {
         findViewById(R.id.navigate).setOnClickListener(view -> {

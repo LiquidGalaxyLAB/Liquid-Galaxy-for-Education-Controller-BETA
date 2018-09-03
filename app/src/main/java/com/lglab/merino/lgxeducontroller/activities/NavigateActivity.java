@@ -1,5 +1,6 @@
 package com.lglab.merino.lgxeducontroller.activities;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -18,7 +19,12 @@ import android.widget.MediaController;
 
 import com.lglab.merino.lgxeducontroller.R;
 import com.lglab.merino.lgxeducontroller.connection.LGConnectionManager;
+import com.lglab.merino.lgxeducontroller.legacy.AdminActivity;
+import com.lglab.merino.lgxeducontroller.legacy.CreateItemActivity;
+import com.lglab.merino.lgxeducontroller.legacy.LGPC;
+import com.lglab.merino.lgxeducontroller.legacy.LGPCAdminActivity;
 import com.lglab.merino.lgxeducontroller.legacy.utils.LGUtils;
+import com.lglab.merino.lgxeducontroller.legacy.utils.PoisGridViewAdapter;
 import com.lglab.merino.lgxeducontroller.utils.LGCommand;
 import com.lglab.merino.lgxeducontroller.utils.PointerDetector;
 
@@ -48,6 +54,8 @@ public class NavigateActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle("Navigate");
 
+
+
         wifiGif = findViewById(R.id.wifi_gif);
     }
 
@@ -68,13 +76,15 @@ public class NavigateActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
             case R.id.go_to_pois_and_tours:
-                //GOTOPOISANDTOURSSCREEN
-                return true;
+                 Intent intent = new Intent(this, LGPC_Copy.class);
+                 startActivity(intent);
+                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -215,3 +225,4 @@ public class NavigateActivity extends AppCompatActivity {
         LGConnectionManager.getInstance().setNavigateActivity(null);
     }
 }
+

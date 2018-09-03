@@ -78,6 +78,9 @@
             android:name=".legacy.LGPC"
             android:label="@string/app_name"></activity>
         <activity
+            android:name=".activities.LGPC_Copy"
+            android:label="@string/app_name"></activity>
+        <activity
             android:name=".legacy.LGPCAdminActivity"
             android:label="" />
         <activity
