@@ -28,4 +28,11 @@ public class QuizManager {
 
         return allAnswered;
     }
+
+    public int correctAnsweredQuestionsCount() {
+        int total = 0;
+        for(int i = 0; i < quiz.questions.size(); i++)
+            total += quiz.questions.get(i).selectedAnswer == quiz.questions.get(i).correctAnswer ? 1 : 0;
+        return total;
+    }
 }

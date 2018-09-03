@@ -12,9 +12,9 @@ public class Question implements IJsonPacker {
     public String question;
     public int correctAnswer;
     public String[] answers;
-    private String information;
+    public String information;
     public POI[] pois;
-    private POI initialPOI;
+    public POI initialPOI;
 
 
     //Additional for game-use only

@@ -43,6 +43,7 @@ public class SettingsActivity extends PreferenceActivity
         bindPreferenceSummaryToValue(findPreference("Password"));
         bindPreferenceSummaryToValue(findPreference("HostName"));
         bindPreferenceSummaryToValue(findPreference("Port"));
+        bindPreferenceSummaryToValue(findPreference("isOnChromeBook"));
         bindPreferenceSummaryToValue(findPreference("AdminPassword"));
         bindPreferenceSummaryToValue(findPreference("pref_kiosk_mode"));
         bindPreferenceSummaryToValue(findPreference("ServerIp"));
@@ -79,7 +80,7 @@ public class SettingsActivity extends PreferenceActivity
 
         // Trigger the listener immediately with the preference's
         // current value.
-        if (preference.getKey().equals("pref_kiosk_mode")) {
+        if (preference.getKey().equals("pref_kiosk_mode") || preference.getKey().equals("isOnChromeBook")) {
             onPreferenceChange(preference, PreferenceManager.getDefaultSharedPreferences(preference.getContext()).getBoolean(preference.getKey(), false));
         } else {
             onPreferenceChange(preference, PreferenceManager.getDefaultSharedPreferences(preference.getContext()).getString(preference.getKey(), ""));

@@ -123,7 +123,8 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".activities.QuizActivity"></activity>
+        <activity android:name=".activities.QuizActivity" android:screenOrientation="sensorLandscape"></activity>
+        <activity android:name=".activities.ResultsActivity" android:screenOrientation="sensorLandscape"></activity>
     </application>
 
 </manifest>

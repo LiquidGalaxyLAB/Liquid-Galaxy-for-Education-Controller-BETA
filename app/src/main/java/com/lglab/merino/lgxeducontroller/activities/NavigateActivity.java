@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -44,6 +45,8 @@ public class NavigateActivity extends AppCompatActivity {
 
     public GifImageView wifiGif;
 
+    private boolean isOnChromeBook = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +68,8 @@ public class NavigateActivity extends AppCompatActivity {
         LGConnectionManager.getInstance().setNavigateActivity(this);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        LGConnectionManager.getInstance().setData(prefs.getString("User", "lg"),  prefs.getString("Password", "lqgalaxy"), prefs.getString("HostName", "10.160.67.204"), Integer.parseInt(prefs.getString("Port", "22")));
+        LGConnectionManager.getInstance().setData(prefs.getString("User", "lg"),  prefs.getString("Password", "lqgalaxy"), prefs.getString("HostName", "10.160.67.80"), Integer.parseInt(prefs.getString("Port", "22")));
+        isOnChromeBook = prefs.getBoolean("isOnChromeBook", false);
     }
 
     @Override
@@ -82,9 +86,13 @@ public class NavigateActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.go_to_pois_and_tours:
+<<<<<<< HEAD
                  Intent intent = new Intent(this, LGPC_Copy.class);
                  startActivity(intent);
                  return true;
+=======
+                return true;
+>>>>>>> d98b210d65baac2ae74678883a2c82f61120edbb
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -94,6 +102,14 @@ public class NavigateActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0)
+            return onSupportNavigateUp();
+
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override
@@ -135,11 +151,11 @@ public class NavigateActivity extends AppCompatActivity {
         if(pointers.size() == 1) {
             PointerDetector pointer = pointers.entrySet().iterator().next().getValue();
             if(pointer.isMoving() && canMove1()) {
-                LGConnectionManager.getInstance().addCommandToLG(new LGCommand("export DISPLAY=:0; " +
+                LGConnectionManager.getInstance().addCommandToLG(new LGCommand("export DISPLAY=:" + (isOnChromeBook ? "1" : "0") + "; " +
                         "xdotool mouseup 1 " +
                         "mousemove --polar --sync 0 0 " +
                         "mousedown 1 " +
-                        "mousemove --polar --sync " + (int)pointer.getTraveledAngle() + " " + (int)Math.min(pointer.getTraveledDistance(), 250) + " " +
+                        "mousemove --polar --sync " + (int)pointer.getTraveledAngle() + " " + (isOnChromeBook ? 3 : 1) * (int)Math.min(pointer.getTraveledDistance(), 250) + " " +
                         "mouseup 1;", LGCommand.NON_CRITICAL_MESSAGE)
                 );
             }
@@ -180,11 +196,11 @@ public class NavigateActivity extends AppCompatActivity {
                     updateKeyToLG(PointerDetector.isZoomingOut, PointerDetector.KEY_ZOOM_OUT);
                 }
 
-                LGConnectionManager.getInstance().addCommandToLG(new LGCommand("export DISPLAY=:0; " +
+                LGConnectionManager.getInstance().addCommandToLG(new LGCommand("export DISPLAY=:" + (isOnChromeBook ? "1" : "0") + "; " +
                         "xdotool mouseup 1 " +
                         "mousemove --polar --sync 0 0 " +
                         "mousedown 2 " +
-                        "mousemove --polar --sync " + (int)getAverageAngle(pointer1.getTraveledAngle(), pointer2.getTraveledAngle(),angleDiff) + " " + (int)Math.min((pointer1.getTraveledDistance() + pointer2.getTraveledDistance()) / 2, 250) + " " +
+                        "mousemove --polar --sync " + (int)getAverageAngle(pointer1.getTraveledAngle(), pointer2.getTraveledAngle(),angleDiff) + " " + (isOnChromeBook ? 3 : 1) * (int)Math.min((pointer1.getTraveledDistance() + pointer2.getTraveledDistance()) / 2, 250) + " " +
                         "mouseup 2;", LGCommand.NON_CRITICAL_MESSAGE)
                 );
             }
@@ -196,7 +212,7 @@ public class NavigateActivity extends AppCompatActivity {
     }
 
     private void updateKeyToLG(boolean isActive, String key) {
-        LGConnectionManager.getInstance().addCommandToLG(new LGCommand("export DISPLAY=:0; " +
+        LGConnectionManager.getInstance().addCommandToLG(new LGCommand("export DISPLAY=:" + (isOnChromeBook ? "1" : "0") + "; " +
                 "xdotool key" + (isActive ? "down" : "up") + " " + key + ";", LGCommand.CRITICAL_MESSAGE)
         );
     }

@@ -37,6 +37,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import static com.google.android.gms.drive.Drive.getDriveResourceClient;
 import static com.lglab.merino.lgxeducontroller.drive.GoogleDriveManager.RC_SIGN_IN;
@@ -118,7 +120,8 @@ public abstract class GoogleDriveActivity extends AppCompatActivity {
     private Task<DriveId> pickTextFile() {
         OpenFileActivityOptions openOptions =
                 new OpenFileActivityOptions.Builder()
-                        .setSelectionFilter(Filters.eq(SearchableField.MIME_TYPE, "text/plain"))
+                        //.setSelectionFilter(Filters.eq(SearchableField.MIME_TYPE, "text/plain"))
+                        .setMimeType(new ArrayList(Arrays.asList( "text/plain", "application/json")))
                         .setActivityTitle("Select a file")
                         .build();
         return pickItem(openOptions);
@@ -203,7 +206,8 @@ public abstract class GoogleDriveActivity extends AppCompatActivity {
 
                     MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
                             .setTitle(quiz.getNameForExporting())
-                            .setMimeType("text/plain")
+                            //.setMimeType("text/plain")
+                            .setMimeType("application/json")
                             .setStarred(true)
                             .build();
 

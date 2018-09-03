@@ -3,6 +3,7 @@ package com.lglab.merino.lgxeducontroller.fragments;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lglab.merino.lgxeducontroller.R;
+import com.lglab.merino.lgxeducontroller.activities.QuizActivity;
 import com.lglab.merino.lgxeducontroller.connection.LGConnectionManager;
 import com.lglab.merino.lgxeducontroller.games.quiz.Question;
 import com.lglab.merino.lgxeducontroller.games.quiz.QuizManager;
@@ -31,10 +33,30 @@ public class QuestionFragment extends Fragment {
     private TextView textView;
     private TextView[] answerViews;
 
+    private boolean sendInitialPOIOnCreate = false;
+
     //LiquidGalaxyAnswerTourView activeTour;
     AlertDialog activeAlertDialog;
 
     private boolean hasClicked = false;
+
+    private static final POI EARTH_POI = new POI()
+                        .setLongitude(10.52668d)
+                        .setLatitude(40.085941d)
+                        .setAltitude(0.0d)
+                        .setHeading(0.0d)
+                        .setTilt(0.0d)
+                        .setRange(10000000.0d)
+                        .setAltitudeMode("relativeToSeaFloor");
+
+    private static final POI EUROPE_POI = new POI()
+            .setLongitude(9.0629d)
+            .setLatitude(47.77d)
+            .setAltitude(0.0d)
+            .setHeading(0.0d)
+            .setTilt(0.0d)
+            .setRange(6000000.0d)
+            .setAltitudeMode("relativeToSeaFloor");
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,14 +92,32 @@ public class QuestionFragment extends Fragment {
         for(int i = 0; i < answerViews.length; i++) {
             setClickListener(i);
         }
+
+        if(sendInitialPOIOnCreate == true) {
+            sendInitialPOIOnCreate = false;
+            sendInitialPoi();
+        }
     }
 
     @Override
     public void setMenuVisibility(final boolean visible) {
         super.setMenuVisibility(visible);
         if (visible) {
-            //SEND INITIAL POI IF THERE'S ONE
+            if (question == null)
+                sendInitialPOIOnCreate = true;
+            else
+                sendInitialPoi();
         }
+    }
+
+    private void sendInitialPoi() {
+        long poiId = question.initialPOI.getId();
+        if(poiId == -1)
+            sendPOI(buildCommand(EARTH_POI));
+        else if(poiId == -2)
+            sendPOI(buildCommand(EUROPE_POI));
+        else
+            sendPOI(buildCommand(question.initialPOI));
     }
 
     public void setClickListener(final int i) {
@@ -95,21 +135,6 @@ public class QuestionFragment extends Fragment {
                 }
 
                 if(!hadAlreadyClicked) {
-
-                    //AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    //LayoutInflater inflater = getActivity().getLayoutInflater();
-                    /*builder.setView(inflater.inflate(R.layout.dialog_answer_quiz, null))
-                        .setPositiveButton("SHOW CORRECT ANSWER", (dialog, id) -> {
-                            sendPOI(buildCommand(question.pois[question.correctAnswer - 1]));
-                            changeCommentDialog("And now going to " + question.pois[question.correctAnswer - 1].getName());
-                            dialog.dismiss();
-                        })
-                        .setNegativeButton("SKIP", (dialog, id) -> dialog.cancel());
-                        */
-                    /*builder.setOnCancelListener(dialog -> {
-                        tourFinished();
-                    });*/
-
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
                     if(question.selectedAnswer != question.correctAnswer) {
@@ -127,31 +152,38 @@ public class QuestionFragment extends Fragment {
                     }
 
                     builder.setNegativeButton("SKIP", (dialog, id) -> dialog.cancel());
+                    builder.setOnCancelListener(dialog -> checkQuizProgress());
+
                     activeAlertDialog = builder.create();
                     activeAlertDialog.show();
 
                     if(question.selectedAnswer != question.correctAnswer) {
+
+                        /*final Handler handler = new Handler();
+                        handler.postDelayed(() -> {
+                            //Do something after 15sec
+                            if(activeAlertDialog.isShowing())
+                                activeAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE).performClick();
+                        }, 15000);*/
+
                         activeAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v1 -> {
                             sendPOI(buildCommand(question.pois[question.correctAnswer - 1]));
                             activeAlertDialog.setMessage("And now going to " + question.pois[question.correctAnswer - 1].getName());
                             v1.setEnabled(false);
                         });
                     }
-                    //activeTour = new LiquidGalaxyAnswerTourView(this);
-                    //activeTour.execute(questionNumber);
                 }
-
-                /*if(QuizManager.getInstance().hasAnsweredAllQuestions()){
-
-                    //He has answered all the questions, we must show something of his score...
-                    Toast.makeText(this.getContext(), "Answered all questions", Toast.LENGTH_LONG).show();
-
-                }*/
             }
         });
 
         if(question.selectedAnswer == i + 1) {
             view.findViewById(R.id.answerCard1 + i).performClick();
+        }
+    }
+
+    private void checkQuizProgress() {
+        if(QuizManager.getInstance().hasAnsweredAllQuestions()){
+            ((QuizActivity)getActivity()).showFloatingExitButton();
         }
     }
 
@@ -161,6 +193,5 @@ public class QuestionFragment extends Fragment {
 
     private void sendPOI(String command) {
         LGConnectionManager.getInstance().addCommandToLG(new LGCommand(command, LGCommand.CRITICAL_MESSAGE));
-        Log.d("TOUR", "Sent a POI to LG");
     }
 }

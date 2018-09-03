@@ -68,72 +68,81 @@ public class POI implements IJsonPacker, Parcelable {
         return name;
     }
 
-    public void setName(String name) {
+    public POI setName(String name) {
         this.name = name;
+        return this;
     }
 
     public String getVisited_place() {
         return visited_place;
     }
 
-    public void setVisited_place(String visited_place) {
+    public POI setVisited_place(String visited_place) {
         this.visited_place = visited_place;
+        return this;
     }
 
     public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(double longitude) {
+    public POI setLongitude(double longitude) {
         this.longitude = longitude;
+        return this;
     }
 
     public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(double latitude) {
+    public POI setLatitude(double latitude) {
         this.latitude = latitude;
+        return this;
     }
 
     public double getAltitude() {
         return altitude;
     }
 
-    public void setAltitude(double altitude) {
+    public POI setAltitude(double altitude) {
         this.altitude = altitude;
+        return this;
     }
 
     public double getHeading() {
         return heading;
     }
 
-    public void setHeading(double heading) {
+    public POI setHeading(double heading) {
         this.heading = heading;
+        return this;
     }
 
     public double getTilt() {
         return tilt;
     }
 
-    public void setTilt(double tilt) {
+    public POI setTilt(double tilt) {
         this.tilt = tilt;
+        return this;
     }
 
     public double getRange() {
         return range;
     }
 
-    public void setRange(double range) {
+    public POI setRange(double range) {
         this.range = range;
+        return this;
     }
 
     public String getAltitudeMode() {
         return altitudeMode;
     }
 
-    public void setAltitudeMode(String altitudeMode) {
+    public POI setAltitudeMode(String altitudeMode) {
         this.altitudeMode = altitudeMode;
+        return this;
     }
 
     public boolean isHidden() {

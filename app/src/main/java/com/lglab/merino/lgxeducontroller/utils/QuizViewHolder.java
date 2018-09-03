@@ -31,6 +31,7 @@ public class QuizViewHolder extends ChildViewHolder {
             QuizManager.getInstance().startQuiz(quiz);
 
             Intent intent = new Intent(activity, QuizActivity.class);
+            intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY); //Adds the FLAG_ACTIVITY_NO_HISTORY flag
             activity.startActivity(intent);
 
         });
