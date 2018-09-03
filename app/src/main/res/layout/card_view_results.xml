@@ -50,7 +50,7 @@
                 android:id="@+id/question_name"
                 android:layout_toRightOf="@+id/number_question"
                 android:layout_alignParentTop="true"
-                android:textSize="30sp"
+                android:textSize="26sp"
                 android:text="HOLA"
                 android:textColor="#000000" />
 
@@ -59,9 +59,10 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/question_solution"
                 android:layout_toRightOf="@+id/number_question"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:text="HOLA"
-                android:layout_marginLeft="12dp"/>
+                android:layout_marginLeft="12dp"
+                android:layout_gravity="center_vertical"/>
         </LinearLayout>
 
     </RelativeLayout>

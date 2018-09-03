@@ -44,6 +44,7 @@ public class ResultsActivity extends AppCompatActivity {
         ResultsAdapter adapter = new ResultsAdapter();
         rv.setAdapter(adapter);
 
+        ((TextView)findViewById(R.id.textViewScore)).setText("You have scored " + String.valueOf(QuizManager.getInstance().correctAnsweredQuestionsCount()) + " out of " + String.valueOf(QuizManager.getInstance().getQuiz().questions.size()) + "!");
     }
 
     @Override
