@@ -3,6 +3,7 @@ package com.lglab.merino.lgxeducontroller.fragments;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -148,6 +149,13 @@ public class QuestionFragment extends Fragment {
                     activeAlertDialog.show();
 
                     if(question.selectedAnswer != question.correctAnswer) {
+
+                        final Handler handler = new Handler();
+                        handler.postDelayed(() -> {
+                            //Do something after 15sec
+                            activeAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE).performClick();
+                        }, 15000);
+
                         activeAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v1 -> {
                             sendPOI(buildCommand(question.pois[question.correctAnswer - 1]));
                             activeAlertDialog.setMessage("And now going to " + question.pois[question.correctAnswer - 1].getName());
