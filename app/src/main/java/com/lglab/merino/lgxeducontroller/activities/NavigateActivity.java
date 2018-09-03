@@ -86,13 +86,9 @@ public class NavigateActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.go_to_pois_and_tours:
-<<<<<<< HEAD
                  Intent intent = new Intent(this, LGPC_Copy.class);
                  startActivity(intent);
                  return true;
-=======
-                return true;
->>>>>>> d98b210d65baac2ae74678883a2c82f61120edbb
             default:
                 return super.onOptionsItemSelected(item);
         }
