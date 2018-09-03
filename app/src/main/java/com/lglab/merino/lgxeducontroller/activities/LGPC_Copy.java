@@ -112,21 +112,6 @@ public class LGPC_Copy extends AppCompatActivity implements ActionBar.TabListene
         getSupportActionBar().setDisplayUseLogoEnabled(true);
     }
 
-    private void showAboutDialog() {
-        final Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.about_dialog);
-        dialog.setTitle(getResources().getString(R.string.about_Controller_message));
-
-        Button dialogButton = (Button) dialog.findViewById(R.id.aboutDialogButtonOK);
-        dialogButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-    }
-
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
         // When the given tab is selected, switch to the corresponding page in
