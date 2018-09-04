@@ -20,6 +20,8 @@ import android.widget.Toast;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.lglab.merino.lgxeducontroller.R;
+import com.lglab.merino.lgxeducontroller.connection.LGCommand;
+import com.lglab.merino.lgxeducontroller.connection.LGConnectionManager;
 import com.lglab.merino.lgxeducontroller.legacy.beans.POI;
 
 import java.util.List;
@@ -326,10 +328,11 @@ public class PoisGridViewAdapter extends BaseAdapter {
         protected String doInBackground(Void... params) {
             try {
 
-                session = LGUtils.getSession(activity);
+                //session = LGUtils.getSession(activity);
 
                 //We fly to the point
-                LGUtils.setConnectionWithLiquidGalaxy(session, command, activity);
+                //LGUtils.setConnectionWithLiquidGalaxy(session, command, activity);
+                LGConnectionManager.getInstance().addCommandToLG(new LGCommand(command, LGCommand.CRITICAL_MESSAGE));
 
                 //If rotation button is pressed, we start the rotation
                 if (this.rotate) {
@@ -337,7 +340,7 @@ public class PoisGridViewAdapter extends BaseAdapter {
                     boolean isFirst = true;
 
                     while (!isCancelled()) {
-                        session.sendKeepAliveMsg();
+                        //session.sendKeepAliveMsg();
 
                         for (int i = 0; i <= (360 - this.currentPoi.getHeading()); i += (this.rotationAngle * this.rotationFactor)) {
 
@@ -352,8 +355,9 @@ public class PoisGridViewAdapter extends BaseAdapter {
                                     "</LookAt>' > /tmp/query.txt";
 
 
-                            LGUtils.setConnectionWithLiquidGalaxy(session, commandRotate, activity);
-                            session.sendKeepAliveMsg();
+                            //LGUtils.setConnectionWithLiquidGalaxy(session, commandRotate, activity);
+                            LGConnectionManager.getInstance().addCommandToLG(new LGCommand(commandRotate, LGCommand.CRITICAL_MESSAGE));
+                            //session.sendKeepAliveMsg();
 
                             if (isFirst) {
                                 isFirst = false;
@@ -367,7 +371,7 @@ public class PoisGridViewAdapter extends BaseAdapter {
 
                 return "";
 
-            } catch (JSchException e) {
+            /*} catch (JSchException e) {
                 this.cancel(true);
                 if (dialog != null) {
                     dialog.dismiss();
@@ -381,7 +385,7 @@ public class PoisGridViewAdapter extends BaseAdapter {
                 });
 
                 return null;
-            } catch (InterruptedException e) {
+            */} catch (InterruptedException e) {
                 activity.runOnUiThread(new Runnable() {
 
                     @Override
