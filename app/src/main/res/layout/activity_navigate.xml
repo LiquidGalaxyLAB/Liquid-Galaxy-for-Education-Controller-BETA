@@ -22,7 +22,7 @@
             android:adjustViewBounds="true"
             android:src="@drawable/wifi"
             android:scaleType="centerCrop"
-            android:visibility="invisible" />
+            android:visibility="visible" />
     </RelativeLayout>
 
     <TextView

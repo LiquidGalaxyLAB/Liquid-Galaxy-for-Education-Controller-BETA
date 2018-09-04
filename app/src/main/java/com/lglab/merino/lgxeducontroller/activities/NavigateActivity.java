@@ -2,48 +2,37 @@ package com.lglab.merino.lgxeducontroller.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.View;
-import android.widget.Button;
-import android.widget.MediaController;
 
 import com.lglab.merino.lgxeducontroller.R;
+import com.lglab.merino.lgxeducontroller.connection.ILGConnection;
 import com.lglab.merino.lgxeducontroller.connection.LGConnectionManager;
-import com.lglab.merino.lgxeducontroller.legacy.AdminActivity;
-import com.lglab.merino.lgxeducontroller.legacy.CreateItemActivity;
-import com.lglab.merino.lgxeducontroller.legacy.LGPC;
-import com.lglab.merino.lgxeducontroller.legacy.LGPCAdminActivity;
-import com.lglab.merino.lgxeducontroller.legacy.utils.LGUtils;
-import com.lglab.merino.lgxeducontroller.legacy.utils.PoisGridViewAdapter;
-import com.lglab.merino.lgxeducontroller.utils.LGCommand;
+import com.lglab.merino.lgxeducontroller.connection.LGCommand;
 import com.lglab.merino.lgxeducontroller.utils.PointerDetector;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import pl.droidsonroids.gif.GifDrawable;
-import pl.droidsonroids.gif.GifImageButton;
 import pl.droidsonroids.gif.GifImageView;
 
-public class NavigateActivity extends AppCompatActivity {
+public class NavigateActivity extends AppCompatActivity implements ILGConnection {
 
     private final HashMap<Integer, PointerDetector> pointers = new HashMap<>();
     private long canMoveTime = 0;
 
-    public GifImageView wifiGif;
+    private GifImageView wifiGif;
+    private short currentStatus;
 
     private boolean isOnChromeBook = false;
 
@@ -57,15 +46,15 @@ public class NavigateActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle("Navigate");
 
-
-
         wifiGif = findViewById(R.id.wifi_gif);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        LGConnectionManager.getInstance().setNavigateActivity(this);
+
+        LGConnectionManager.getInstance().setActivity(this);
+        currentStatus = 0;
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         LGConnectionManager.getInstance().setData(prefs.getString("User", "lg"),  prefs.getString("Password", "lqgalaxy"), prefs.getString("HostName", "10.160.67.80"), Integer.parseInt(prefs.getString("Port", "22")));
@@ -200,10 +189,7 @@ public class NavigateActivity extends AppCompatActivity {
                         "mouseup 2;", LGCommand.NON_CRITICAL_MESSAGE)
                 );
             }
-
         }
-
-
         return true;
     }
 
@@ -234,7 +220,38 @@ public class NavigateActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        LGConnectionManager.getInstance().setNavigateActivity(null);
+        LGConnectionManager.getInstance().setActivity(null);
+    }
+
+    @Override
+    public void setStatus(short status){
+        
+        runOnUiThread(() -> {
+            try {
+                if (status != currentStatus) {
+                    currentStatus = status;
+
+                    switch (status) {
+                        case LGConnectionManager.CONNECTED:
+                            wifiGif.setColorFilter(Color.parseColor("#4CAF50"));
+                            break;
+                        case LGConnectionManager.NOT_CONNECTED:
+                            wifiGif.setColorFilter(Color.parseColor("#F44336"));
+                            break;
+                        case LGConnectionManager.QUEUE_BUSY:
+                            wifiGif.setColorFilter(Color.parseColor("#FF9800"));
+                            break;
+                        default:
+                            wifiGif.setColorFilter(Color.argb(255, 255, 255, 255));
+                            break;
+                    }
+
+                }
+            }
+            catch (Exception e) {
+
+            }
+        });
     }
 }
 

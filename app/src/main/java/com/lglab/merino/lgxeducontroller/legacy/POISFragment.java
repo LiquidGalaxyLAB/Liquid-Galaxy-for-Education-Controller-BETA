@@ -1,6 +1,5 @@
 package com.lglab.merino.lgxeducontroller.legacy;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -25,16 +24,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.lglab.merino.lgxeducontroller.R;
 import com.lglab.merino.lgxeducontroller.connection.LGConnectionManager;
 import com.lglab.merino.lgxeducontroller.legacy.beans.TourPOI;
 import com.lglab.merino.lgxeducontroller.legacy.data.POIsContract;
-import com.lglab.merino.lgxeducontroller.legacy.utils.LGUtils;
-import com.lglab.merino.lgxeducontroller.utils.LGCommand;
+import com.lglab.merino.lgxeducontroller.connection.LGCommand;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

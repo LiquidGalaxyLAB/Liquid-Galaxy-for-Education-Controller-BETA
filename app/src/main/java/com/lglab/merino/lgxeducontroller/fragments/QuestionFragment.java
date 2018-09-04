@@ -1,22 +1,14 @@
 package com.lglab.merino.lgxeducontroller.fragments;
 
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.CardView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.lglab.merino.lgxeducontroller.R;
 import com.lglab.merino.lgxeducontroller.activities.QuizActivity;
@@ -24,7 +16,7 @@ import com.lglab.merino.lgxeducontroller.connection.LGConnectionManager;
 import com.lglab.merino.lgxeducontroller.games.quiz.Question;
 import com.lglab.merino.lgxeducontroller.games.quiz.QuizManager;
 import com.lglab.merino.lgxeducontroller.legacy.beans.POI;
-import com.lglab.merino.lgxeducontroller.utils.LGCommand;
+import com.lglab.merino.lgxeducontroller.connection.LGCommand;
 
 public class QuestionFragment extends Fragment {
     private View view;

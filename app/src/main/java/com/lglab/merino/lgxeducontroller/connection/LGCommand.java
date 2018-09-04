@@ -1,4 +1,4 @@
-package com.lglab.merino.lgxeducontroller.utils;
+package com.lglab.merino.lgxeducontroller.connection;
 
 public class LGCommand {
 

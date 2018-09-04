@@ -1,28 +1,35 @@
 package com.lglab.merino.lgxeducontroller.connection;
 
-import android.app.Activity;
 import android.database.Cursor;
 import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
 
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
-import com.lglab.merino.lgxeducontroller.R;
-import com.lglab.merino.lgxeducontroller.activities.NavigateActivity;
 import com.lglab.merino.lgxeducontroller.legacy.data.POIsProvider;
-import com.lglab.merino.lgxeducontroller.utils.LGCommand;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Properties;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
-import pl.droidsonroids.gif.GifImageView;
-
 public class LGConnectionManager implements Runnable {
+    public static final short CONNECTED = 1;
+    public static final short NOT_CONNECTED = 2;
+    public static final short QUEUE_BUSY = 3;
+
     private static LGConnectionManager instance = null;
+    private static StatusUpdater statusUpdater = null;
+
+    public static LGConnectionManager getInstance() {
+        if (instance == null) {
+            instance = new LGConnectionManager();
+            new Thread(instance).start();
+            statusUpdater = new StatusUpdater(instance);
+            new Thread(statusUpdater).start();
+        }
+        return instance;
+    }
 
     private String user;
     private String password;
@@ -36,7 +43,7 @@ public class LGConnectionManager implements Runnable {
     private int itemsToDequeue;
     private LGCommand lgCommandToReSend;
 
-    private NavigateActivity activity;
+    private ILGConnection activity;
 
     public LGConnectionManager() {
         user = "lg";
@@ -52,12 +59,17 @@ public class LGConnectionManager implements Runnable {
         //loadDataFromDB();
     }
 
-    public static LGConnectionManager getInstance() {
-        if (instance == null) {
-            instance = new LGConnectionManager();
-            new Thread(instance).start();
+    public synchronized void tick() {
+        ILGConnection activityCopy = activity;
+        if(activityCopy != null) {
+            if(session == null || !session.isConnected()) {
+                activityCopy.setStatus(LGConnectionManager.NOT_CONNECTED);
+            } else if (lgCommandToReSend == null && queue.size() == 0) {
+                activityCopy.setStatus(LGConnectionManager.CONNECTED);
+            } else {
+                activityCopy.setStatus(LGConnectionManager.QUEUE_BUSY);
+            }
         }
-        return instance;
     }
 
     private void loadDataFromDB() {
@@ -75,15 +87,16 @@ public class LGConnectionManager implements Runnable {
     }
 
     private Session getSession() {
-        if (session == null || !session.isConnected()) {
+        Session oldSession = this.session;
+        if (oldSession == null || !oldSession.isConnected()) {
             JSch jsch = new JSch();
+            Session session;
             try {
                 session = jsch.getSession(user, hostname, port);
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
             }
-
             session.setPassword(password);
 
             Properties prop = new Properties();
@@ -93,21 +106,23 @@ public class LGConnectionManager implements Runnable {
             try {
                 session.connect(Integer.MAX_VALUE);
             } catch (Exception e) {
-                //e.printStackTrace();
+                e.printStackTrace();
                 return null;
             }
+
+            this.session = session;
             return session;
         }
 
 
         try {
-            session.sendKeepAliveMsg();
+            oldSession.sendKeepAliveMsg();
+            return oldSession;
+
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
-
-        return session;
     }
 
     private boolean sendLGCommand(LGCommand lgCommand) {
@@ -149,34 +164,19 @@ public class LGConnectionManager implements Runnable {
         this.hostname = hostname;
         this.port = port;
 
+        session = null;
+        tick();
+        addCommandToLG(new LGCommand("echo 'connection';", LGCommand.CRITICAL_MESSAGE));
         //saveDataToDB();
     }
 
-    public void setNavigateActivity(NavigateActivity activity) {
+    public void setActivity(ILGConnection activity) {
         this.activity = activity;
-    }
-
-    private synchronized void setGifWifiVisibility(boolean visibility) {
-        try {
-            if(activity != null) {
-                int newVisibility = visibility ? View.VISIBLE : View.INVISIBLE;
-
-                activity.runOnUiThread(() -> {
-                    if(activity.wifiGif.getVisibility() != newVisibility)
-                        activity.wifiGif.setVisibility(newVisibility);
-                });
-            }
-
-        }
-        catch(Exception e) {
-
-        }
     }
 
     public void addCommandToLG(LGCommand lgCommand) {
         try {
             queue.offer(lgCommand);
-            setGifWifiVisibility(true);
         } catch (Exception e) {
 
         }
@@ -214,10 +214,6 @@ public class LGConnectionManager implements Runnable {
                 else {
                     //Command sent in less than 2 seconds
                     lgCommandToReSend = null;
-                }
-
-                if(lgCommandToReSend == null && queue.size() == 0) {
-                    setGifWifiVisibility(false);
                 }
             }
         } catch (InterruptedException e) {

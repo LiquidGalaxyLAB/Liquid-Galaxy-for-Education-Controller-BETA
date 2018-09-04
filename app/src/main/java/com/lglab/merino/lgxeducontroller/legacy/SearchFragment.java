@@ -25,18 +25,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.lglab.merino.lgxeducontroller.R;
 import com.lglab.merino.lgxeducontroller.connection.LGConnectionManager;
 import com.lglab.merino.lgxeducontroller.legacy.beans.Category;
 import com.lglab.merino.lgxeducontroller.legacy.beans.POI;
 import com.lglab.merino.lgxeducontroller.legacy.data.POIsContract;
-import com.lglab.merino.lgxeducontroller.legacy.utils.LGUtils;
 import com.lglab.merino.lgxeducontroller.legacy.utils.PoisGridViewAdapter;
-import com.lglab.merino.lgxeducontroller.utils.LGCommand;
+import com.lglab.merino.lgxeducontroller.connection.LGCommand;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
