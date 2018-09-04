@@ -424,7 +424,7 @@ public class PoisGridViewAdapter extends BaseAdapter {
 
         @Override
         protected Void doInBackground(Void... params) {
-            session = LGUtils.getSession(activity);
+            //session = LGUtils.getSession(activity);
             return null;
         }
 
