@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.support.v4.content.res.ResourcesCompat;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -35,6 +36,7 @@ public class PoisGridViewAdapter extends BaseAdapter {
     private Context context;
     private Activity activity;
     private Session session;
+    private Handler handler = new Handler();
 
     public PoisGridViewAdapter(List<POI> poiList, Context context, Activity activity) {
         this.poiList = poiList;
@@ -77,13 +79,10 @@ public class PoisGridViewAdapter extends BaseAdapter {
         rotatePoiButton.setBackground(ResourcesCompat.getDrawable(context.getResources(), R.drawable.button_rounded_grey, null));
         paramsRotate.addRule(RelativeLayout.ALIGN_PARENT_END);
 
-        rotatePoiButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String command = buildCommand(currentPoi);
-                VisitPoiTask visitPoiTask = new VisitPoiTask(command, currentPoi, true);
-                visitPoiTask.execute();
-            }
+        rotatePoiButton.setOnClickListener(view13 -> {
+            String command = buildCommand(currentPoi);
+            VisitPoiTask visitPoiTask = new VisitPoiTask(command, currentPoi, true);
+            visitPoiTask.execute();
         });
 
         rotatePoiButton.setEnabled(false);
@@ -98,25 +97,23 @@ public class PoisGridViewAdapter extends BaseAdapter {
         viewPoiButton.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_place_black_24dp, null));
         viewPoiButton.setBackground(ResourcesCompat.getDrawable(context.getResources(), R.drawable.button_rounded_grey, null));
         viewPoiButton.setLayoutParams(paramsView);
-        viewPoiButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        viewPoiButton.setOnClickListener(view12 -> {
 
-                String command = buildCommand(currentPoi);
-                VisitPoiTask visitPoiTask = new VisitPoiTask(command, currentPoi, false);
-                visitPoiTask.execute();
+            String command = buildCommand(currentPoi);
+            VisitPoiTask visitPoiTask = new VisitPoiTask(command, currentPoi, false);
+            visitPoiTask.execute();
 
-                disableOtherRotateButtons(viewGroup);
-
+            disableOtherRotateButtons(viewGroup);
+            handler.removeCallbacksAndMessages(null);
+            handler.postDelayed(() -> {
                 try {
-                    Thread.sleep(10000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    rotatePoiButton.setEnabled(true);
+                    rotatePoiButton.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_autorenew_black_36dp, null));
                 }
+                catch(Exception e) {
 
-                rotatePoiButton.setEnabled(true);
-                rotatePoiButton.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_autorenew_black_36dp, null));
-            }
+                }
+            }, 10000);
         });
 
         layout.addView(viewPoiButton);
@@ -145,25 +142,23 @@ public class PoisGridViewAdapter extends BaseAdapter {
         poiName.setMaxLines(2);
         paramsText.addRule(RelativeLayout.CENTER_IN_PARENT);
 
-        poiName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        poiName.setOnClickListener(view1 -> {
 
-                String command = buildCommand(currentPoi);
-                VisitPoiTask visitPoiTask = new VisitPoiTask(command, currentPoi, false);
-                visitPoiTask.execute();
+            String command = buildCommand(currentPoi);
+            VisitPoiTask visitPoiTask = new VisitPoiTask(command, currentPoi, false);
+            visitPoiTask.execute();
 
-                disableOtherRotateButtons(viewGroup);
-
-
+            disableOtherRotateButtons(viewGroup);
+            handler.removeCallbacksAndMessages(null);
+            handler.postDelayed(() -> {
                 try {
-                    Thread.sleep(10000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    rotatePoiButton.setEnabled(true);
+                    rotatePoiButton.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_autorenew_black_36dp, null));
                 }
-                rotatePoiButton.setEnabled(true);
-                rotatePoiButton.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_autorenew_black_36dp, null));
-            }
+                catch(Exception e) {
+
+                }
+            }, 10000);
         });
 
         layout.addView(poiName);
@@ -180,9 +175,10 @@ public class PoisGridViewAdapter extends BaseAdapter {
         for (int i = 0; i < viewGroup.getChildCount(); i++) {
             RelativeLayout poiItem = (RelativeLayout) viewGroup.getChildAt(i);
             ImageButton rotateButton = (ImageButton) poiItem.getChildAt(2);
-
-            rotateButton.setEnabled(false);
-            rotateButton.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_autorenew_white_36dp, null));
+            if (rotateButton.isEnabled()) {
+                rotateButton.setEnabled(false);
+                rotateButton.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_autorenew_white_36dp, null));
+            }
         }
     }
 
@@ -241,85 +237,85 @@ public class PoisGridViewAdapter extends BaseAdapter {
         protected void onPreExecute() {
             super.onPreExecute();
             if (dialog == null) {
-                dialog = new ProgressDialog(context);
-                String message = context.getResources().getString(R.string.viewing) + " " + this.currentPoi.getName() + " " + context.getResources().getString(R.string.inLG);
-                dialog.setMessage(message);
-                dialog.setIndeterminate(false);
-                dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                dialog.setCancelable(false);
+                activity.runOnUiThread(() -> {
+                    dialog = new ProgressDialog(context);
+                    String message = context.getResources().getString(R.string.viewing) + " " + this.currentPoi.getName() + " " + context.getResources().getString(R.string.inLG);
+                    dialog.setMessage(message);
+                    dialog.setIndeterminate(false);
+                    dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                    dialog.setCancelable(false);
+                    //Buton positive => more speed
+                    //Button neutral => less speed
+                    if (this.rotate) {
+                        dialog.setButton(DialogInterface.BUTTON_POSITIVE, context.getResources().getString(R.string.speedx2), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //Do nothing, we after define the onclick
+                            }
+                        });
+
+                        dialog.setButton(DialogInterface.BUTTON_NEUTRAL, context.getResources().getString(R.string.speeddiv2), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //Do nothing, we after define the onclick
+                            }
+                        });
+                    }
 
 
-                //Buton positive => more speed
-                //Button neutral => less speed
-                if (this.rotate) {
-                    dialog.setButton(DialogInterface.BUTTON_POSITIVE, context.getResources().getString(R.string.speedx2), new DialogInterface.OnClickListener() {
+                    dialog.setButton(DialogInterface.BUTTON_NEGATIVE, context.getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            //Do nothing, we after define the onclick
+                            dialog.dismiss();
+                            cancel(true);
+                        }
+                    });
+                    dialog.setCanceledOnTouchOutside(false);
+                    dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            cancel(true);
                         }
                     });
 
-                    dialog.setButton(DialogInterface.BUTTON_NEUTRAL, context.getResources().getString(R.string.speeddiv2), new DialogInterface.OnClickListener() {
+
+                    dialog.show();
+                    dialog.getButton(DialogInterface.BUTTON_POSITIVE).setCompoundDrawablesRelativeWithIntrinsicBounds(0, R.drawable.ic_fast_forward_black_36dp, 0, 0);
+                    dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setCompoundDrawablesRelativeWithIntrinsicBounds(0, R.drawable.ic_fast_rewind_black_36dp, 0, 0);
+                    dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            //Do nothing, we after define the onclick
+                        public void onClick(View view) {
+                            changeVelocity = true;
+                            rotationFactor = rotationFactor * 2;
+
+                            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setText(context.getResources().getString(R.string.speedx4));
+                            dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setText(context.getResources().getString(R.string.speeddiv2));
+                            dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setEnabled(true);
+                            dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setCompoundDrawablesRelativeWithIntrinsicBounds(0, R.drawable.ic_fast_rewind_black_36dp, 0, 0);
+
+                            if (rotationFactor == 4) {
+                                dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
+                                dialog.getButton(DialogInterface.BUTTON_POSITIVE).setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, 0, 0);
+                            }
                         }
                     });
-                }
+                    dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            changeVelocity = true;
+                            rotationFactor = rotationFactor / 2;
 
+                            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setText(context.getResources().getString(R.string.speedx2));
+                            dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setText(context.getResources().getString(R.string.speeddiv4));
+                            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
+                            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setCompoundDrawablesRelativeWithIntrinsicBounds(0, R.drawable.ic_fast_forward_black_36dp, 0, 0);
 
-                dialog.setButton(DialogInterface.BUTTON_NEGATIVE, context.getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        cancel(true);
-                    }
-                });
-                dialog.setCanceledOnTouchOutside(false);
-                dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-                        cancel(true);
-                    }
-                });
-
-
-                dialog.show();
-                dialog.getButton(DialogInterface.BUTTON_POSITIVE).setCompoundDrawablesRelativeWithIntrinsicBounds(0, R.drawable.ic_fast_forward_black_36dp, 0, 0);
-                dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setCompoundDrawablesRelativeWithIntrinsicBounds(0, R.drawable.ic_fast_rewind_black_36dp, 0, 0);
-                dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        changeVelocity = true;
-                        rotationFactor = rotationFactor * 2;
-
-                        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setText(context.getResources().getString(R.string.speedx4));
-                        dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setText(context.getResources().getString(R.string.speeddiv2));
-                        dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setEnabled(true);
-                        dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setCompoundDrawablesRelativeWithIntrinsicBounds(0, R.drawable.ic_fast_rewind_black_36dp, 0, 0);
-
-                        if (rotationFactor == 4) {
-                            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
-                            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, 0, 0);
+                            if (rotationFactor == 1) {
+                                dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, 0, 0);
+                                dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setEnabled(false);
+                            }
                         }
-                    }
-                });
-                dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        changeVelocity = true;
-                        rotationFactor = rotationFactor / 2;
-
-                        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setText(context.getResources().getString(R.string.speedx2));
-                        dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setText(context.getResources().getString(R.string.speeddiv4));
-                        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
-                        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setCompoundDrawablesRelativeWithIntrinsicBounds(0, R.drawable.ic_fast_forward_black_36dp, 0, 0);
-
-                        if (rotationFactor == 1) {
-                            dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, 0, 0);
-                            dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setEnabled(false);
-                        }
-                    }
+                    });
                 });
             }
         }
@@ -386,13 +382,7 @@ public class PoisGridViewAdapter extends BaseAdapter {
 
                 return null;
             */} catch (InterruptedException e) {
-                activity.runOnUiThread(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        Toast.makeText(context, context.getResources().getString(R.string.visualizationCanceled), Toast.LENGTH_LONG).show();
-                    }
-                });
+                activity.runOnUiThread(() -> Toast.makeText(context, context.getResources().getString(R.string.visualizationCanceled), Toast.LENGTH_LONG).show());
                 return null;
             } catch (Exception e) {
                 e.printStackTrace();
