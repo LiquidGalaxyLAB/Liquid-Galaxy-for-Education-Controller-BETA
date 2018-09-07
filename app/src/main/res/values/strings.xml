@@ -1,8 +1,24 @@
 <resources>
+    <string name="server_client_id">570014662901-v9p1r3dqtfspmisad8o5gp264o7r181q.apps.googleusercontent.com</string>
     <string name="app_name">LGxEdu Controller</string>
     <string name="navigate">Navigate</string>
     <string name="play">Play</string>
+    <string name="create_question">Create Question</string>
 
+    <!-- Create Question -->
+    <string name="question_text_edit">Question</string>
+    <string name="correct_answer">Correct answer</string>
+    <string name="question_POI">Question POI</string>
+    <string name="bubble_text">Additional information for the answer</string>
+    <string name="answer_1">Answer 1</string>
+    <string name="answer_2">Answer 2</string>
+    <string name="answer_3">Answer 3</string>
+    <string name="answer_4">Answer 4</string>
+    <string name="answer_1_POI">Answer 1 POI</string>
+    <string name="answer_2_POI">Answer 2 POI</string>
+    <string name="answer_3_POI">Answer 3 POI</string>
+    <string name="answer_4_POI">Answer 4 POI</string>
+    <!-- End Create Question -->
 
     <!-- Legacy -->
     <string name="tittle">Liquid Galaxy Controller</string>
@@ -89,7 +105,6 @@
     <string name="title_nearby_beacons">Found Physical Web Beacons</string>
 
 
-
     <string name="importingContents">Importing Contents</string>
     <string name="parsingError">Parsing Document Error</string>
     <string name="viewing_poi">Viewing POI in LG</string>
@@ -144,6 +159,7 @@
     <string name="add_poi_tour">Add POI to Tour</string>
     <string name="please_enter_password">Please, enter the password:</string>
     <string name="search_some_place">Search some place on Liquid Galaxy…</string>
+    <string name="search_some_quiz">Find Quiz…</string>
     <string name="seconds">(s)</string>
     <string name="import_pois">Import POIs</string>
     <string name="password">Password</string>
@@ -235,11 +251,11 @@
     <!--About dialog-->
     <string name="about">About</string>
     <string name="close">Close</string>
-    <string name="aboutDocText1">This app has been developed thanks to GSOC 2016 Program as a continuation of a GSOC 2015 Project</string>
-    <string name="aboutDocText2">Developed originally by Rafa Durán Sàez(rafaduransaez@gmail.com) and continued by Ivan Josa Llovera (ivanjosallovera@gmail.com)</string>
-    <string name="aboutDocText3">https://github.com/LiquidGalaxyLAB/Liquid-Galaxy-POIs-Controller.git</string>
+    <string name="aboutDocText1">This app has been developed thanks to Intership students as a new application from GSOC 2016 Project</string>
+    <string name="aboutDocText2">Developed originally by Rafa Durán Sàez(rafaduransaez@gmail.com) and Ivan Josa Llovera (ivanjosallovera@gmail.com), continued by Ivan Colomer, Aleks Genov, Albert Planes, Albert Merino, Oscar Carrasco and Deniz Yüksel</string>
+    <string name="aboutDocText3">https://github.com/LiquidGalaxyLAB/Liquid-Galaxy-for-Education-Controller.git</string>
     <string name="aboutDocText4">Developed thanks to the TIC Laboratories of the Scientific Park of Lleida, Liquid Galaxy LAB &amp; LleidaDrone LAB,  Polytechnic School of Lleida, End Point Corp (NY), Wonderama LAB from Western University (Sydney), Gigabyte, Benq, HP, Corsair, and  Hemav Academics.</string>
-    <string name="about_Controller_message">About Liquid Galaxy Controller</string>
+    <string name="about_Controller_message">About Liquid Galaxy for Education Controller</string>
     <string name="hidden">Hidden</string>
     <string name="visible">Visible</string>
     <string name="tours">Tours</string>
@@ -266,5 +282,9 @@
     <string name="taskIpDefault">$serverIp</string>
     <string name="taskBrowserUrlDefault">$serverIp:$serverPort</string>
     <string name="clean_KML">Clean KMLS</string>
+    <string name="app_label">LGxEDU</string>
+    <string name="search_hint">Search a quiz</string>
     <!-- Legacy -->
+
+
 </resources>

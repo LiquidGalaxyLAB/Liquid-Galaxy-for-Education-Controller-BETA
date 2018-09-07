@@ -11,6 +11,8 @@ import android.util.Log;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.lglab.merino.lgxeducontroller.BuildConfig;
+import com.lglab.merino.lgxeducontroller.connection.LGCommand;
+import com.lglab.merino.lgxeducontroller.connection.LGConnectionManager;
 import com.lglab.merino.lgxeducontroller.legacy.utils.LGUtils;
 
 import java.io.IOException;
@@ -35,7 +37,7 @@ public class LiquidGalaxyTourView extends AsyncTask<String, Void, String> {
 
     public LiquidGalaxyTourView(FragmentActivity activity) {
         this.poisFragmentAct = activity;
-        session = LGUtils.getSession(this.poisFragmentAct);
+        //session = LGUtils.getSession(this.poisFragmentAct);
     }
 
     protected String doInBackground(String... params) {
@@ -118,28 +120,30 @@ public class LiquidGalaxyTourView extends AsyncTask<String, Void, String> {
     }
 
     private void sendFirstTourPOI(HashMap<String, String> firstPoi) {
-        try {
-            LGUtils.setConnectionWithLiquidGalaxy(session, buildCommand(firstPoi), poisFragmentAct);
+        //try {
+            //LGUtils.setConnectionWithLiquidGalaxy(session, buildCommand(firstPoi), poisFragmentAct);
+            LGConnectionManager.getInstance().addCommandToLG(new LGCommand(buildCommand(firstPoi), LGCommand.CRITICAL_MESSAGE));
             Log.d(TAG, "First send");
-        } catch (JSchException e) {
+        /*} catch (JSchException e) {
             Log.d(TAG, "Error in connection with Liquid Galaxy.");
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     private void sendTourPOI(Integer duration, String command) {
         try {
             Thread.sleep((long) (duration * 1000));
-            LGUtils.setConnectionWithLiquidGalaxy(session, command, poisFragmentAct);
+            //LGUtils.setConnectionWithLiquidGalaxy(session, command, poisFragmentAct);
+            LGConnectionManager.getInstance().addCommandToLG(new LGCommand(command, LGCommand.CRITICAL_MESSAGE));
         } catch (InterruptedException e) {
             e.printStackTrace();
             Log.d(TAG, "Error in duration of POIs.");
-        } catch (JSchException e2) {
+        } /*catch (JSchException e2) {
             Log.d(TAG, "Error connecting with LG.");
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     protected void onCancelled() {

@@ -25,16 +25,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.lglab.merino.lgxeducontroller.R;
+import com.lglab.merino.lgxeducontroller.connection.LGConnectionManager;
 import com.lglab.merino.lgxeducontroller.legacy.beans.Category;
 import com.lglab.merino.lgxeducontroller.legacy.beans.POI;
 import com.lglab.merino.lgxeducontroller.legacy.data.POIsContract;
-import com.lglab.merino.lgxeducontroller.legacy.utils.LGUtils;
 import com.lglab.merino.lgxeducontroller.legacy.utils.PoisGridViewAdapter;
+import com.lglab.merino.lgxeducontroller.connection.LGCommand;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -534,7 +533,8 @@ public class SearchFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             if (getActivity() != null) {
-                session = LGUtils.getSession(getActivity());
+                //OLD CODE
+                //session = LGUtils.getSession(getActivity());
             }
             return null;
         }
@@ -582,8 +582,9 @@ public class SearchFragment extends Fragment {
 
         @Override
         protected String doInBackground(Void... params) {
-            try {
-                return LGUtils.setConnectionWithLiquidGalaxy(session, command, getActivity());
+            //OLD CODE
+            /*try {
+                //return LGUtils.setConnectionWithLiquidGalaxy(session, command, getActivity());
             } catch (JSchException e) {
                 if (dialog != null) {
                     dialog.dismiss();
@@ -592,6 +593,10 @@ public class SearchFragment extends Fragment {
                 e.printStackTrace();
             }
             return null;
+            */
+
+            LGConnectionManager.getInstance().addCommandToLG(new LGCommand(command, LGCommand.CRITICAL_MESSAGE));
+            return "";
         }
 
         @Override

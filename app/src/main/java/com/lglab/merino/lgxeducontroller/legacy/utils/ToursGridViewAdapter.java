@@ -19,6 +19,8 @@ import android.widget.Button;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.lglab.merino.lgxeducontroller.R;
+import com.lglab.merino.lgxeducontroller.connection.LGCommand;
+import com.lglab.merino.lgxeducontroller.connection.LGConnectionManager;
 import com.lglab.merino.lgxeducontroller.legacy.beans.Tour;
 import com.lglab.merino.lgxeducontroller.legacy.data.POIsContract;
 
@@ -174,13 +176,15 @@ public class ToursGridViewAdapter extends BaseAdapter {
         }
 
         private void sendFirstTourPOI(HashMap<String, String> firstPoi) throws IOException, JSchException {
-            LGUtils.setConnectionWithLiquidGalaxy(session, buildCommand(firstPoi), activity);
+            //LGUtils.setConnectionWithLiquidGalaxy(session, buildCommand(firstPoi), activity);
+            LGConnectionManager.getInstance().addCommandToLG(new LGCommand(buildCommand(firstPoi), LGCommand.CRITICAL_MESSAGE));
         }
 
         private void sendTourPOI(Integer duration, String command) throws IOException, JSchException {
             try {
                 Thread.sleep((long) ((duration * 2) * 1000));
-                LGUtils.setConnectionWithLiquidGalaxy(session, command, activity);
+               // LGUtils.setConnectionWithLiquidGalaxy(session, command, activity);
+                LGConnectionManager.getInstance().addCommandToLG(new LGCommand(command, LGCommand.CRITICAL_MESSAGE));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -267,7 +271,7 @@ public class ToursGridViewAdapter extends BaseAdapter {
 
         @Override
         protected Void doInBackground(Void... params) {
-            session = LGUtils.getSession(activity);
+            //session = LGUtils.getSession(activity);
             return null;
         }
 

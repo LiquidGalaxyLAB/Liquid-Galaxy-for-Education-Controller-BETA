@@ -10,8 +10,10 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.lglab.merino.lgxeducontroller.R;
+import com.lglab.merino.lgxeducontroller.connection.LGConnectionManager;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -41,10 +43,29 @@ public class SettingsActivity extends PreferenceActivity
         bindPreferenceSummaryToValue(findPreference("Password"));
         bindPreferenceSummaryToValue(findPreference("HostName"));
         bindPreferenceSummaryToValue(findPreference("Port"));
+        bindPreferenceSummaryToValue(findPreference("isOnChromeBook"));
         bindPreferenceSummaryToValue(findPreference("AdminPassword"));
         bindPreferenceSummaryToValue(findPreference("pref_kiosk_mode"));
         bindPreferenceSummaryToValue(findPreference("ServerIp"));
         bindPreferenceSummaryToValue(findPreference("ServerPort"));
+
+        /*Preference User = findPreference("User");
+        User.setSummary(LGConnectionManager.getInstance().getUser());
+        ((EditTextPreference)User).setText(LGConnectionManager.getInstance().getUser());
+
+        Preference Password = findPreference("Password");
+        EditText edit = ((EditTextPreference) Password).getEditText();
+        String pref = edit.getTransformationMethod().getTransformation(LGConnectionManager.getInstance().getPassword(), edit).toString();
+        Password.setSummary(pref);
+        ((EditTextPreference)Password).setText(LGConnectionManager.getInstance().getPassword());
+
+        Preference HostName = findPreference("HostName");
+        HostName.setSummary(LGConnectionManager.getInstance().getHostname());
+        ((EditTextPreference)HostName).setText(LGConnectionManager.getInstance().getHostname());
+
+        Preference Port = findPreference("Port");
+        Port.setSummary(String.valueOf(LGConnectionManager.getInstance().getPort()));
+        ((EditTextPreference)Port).setText(String.valueOf(LGConnectionManager.getInstance().getPort()));*/
     }
 
     /**
@@ -59,19 +80,11 @@ public class SettingsActivity extends PreferenceActivity
 
         // Trigger the listener immediately with the preference's
         // current value.
-        if (preference.getKey().equals("pref_kiosk_mode")) {
+        if (preference.getKey().equals("pref_kiosk_mode") || preference.getKey().equals("isOnChromeBook")) {
             onPreferenceChange(preference, PreferenceManager.getDefaultSharedPreferences(preference.getContext()).getBoolean(preference.getKey(), false));
-        } else if (preference.getKey().contains("Password")) {
-            onPreferencePasswordChange(preference, PreferenceManager.getDefaultSharedPreferences(preference.getContext()).getString(preference.getKey(), ""));
         } else {
             onPreferenceChange(preference, PreferenceManager.getDefaultSharedPreferences(preference.getContext()).getString(preference.getKey(), ""));
         }
-    }
-
-    private void onPreferencePasswordChange(Preference preference, String string) {
-        EditText edit = ((EditTextPreference) preference).getEditText();
-        String pref = edit.getTransformationMethod().getTransformation(string, edit).toString();
-        preference.setSummary(pref);
     }
 
     @Override
@@ -94,9 +107,15 @@ public class SettingsActivity extends PreferenceActivity
         } else {
             // For other preferences, set the summary to the value's simple string representation.
             preference.setSummary(stringValue);
-
-
         }
+
+        /*LGConnectionManager.getInstance().setData(
+                ((EditTextPreference)findPreference("User")).getText(),
+                ((EditTextPreference)findPreference("Password")).getText(),
+                ((EditTextPreference)findPreference("HostName")).getText(),
+                Integer.parseInt(((EditTextPreference)findPreference("Port")).getText())
+        );*/
+
         return true;
     }
 

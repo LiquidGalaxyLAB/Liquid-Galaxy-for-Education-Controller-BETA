@@ -96,6 +96,55 @@ public class POIsProvider extends ContentProvider {
         return mOpenHelper.getReadableDatabase().rawQuery(sql, new String[]{String.valueOf(poiId)});
     }
 
+    public static Cursor getAllPOIs() {
+        String sql = "SELECT p.* FROM POI p";
+        return mOpenHelper.getReadableDatabase().rawQuery(sql, new String[]{});
+    }
+
+    public static Cursor getAllQuizes() {
+        String sql = "SELECT q._id, q.Data FROM quiz q";
+        return mOpenHelper.getReadableDatabase().rawQuery(sql, new String[]{});
+    }
+
+    public static Cursor getAllCategories() {
+        String sql = "SELECT c._id, c.Name FROM quiz_category c";
+        return mOpenHelper.getReadableDatabase().rawQuery(sql, new String[]{});
+    }
+
+    public static Cursor queryQuiz(int quizId) {
+        String sql = "SELECT q._id, q.Data FROM quiz q WHERE q._ID = ?";
+        return mOpenHelper.getReadableDatabase().rawQuery(sql, new String[]{String.valueOf(quizId)});
+    }
+
+    public static void updateQuizById(int quizId, String data) {
+        mOpenHelper.getReadableDatabase().execSQL("UPDATE quiz SET data = '" + data + "' WHERE _id = ?", new String[]{String.valueOf(quizId)});
+    }
+
+    public static void removeQuizById(int quizId) {
+        mOpenHelper.getReadableDatabase().execSQL("DELETE FROM quiz WHERE _ID = ?", new String[]{String.valueOf(quizId)});
+    }
+
+    public static Cursor getLGConnectionData() {
+        String sql = "SELECT c.user, c.password, c.hostname, c.port FROM lg_connection_info c";
+        return mOpenHelper.getReadableDatabase().rawQuery(sql, new String[]{});
+    }
+
+    public static void updateLGConnectionData(String user, String password, String hostname, int port) {
+        mOpenHelper.getReadableDatabase().execSQL("UPDATE lg_connection_info SET user = '" + user + "', password = '" + password + "', hostname = '" + hostname + "', port = ?", new String[]{String.valueOf(port)});
+    }
+
+    public static long insertQuiz(String data) {
+        ContentValues values = new ContentValues();
+        values.put("data", data);
+        return mOpenHelper.getReadableDatabase().insert("quiz", "", values);
+    }
+
+    public static long insertCategory(String data) {
+        ContentValues values = new ContentValues();
+        values.put("Name", data);
+        return mOpenHelper.getReadableDatabase().insert("quiz_category", "", values);
+    }
+
     public boolean onCreate() {
         mOpenHelper = new POIsDbHelper(getContext());
         return true;

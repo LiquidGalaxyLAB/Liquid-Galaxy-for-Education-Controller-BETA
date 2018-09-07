@@ -24,14 +24,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.lglab.merino.lgxeducontroller.R;
+import com.lglab.merino.lgxeducontroller.connection.LGConnectionManager;
 import com.lglab.merino.lgxeducontroller.legacy.beans.TourPOI;
 import com.lglab.merino.lgxeducontroller.legacy.data.POIsContract;
-import com.lglab.merino.lgxeducontroller.legacy.utils.LGUtils;
+import com.lglab.merino.lgxeducontroller.connection.LGCommand;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -131,12 +130,12 @@ public class POISFragment extends Fragment {
         backStartIcon = (ImageView) poisView.findViewById(R.id.back_start_icon);//comes back to the initial category
         seeingOptions = (TextView) poisView.findViewById(R.id.see_all_or_by_category);//by clicking on it, lets the user see all elements or classified by categories
         poisListViewTittle = (TextView) poisView.findViewById(R.id.pois_tittle_listview);
-        route = (TextView) poisView.findViewById(R.id.fragment_pois_route);//categories route
-        poisfragment = (LinearLayout) poisView.findViewById(R.id.pois_xml_fragment);//content of elements representing all the fragment
-        stopButton = (android.support.design.widget.FloatingActionButton) poisView.findViewById(R.id.tour_stop);//stops tour execution on LG
+        route = poisView.findViewById(R.id.fragment_pois_route);//categories route
+        poisfragment = poisView.findViewById(R.id.pois_xml_fragment);//content of elements representing all the fragment
+        stopButton = poisView.findViewById(R.id.tour_stop);//stops tour execution on LG
         categories_tittle = (TextView) poisView.findViewById(R.id.categories_textview);
 
-        additionLayout = (LinearLayout) poisView.findViewById(R.id.addition_buttons_layout);//layout containging buttons to add items
+        additionLayout = poisView.findViewById(R.id.addition_buttons_layout);//layout containging buttons to add items
         createPOI = (android.support.design.widget.FloatingActionButton) poisView.findViewById(R.id.new_poi);
         createCategory = (android.support.design.widget.FloatingActionButton) poisView.findViewById(R.id.new_category);
         createTour = (android.support.design.widget.FloatingActionButton) poisView.findViewById(R.id.new_tour);
@@ -144,7 +143,8 @@ public class POISFragment extends Fragment {
         createCategoryhere = (android.support.design.widget.FloatingActionButton) poisView.findViewById(R.id.new_category_here);
         createTourhere = (android.support.design.widget.FloatingActionButton) poisView.findViewById(R.id.new_tour_here);
 
-        dialogView = getLayoutInflater(getArguments()).inflate(R.layout.dialog_item_options, null); //In the tours creation process, it lets the user add POIs. when the elements selection inside Admin section, lets edit or update them.
+        //dialogView = getLayoutInflater(getArguments()).inflate(R.layout.dialog_item_options, null); //In the tours creation process, it lets the user add POIs. when the elements selection inside Admin section, lets edit or update them.
+        dialogView = getActivity().getLayoutInflater().inflate(R.layout.dialog_item_options, null);
         dialog = getDialogByView(dialogView);
         cancel = (FloatingActionButton) dialogView.findViewById(R.id.cancel_poi_selection);
         edit = (FloatingActionButton) dialogView.findViewById(R.id.edit_poi);
@@ -1076,7 +1076,8 @@ public class POISFragment extends Fragment {
 
         @Override
         protected String doInBackground(Void... params) {
-            try {
+            //OLD CODE
+            /*try {
                 return LGUtils.setConnectionWithLiquidGalaxy(session, command, getActivity());
             } catch (JSchException e) {
                 cancel(true);
@@ -1089,7 +1090,9 @@ public class POISFragment extends Fragment {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return null;
+            return null;*/
+            LGConnectionManager.getInstance().addCommandToLG(new LGCommand(command, LGCommand.CRITICAL_MESSAGE));
+            return "";
         }
 
         @Override
@@ -1117,7 +1120,8 @@ public class POISFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                session = LGUtils.getSession(getActivity());
+                //OLD CODE
+                //session = LGUtils.getSession(getActivity());
             } catch (Exception e) {
 
             }
