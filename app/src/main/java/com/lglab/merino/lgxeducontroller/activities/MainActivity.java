@@ -77,13 +77,13 @@ public class MainActivity extends GoogleDriveActivity {
 
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_settings_2) {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }  else if (id == R.id.action_information_help) {
             startActivity(new Intent(this, Help.class));
             return true;
-        } else if (id == R.id.action_about) {
+        } else if (id == R.id.action_about_2) {
             showAboutDialog();
             return true;
         } else {

@@ -51,17 +51,6 @@
             android:text="@string/play" />
 
     </LinearLayout>
-    <Button
-        android:id="@+id/aleks_button"
-        android:layout_width="500dp"
-        android:layout_height="wrap_content"
-        android:text="Temporal button to CREATE QUESTION"
-        android:layout_weight="0.5"/>
-    <!--
-    <Space
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.5" /> -->
 
     <ImageView
         android:id="@+id/imageViewPartner"

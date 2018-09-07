@@ -3,20 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="legacy.LGPCAdminActivity">
 
-    <item
+    <!--<item
         android:id="@+id/action_information_help"
         android:orderInCategory="97"
         android:title="@string/help"
-        app:showAsAction="never" />
+        app:showAsAction="never" />-->
 
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_settings_2"
         android:orderInCategory="98"
         android:title="@string/action_settings"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_about"
+        android:id="@+id/action_about_2"
         android:orderInCategory="101"
         android:title="@string/about"
         app:showAsAction="never" />
