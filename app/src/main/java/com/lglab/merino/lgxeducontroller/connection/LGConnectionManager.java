@@ -1,7 +1,6 @@
 package com.lglab.merino.lgxeducontroller.connection;
 
 import android.database.Cursor;
-import android.util.Log;
 
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
@@ -20,29 +19,14 @@ public class LGConnectionManager implements Runnable {
 
     private static LGConnectionManager instance = null;
     private static StatusUpdater statusUpdater = null;
-
-    public static LGConnectionManager getInstance() {
-        if (instance == null) {
-            instance = new LGConnectionManager();
-            new Thread(instance).start();
-            statusUpdater = new StatusUpdater(instance);
-            new Thread(statusUpdater).start();
-        }
-        return instance;
-    }
-
     private String user;
     private String password;
     private String hostname;
     private int port;
-
     private Session session;
-
     private BlockingQueue<LGCommand> queue;
-
     private int itemsToDequeue;
     private LGCommand lgCommandToReSend;
-
     private ILGConnection activity;
 
     public LGConnectionManager() {
@@ -59,10 +43,20 @@ public class LGConnectionManager implements Runnable {
         //loadDataFromDB();
     }
 
+    public static LGConnectionManager getInstance() {
+        if (instance == null) {
+            instance = new LGConnectionManager();
+            new Thread(instance).start();
+            statusUpdater = new StatusUpdater(instance);
+            new Thread(statusUpdater).start();
+        }
+        return instance;
+    }
+
     public synchronized void tick() {
         ILGConnection activityCopy = activity;
-        if(activityCopy != null) {
-            if(session == null || !session.isConnected()) {
+        if (activityCopy != null) {
+            if (session == null || !session.isConnected()) {
                 activityCopy.setStatus(LGConnectionManager.NOT_CONNECTED);
             } else if (lgCommandToReSend == null && queue.size() == 0) {
                 activityCopy.setStatus(LGConnectionManager.CONNECTED);
@@ -129,7 +123,7 @@ public class LGConnectionManager implements Runnable {
         lgCommandToReSend = lgCommand;
 
         Session session = getSession();
-        if(session == null || !session.isConnected()) {
+        if (session == null || !session.isConnected()) {
             return false;
         }
 
@@ -188,12 +182,12 @@ public class LGConnectionManager implements Runnable {
             while (true) {
 
                 LGCommand lgCommand = lgCommandToReSend;
-                if(lgCommand == null) {
+                if (lgCommand == null) {
                     lgCommand = queue.take();
 
-                    if(itemsToDequeue > 0) {
+                    if (itemsToDequeue > 0) {
                         itemsToDequeue--;
-                        if(lgCommand.getPriorityType() == LGCommand.CRITICAL_MESSAGE) {
+                        if (lgCommand.getPriorityType() == LGCommand.CRITICAL_MESSAGE) {
                             lgCommandToReSend = lgCommand;
                         }
                         continue;
@@ -202,16 +196,14 @@ public class LGConnectionManager implements Runnable {
 
                 long timeBefore = System.currentTimeMillis();
 
-                if(!sendLGCommand(lgCommand)) {
+                if (!sendLGCommand(lgCommand)) {
                     //Command not sent
                     itemsToDequeue = queue.size();
-                }
-                else if(System.currentTimeMillis() - timeBefore >= 2000) {
+                } else if (System.currentTimeMillis() - timeBefore >= 2000) {
                     //Command sent but took more than 2 seconds
                     lgCommandToReSend = null;
                     itemsToDequeue = queue.size();
-                }
-                else {
+                } else {
                     //Command sent in less than 2 seconds
                     lgCommandToReSend = null;
                 }

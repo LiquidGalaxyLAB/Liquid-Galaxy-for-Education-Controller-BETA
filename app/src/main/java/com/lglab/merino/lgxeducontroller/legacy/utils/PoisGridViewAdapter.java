@@ -18,7 +18,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.lglab.merino.lgxeducontroller.R;
 import com.lglab.merino.lgxeducontroller.connection.LGCommand;
@@ -109,8 +108,7 @@ public class PoisGridViewAdapter extends BaseAdapter {
                 try {
                     rotatePoiButton.setEnabled(true);
                     rotatePoiButton.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_autorenew_black_36dp, null));
-                }
-                catch(Exception e) {
+                } catch (Exception e) {
 
                 }
             }, 10000);
@@ -154,8 +152,7 @@ public class PoisGridViewAdapter extends BaseAdapter {
                 try {
                     rotatePoiButton.setEnabled(true);
                     rotatePoiButton.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_autorenew_black_36dp, null));
-                }
-                catch(Exception e) {
+                } catch (Exception e) {
 
                 }
             }, 10000);
@@ -381,7 +378,8 @@ public class PoisGridViewAdapter extends BaseAdapter {
                 });
 
                 return null;
-            */} catch (InterruptedException e) {
+            */
+            } catch (InterruptedException e) {
                 activity.runOnUiThread(() -> Toast.makeText(context, context.getResources().getString(R.string.visualizationCanceled), Toast.LENGTH_LONG).show());
                 return null;
             } catch (Exception e) {

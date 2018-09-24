@@ -32,12 +32,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp">
 
-            <EditText
-                android:id="@+id/tour_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:hint="@string/name" />
+                <EditText
+                    android:id="@+id/tour_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:hint="@string/name" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -70,12 +70,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp">
-            <EditText
-                android:id="@+id/pois_interval"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/global_interval_tour_text"
-                android:inputType="number" />
+
+                <EditText
+                    android:id="@+id/pois_interval"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/global_interval_tour_text"
+                    android:inputType="number" />
             </android.support.design.widget.TextInputLayout>
 
             <Spinner

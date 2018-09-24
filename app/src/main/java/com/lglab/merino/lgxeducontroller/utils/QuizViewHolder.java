@@ -1,6 +1,5 @@
 package com.lglab.merino.lgxeducontroller.utils;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,8 +14,8 @@ import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder;
 
 public class QuizViewHolder extends ChildViewHolder {
 
-    private TextView quizName;
     public Quiz quiz;
+    private TextView quizName;
     private ImageView playButton;
     private ImageView shareButton;
 

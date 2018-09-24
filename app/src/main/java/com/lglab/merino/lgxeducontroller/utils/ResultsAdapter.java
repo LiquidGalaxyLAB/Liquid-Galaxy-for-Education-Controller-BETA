@@ -1,7 +1,6 @@
 package com.lglab.merino.lgxeducontroller.utils;
 
 import android.graphics.Color;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,35 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.android.gms.plus.model.people.Person;
 import com.lglab.merino.lgxeducontroller.R;
 import com.lglab.merino.lgxeducontroller.games.quiz.Question;
 import com.lglab.merino.lgxeducontroller.games.quiz.QuizManager;
 
-import java.util.List;
+public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ResultsViewHolder> {
 
-public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ResultsViewHolder>{
-
-    public static class ResultsViewHolder extends RecyclerView.ViewHolder {
-        CardView cv;
-        TextView questionNumber;
-        TextView questionName;
-        TextView questionSolution;
-        DynamicSquareLayout rl;
-
-        ResultsViewHolder(View itemView) {
-            super(itemView);
-
-            cv = itemView.findViewById(R.id.cv);
-            questionName = itemView.findViewById(R.id.question_name);
-            questionNumber = itemView.findViewById(R.id.question_number);
-            questionSolution = itemView.findViewById(R.id.question_solution);
-            rl = itemView.findViewById(R.id.number_question);
-        }
-    }
-
-
-    public ResultsAdapter(){
+    public ResultsAdapter() {
 
     }
 
@@ -56,7 +33,7 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ResultsV
         personViewHolder.questionNumber.setText(String.valueOf(i + 1));
         personViewHolder.questionSolution.setText(question.answers[question.correctAnswer - 1]);
 
-        if(question.selectedAnswer == question.correctAnswer) {
+        if (question.selectedAnswer == question.correctAnswer) {
             personViewHolder.rl.setBackgroundColor(Color.parseColor("#5cd65c"));
         } else {
             personViewHolder.rl.setBackgroundColor(Color.parseColor("#ff3333"));
@@ -71,5 +48,23 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ResultsV
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
+    }
+
+    public static class ResultsViewHolder extends RecyclerView.ViewHolder {
+        CardView cv;
+        TextView questionNumber;
+        TextView questionName;
+        TextView questionSolution;
+        DynamicSquareLayout rl;
+
+        ResultsViewHolder(View itemView) {
+            super(itemView);
+
+            cv = itemView.findViewById(R.id.cv);
+            questionName = itemView.findViewById(R.id.question_name);
+            questionNumber = itemView.findViewById(R.id.question_number);
+            questionSolution = itemView.findViewById(R.id.question_solution);
+            rl = itemView.findViewById(R.id.number_question);
+        }
     }
 }

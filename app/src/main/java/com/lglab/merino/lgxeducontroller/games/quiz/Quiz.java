@@ -12,10 +12,21 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class Quiz implements IJsonPacker, Parcelable {
+    public static final Creator<Quiz> CREATOR = new Creator<Quiz>() {
+        @Override
+        public Quiz createFromParcel(Parcel in) {
+            return new Quiz(in);
+        }
+
+        @Override
+        public Quiz[] newArray(int size) {
+            return new Quiz[size];
+        }
+    };
     public ArrayList<Question> questions;
-    private String name;
     public long id;
     public String category;
+    private String name;
 
     public Quiz() {
         id = 0;
@@ -29,18 +40,6 @@ public class Quiz implements IJsonPacker, Parcelable {
         id = in.readLong();*/
     }
 
-    public static final Creator<Quiz> CREATOR = new Creator<Quiz>() {
-        @Override
-        public Quiz createFromParcel(Parcel in) {
-            return new Quiz(in);
-        }
-
-        @Override
-        public Quiz[] newArray(int size) {
-            return new Quiz[size];
-        }
-    };
-
     @Override
     public JSONObject pack() throws JSONException {
         JSONObject obj = new JSONObject();
@@ -49,7 +48,7 @@ public class Quiz implements IJsonPacker, Parcelable {
         obj.put("category", category);
 
         JSONArray array = new JSONArray();
-        for(int i = 0; i < questions.size(); i++) {
+        for (int i = 0; i < questions.size(); i++) {
             array.put(questions.get(i).pack());
         }
         obj.put("questions", array);
@@ -63,7 +62,7 @@ public class Quiz implements IJsonPacker, Parcelable {
         category = obj.getString("category");
 
         JSONArray array = obj.getJSONArray("questions");
-        for(int i = 0; i < array.length(); i++) {
+        for (int i = 0; i < array.length(); i++) {
             questions.add(new Question().unpack(array.getJSONObject(i)));
         }
         return this;

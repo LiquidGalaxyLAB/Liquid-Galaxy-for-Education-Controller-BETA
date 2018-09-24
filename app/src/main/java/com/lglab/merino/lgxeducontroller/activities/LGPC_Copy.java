@@ -1,33 +1,18 @@
 package com.lglab.merino.lgxeducontroller.activities;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.text.method.PasswordTransformationMethod;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 
 import com.lglab.merino.lgxeducontroller.R;
 import com.lglab.merino.lgxeducontroller.legacy.CollectionPagerAdapter;
-import com.lglab.merino.lgxeducontroller.legacy.InfoActivity;
-import com.lglab.merino.lgxeducontroller.legacy.LGPCAdminActivity;
-import com.lglab.merino.lgxeducontroller.legacy.POISFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -69,7 +54,6 @@ public class LGPC_Copy extends AppCompatActivity implements ActionBar.TabListene
         if (Build.VERSION.SDK_INT >= 23) {
             actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_action_bar));
         }
-
 
 
         // Create the adapter that will return a fragment for each of the three
@@ -134,13 +118,12 @@ public class LGPC_Copy extends AppCompatActivity implements ActionBar.TabListene
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0)
             return onSupportNavigateUp();
 
         return super.onKeyDown(keyCode, event);
     }
-
 
 
     //Required for kioskMode

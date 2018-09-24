@@ -39,14 +39,14 @@
         android:id="@+id/POIS_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/POI_button"
-        />
+        android:layout_below="@+id/POI_button" />
+
     <Button
         android:id="@+id/admin_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="@string/admin"/>
+        android:text="@string/admin" />
 
     <!-- To be able to use SearchView: minSDKVersion = "11"; -->
     <SearchView

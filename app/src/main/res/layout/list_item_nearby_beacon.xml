@@ -32,7 +32,7 @@
                 android:maxLines="1"
                 android:text=""
                 android:textColor="@color/header_color"
-                android:textSize="20sp"/>
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/url"
@@ -43,7 +43,7 @@
                 android:maxLines="1"
                 android:text=""
                 android:textColor="@color/url_color"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -59,7 +59,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginTop="6dp"
-                android:contentDescription="@string/nearby_beacon_favicon_content_description"/>
+                android:contentDescription="@string/nearby_beacon_favicon_content_description" />
 
         </LinearLayout>
 
@@ -79,7 +79,7 @@
             android:lines="2"
             android:text=""
             android:textColor="@color/description_color"
-            android:textSize="14sp"/>
+            android:textSize="14sp" />
     </LinearLayout>
 
     <LinearLayout

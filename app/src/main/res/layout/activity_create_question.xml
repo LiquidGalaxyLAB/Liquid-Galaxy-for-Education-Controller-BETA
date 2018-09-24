@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="8dp"
-    android:orientation="vertical"
     android:imeOptions="flagNoExtractUi"
+    android:orientation="vertical"
     tools:context=".activities.CreateQuestionActivity">
 
 
@@ -35,7 +35,7 @@
                 android:layout_weight="5.5"
                 android:background="#f1f1f1"
                 android:gravity="top"
-                android:hint="@string/question_text_edit"/>
+                android:hint="@string/question_text_edit" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -45,7 +45,7 @@
 
                 android:gravity="bottom"
                 android:text="@string/correct_answer"
-                android:textColor="#000000"/>
+                android:textColor="#000000" />
 
             <!-- Buttons & initial POI -->
             <LinearLayout
@@ -67,7 +67,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="1"/>
+                        android:text="1" />
 
                     <RadioButton
                         android:id="@+id/correctAnswerRadioButton2"
@@ -89,7 +89,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="4"/>
+                        android:text="4" />
 
                 </RadioGroup>
 
@@ -100,7 +100,7 @@
                     android:layout_weight="2"
                     android:background="#f1f1f1"
                     android:hint="@string/question_POI"
-                    android:singleLine="true"/>
+                    android:singleLine="true" />
 
                 <ImageButton
                     android:id="@+id/addQuestionPOIButton"
@@ -137,7 +137,7 @@
                     android:layout_weight="2"
                     android:background="#f1f1f1"
                     android:hint="@string/answer_1"
-                    android:singleLine="true"/>
+                    android:singleLine="true" />
 
                 <Space
                     android:layout_width="0dp"
@@ -151,7 +151,8 @@
                     android:layout_weight="2"
                     android:background="#f1f1f1"
                     android:hint="@string/answer_1_POI"
-                    android:singleLine="true"/>
+                    android:singleLine="true" />
+
                 <ImageButton
                     android:id="@+id/addAnswer1POIButton"
                     android:layout_width="wrap_content"
@@ -159,14 +160,14 @@
                     android:layout_gravity="center_vertical"
                     android:background="@android:color/transparent"
                     android:src="@drawable/ic_add_location_black_36dp"
-                    android:tint="@color/green"/>
+                    android:tint="@color/green" />
 
             </LinearLayout>
 
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.5"/>
+                android:layout_weight="0.5" />
 
             <LinearLayout
 
@@ -182,11 +183,13 @@
                     android:layout_weight="2"
                     android:background="#f1f1f1"
                     android:hint="@string/answer_2"
-                    android:singleLine="true"/>
+                    android:singleLine="true" />
+
                 <Space
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.5" />
+
                 <AutoCompleteTextView
                     android:id="@+id/answer2POITextEdit"
                     android:layout_width="0dp"
@@ -194,7 +197,8 @@
                     android:layout_weight="2"
                     android:background="#f1f1f1"
                     android:hint="@string/answer_2_POI"
-                    android:singleLine="true"/>
+                    android:singleLine="true" />
+
                 <ImageButton
                     android:id="@+id/addAnswer2POIButton"
                     android:layout_width="wrap_content"
@@ -209,7 +213,7 @@
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.5"/>
+                android:layout_weight="0.5" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -224,7 +228,7 @@
                     android:layout_weight="2"
                     android:background="#f1f1f1"
                     android:hint="@string/answer_3"
-                    android:singleLine="true"/>
+                    android:singleLine="true" />
 
                 <Space
                     android:layout_width="0dp"
@@ -238,7 +242,8 @@
                     android:layout_weight="2"
                     android:background="#f1f1f1"
                     android:hint="@string/answer_3_POI"
-                    android:singleLine="true"/>
+                    android:singleLine="true" />
+
                 <ImageButton
                     android:id="@+id/addAnswer3POIButton"
                     android:layout_width="wrap_content"
@@ -253,7 +258,7 @@
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.5"/>
+                android:layout_weight="0.5" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -268,7 +273,7 @@
                     android:layout_weight="2"
                     android:background="#f1f1f1"
                     android:hint="@string/answer_4"
-                    android:singleLine="true"/>
+                    android:singleLine="true" />
 
                 <Space
                     android:layout_width="0dp"
@@ -282,7 +287,8 @@
                     android:layout_weight="2"
                     android:background="#f1f1f1"
                     android:hint="@string/answer_4_POI"
-                    android:singleLine="true"/>
+                    android:singleLine="true" />
+
                 <ImageButton
                     android:id="@+id/addAnswer4POIButton"
                     android:layout_width="wrap_content"
@@ -304,53 +310,52 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="3"
-        android:weightSum="5"
-        android:gravity="center">
+        android:gravity="center"
+        android:weightSum="5">
 
         <EditText
             android:id="@+id/informationTextEdit"
             android:layout_width="0dp"
-            android:layout_weight="4.25"
             android:layout_height="match_parent"
+            android:layout_weight="4.25"
             android:background="#f1f1f1"
             android:gravity="top"
-            android:hint="@string/bubble_text"/>
+            android:hint="@string/bubble_text" />
 
     </LinearLayout>
 
     <!-- Buttons Cancel & Accept -->
-    <android.support.design.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.7"
-        android:layout_margin="8dp">
+        android:layout_margin="8dp"
+        android:layout_weight="0.7">
 
         <android.support.design.widget.FloatingActionButton
-            android:src="@drawable/ic_check_white_24dp"
-            app:backgroundTint="@color/green"
             android:id="@+id/accept_button"
-
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            app:layout_anchor="@id/cancel_button"
-            app:layout_anchorGravity="center_vertical"
-
             android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_check_white_24dp"
+
+            app:backgroundTint="@color/green"
+            app:layout_anchor="@id/cancel_button"
+
+            app:layout_anchorGravity="center_vertical"
 
             />
 
         <android.support.design.widget.FloatingActionButton
-            android:src="@drawable/ic_close_white_24dp"
             android:id="@+id/cancel_button"
-            app:backgroundTint="@color/red"
-
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
             android:layout_gravity="right|center_vertical"
+            android:src="@drawable/ic_close_white_24dp"
+
+            app:backgroundTint="@color/red"
 
             />
 

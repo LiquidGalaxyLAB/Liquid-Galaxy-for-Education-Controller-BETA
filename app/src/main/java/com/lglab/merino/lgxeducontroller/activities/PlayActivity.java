@@ -1,47 +1,35 @@
 package com.lglab.merino.lgxeducontroller.activities;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.BaseColumns;
 import android.support.v7.app.ActionBar;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.support.v7.widget.SearchView;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import com.lglab.merino.lgxeducontroller.R;
 import com.lglab.merino.lgxeducontroller.connection.LGConnectionManager;
-import com.lglab.merino.lgxeducontroller.games.quiz.ArrayAlternateAdapter;
 import com.lglab.merino.lgxeducontroller.games.quiz.Quiz;
-import com.lglab.merino.lgxeducontroller.legacy.data.POIsDbHelper;
 import com.lglab.merino.lgxeducontroller.legacy.data.POIsProvider;
 import com.lglab.merino.lgxeducontroller.utils.Category;
 import com.lglab.merino.lgxeducontroller.utils.CategoryAdapter;
-import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class PlayActivity extends GoogleDriveActivity {
 
@@ -84,7 +72,7 @@ public class PlayActivity extends GoogleDriveActivity {
         reloadAdapter();
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        LGConnectionManager.getInstance().setData(prefs.getString("User", "lg"),  prefs.getString("Password", "lqgalaxy"), prefs.getString("HostName", "10.160.67.80"), Integer.parseInt(prefs.getString("Port", "22")));
+        LGConnectionManager.getInstance().setData(prefs.getString("User", "lg"), prefs.getString("Password", "lqgalaxy"), prefs.getString("HostName", "10.160.67.80"), Integer.parseInt(prefs.getString("Port", "22")));
 
     }
 
@@ -203,7 +191,7 @@ public class PlayActivity extends GoogleDriveActivity {
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0)
             return onSupportNavigateUp();
 

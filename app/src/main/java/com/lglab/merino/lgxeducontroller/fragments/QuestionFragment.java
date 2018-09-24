@@ -12,35 +12,21 @@ import android.widget.TextView;
 
 import com.lglab.merino.lgxeducontroller.R;
 import com.lglab.merino.lgxeducontroller.activities.QuizActivity;
+import com.lglab.merino.lgxeducontroller.connection.LGCommand;
 import com.lglab.merino.lgxeducontroller.connection.LGConnectionManager;
 import com.lglab.merino.lgxeducontroller.games.quiz.Question;
 import com.lglab.merino.lgxeducontroller.games.quiz.QuizManager;
 import com.lglab.merino.lgxeducontroller.legacy.beans.POI;
-import com.lglab.merino.lgxeducontroller.connection.LGCommand;
 
 public class QuestionFragment extends Fragment {
-    private View view;
-    private int questionNumber;
-    private Question question;
-    private TextView textView;
-    private TextView[] answerViews;
-
-    private boolean sendInitialPOIOnCreate = false;
-
-    //LiquidGalaxyAnswerTourView activeTour;
-    AlertDialog activeAlertDialog;
-
-    private boolean hasClicked = false;
-
     private static final POI EARTH_POI = new POI()
-                        .setLongitude(10.52668d)
-                        .setLatitude(40.085941d)
-                        .setAltitude(0.0d)
-                        .setHeading(0.0d)
-                        .setTilt(0.0d)
-                        .setRange(10000000.0d)
-                        .setAltitudeMode("relativeToSeaFloor");
-
+            .setLongitude(10.52668d)
+            .setLatitude(40.085941d)
+            .setAltitude(0.0d)
+            .setHeading(0.0d)
+            .setTilt(0.0d)
+            .setRange(10000000.0d)
+            .setAltitudeMode("relativeToSeaFloor");
     private static final POI EUROPE_POI = new POI()
             .setLongitude(9.0629d)
             .setLatitude(47.77d)
@@ -49,6 +35,15 @@ public class QuestionFragment extends Fragment {
             .setTilt(0.0d)
             .setRange(3000000.0d)
             .setAltitudeMode("relativeToSeaFloor");
+    //LiquidGalaxyAnswerTourView activeTour;
+    AlertDialog activeAlertDialog;
+    private View view;
+    private int questionNumber;
+    private Question question;
+    private TextView textView;
+    private TextView[] answerViews;
+    private boolean sendInitialPOIOnCreate = false;
+    private boolean hasClicked = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,15 +72,15 @@ public class QuestionFragment extends Fragment {
         answerViews[1] = getView().findViewById(R.id.answerText2);
         answerViews[2] = getView().findViewById(R.id.answerText3);
         answerViews[3] = getView().findViewById(R.id.answerText4);
-        for(int i = 0; i < question.answers.length; i++) {
+        for (int i = 0; i < question.answers.length; i++) {
             answerViews[i].setText(question.answers[i]);
         }
 
-        for(int i = 0; i < answerViews.length; i++) {
+        for (int i = 0; i < answerViews.length; i++) {
             setClickListener(i);
         }
 
-        if(sendInitialPOIOnCreate == true) {
+        if (sendInitialPOIOnCreate == true) {
             sendInitialPOIOnCreate = false;
             sendInitialPoi();
         }
@@ -104,9 +99,9 @@ public class QuestionFragment extends Fragment {
 
     private void sendInitialPoi() {
         long poiId = question.initialPOI.getId();
-        if(poiId == -1)
+        if (poiId == -1)
             sendPOI(buildCommand(EARTH_POI));
-        else if(poiId == -2)
+        else if (poiId == -2)
             sendPOI(buildCommand(EUROPE_POI));
         else
             sendPOI(buildCommand(question.initialPOI));
@@ -114,7 +109,7 @@ public class QuestionFragment extends Fragment {
 
     public void setClickListener(final int i) {
         view.findViewById(R.id.answerCard1 + i).setOnClickListener(v -> {
-            if(!hasClicked) {
+            if (!hasClicked) {
                 hasClicked = true;
                 boolean hadAlreadyClicked = question.selectedAnswer != 0;
                 question.selectedAnswer = i + 1;
@@ -126,10 +121,10 @@ public class QuestionFragment extends Fragment {
                     answerViews[i].setTextColor(Color.parseColor("#000000"));
                 }
 
-                if(!hadAlreadyClicked) {
+                if (!hadAlreadyClicked) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-                    if(question.selectedAnswer != question.correctAnswer) {
+                    if (question.selectedAnswer != question.correctAnswer) {
                         builder.setTitle("Oops! You've chosen a wrong answer!");
                         builder.setMessage("Going to " + question.pois[question.selectedAnswer - 1].getName());
                         builder.setPositiveButton("SHOW CORRECT ANSWER", (dialog, id) -> {
@@ -149,7 +144,7 @@ public class QuestionFragment extends Fragment {
                     activeAlertDialog = builder.create();
                     activeAlertDialog.show();
 
-                    if(question.selectedAnswer != question.correctAnswer) {
+                    if (question.selectedAnswer != question.correctAnswer) {
 
                         /*final Handler handler = new Handler();
                         handler.postDelayed(() -> {
@@ -168,14 +163,14 @@ public class QuestionFragment extends Fragment {
             }
         });
 
-        if(question.selectedAnswer == i + 1) {
+        if (question.selectedAnswer == i + 1) {
             view.findViewById(R.id.answerCard1 + i).performClick();
         }
     }
 
     private void checkQuizProgress() {
-        if(QuizManager.getInstance().hasAnsweredAllQuestions()){
-            ((QuizActivity)getActivity()).showFloatingExitButton();
+        if (QuizManager.getInstance().hasAnsweredAllQuestions()) {
+            ((QuizActivity) getActivity()).showFloatingExitButton();
         }
     }
 

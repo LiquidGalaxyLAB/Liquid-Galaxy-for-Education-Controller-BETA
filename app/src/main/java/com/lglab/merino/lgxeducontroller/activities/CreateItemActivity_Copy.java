@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.lglab.merino.lgxeducontroller.R;
-import com.lglab.merino.lgxeducontroller.legacy.CreateItemFragment;
 
 
 public class CreateItemActivity_Copy extends AppCompatActivity {

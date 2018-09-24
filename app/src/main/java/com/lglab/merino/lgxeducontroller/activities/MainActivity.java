@@ -1,35 +1,16 @@
 package com.lglab.merino.lgxeducontroller.activities;
 
-import android.app.AlarmManager;
 import android.app.Dialog;
-import android.app.PendingIntent;
-import android.content.ContentProviderClient;
-import android.content.ContentResolver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-
-import android.os.Environment;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+
 import com.lglab.merino.lgxeducontroller.R;
 import com.lglab.merino.lgxeducontroller.legacy.Help;
-import com.lglab.merino.lgxeducontroller.legacy.LGPC;
 import com.lglab.merino.lgxeducontroller.legacy.SettingsActivity;
-import com.lglab.merino.lgxeducontroller.legacy.data.POIsDbHelper;
-import com.lglab.merino.lgxeducontroller.legacy.data.POIsProvider;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.nio.channels.FileChannel;
-import java.util.Calendar;
 
 
 public class MainActivity extends GoogleDriveActivity {
@@ -80,7 +61,7 @@ public class MainActivity extends GoogleDriveActivity {
         if (id == R.id.action_settings_2) {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
-        }  else if (id == R.id.action_information_help) {
+        } else if (id == R.id.action_information_help) {
             startActivity(new Intent(this, Help.class));
             return true;
         } else if (id == R.id.action_about_2) {

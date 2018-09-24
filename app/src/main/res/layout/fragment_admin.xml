@@ -17,6 +17,7 @@
         android:layout_marginBottom="10dp"
         android:text="@string/POIs_button"
         android:textColor="@color/white" />
+
     <Button
         android:id="@+id/tours_management"
         android:layout_width="wrap_content"
@@ -24,6 +25,7 @@
         android:layout_toEndOf="@+id/pois_management"
         android:text="@string/TOURs_button"
         android:textColor="@color/white" />
+
     <Button
         android:id="@+id/categories_management"
         android:layout_width="wrap_content"
@@ -36,8 +38,7 @@
         android:id="@+id/management_button_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/pois_management"
-        />
+        android:layout_below="@+id/pois_management" />
 
     <Button
         android:id="@+id/new_poi"
@@ -45,21 +46,23 @@
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/categories_management"
         android:text="@string/new_poi"
-        android:visibility="gone"/>
+        android:visibility="gone" />
+
     <Button
         android:id="@+id/new_category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/categories_management"
         android:text="@string/new_category"
-        android:visibility="gone"/>
+        android:visibility="gone" />
+
     <Button
         android:id="@+id/new_tour"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/categories_management"
         android:text="@string/new_tour"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/new_poi_here"
@@ -67,21 +70,23 @@
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/new_poi"
         android:text="@string/new_poi_here"
-        android:visibility="gone"/>
+        android:visibility="gone" />
+
     <Button
         android:id="@+id/new_category_here"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/new_category"
         android:text="@string/new_category_here"
-        android:visibility="gone"/>
+        android:visibility="gone" />
+
     <Button
         android:id="@+id/new_tour_here"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/new_tour"
         android:text="@string/new_tour_here"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/admin_logout"

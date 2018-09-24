@@ -2,23 +2,21 @@ package com.lglab.merino.lgxeducontroller.games.quiz;
 
 import com.lglab.merino.lgxeducontroller.interfaces.IJsonPacker;
 import com.lglab.merino.lgxeducontroller.legacy.beans.POI;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Question implements IJsonPacker {
     public static final int MAX_ANSWERS = 4;
-
-    private int id;
     public String question;
     public int correctAnswer;
     public String[] answers;
     public String information;
     public POI[] pois;
     public POI initialPOI;
-
-
     //Additional for game-use only
     public int selectedAnswer = 0;
+    private int id;
 
     public Question() {
         answers = new String[MAX_ANSWERS];
@@ -46,11 +44,11 @@ public class Question implements IJsonPacker {
 
         obj.put("Poi_0", initialPOI.pack());
 
-        for(int i = 0; i < MAX_ANSWERS; i++) {
+        for (int i = 0; i < MAX_ANSWERS; i++) {
             obj.put("Answer_" + (i + 1), answers[i]);
         }
 
-        for(int i = 0; i < MAX_ANSWERS; i++) {
+        for (int i = 0; i < MAX_ANSWERS; i++) {
             obj.put("Poi_" + (i + 1), pois[i].pack());
         }
 
@@ -65,11 +63,11 @@ public class Question implements IJsonPacker {
         information = obj.getString("Text_bubble");
         initialPOI = new POI().unpack(obj.getJSONObject("Poi_0"));
 
-        for(int i = 0; i < MAX_ANSWERS; i++) {
+        for (int i = 0; i < MAX_ANSWERS; i++) {
             answers[i] = obj.getString("Answer_" + (i + 1));
         }
 
-        for(int i = 0; i < MAX_ANSWERS; i++) {
+        for (int i = 0; i < MAX_ANSWERS; i++) {
             pois[i] = new POI().unpack(obj.getJSONObject("Poi_" + (i + 1)));
         }
 

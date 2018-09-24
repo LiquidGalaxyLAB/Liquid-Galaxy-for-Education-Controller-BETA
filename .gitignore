@@ -35,3 +35,4 @@ captures/
 # IntelliJ
 *.iml
 .idea/*
+key.jks

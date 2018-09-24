@@ -1,8 +1,5 @@
 package com.lglab.merino.lgxeducontroller.utils;
 
-import android.os.Debug;
-import android.util.Log;
-
 public class PointerDetector {
 
     public final static int MINIUM_DISTANCE_MOVE = 8;
@@ -25,21 +22,21 @@ public class PointerDetector {
     private float xBefore;
     private float yBefore;
 
-    public PointerDetector(float x, float y){
+    public PointerDetector(float x, float y) {
         xAfter = -1;
         yAfter = -1;
         update(x, y);
     }
 
-    public double getTraveledDistance(){
-        return Math.sqrt( Math.pow(xAfter - xBefore, 2) + Math.pow(yAfter - yBefore, 2));
+    public double getTraveledDistance() {
+        return Math.sqrt(Math.pow(xAfter - xBefore, 2) + Math.pow(yAfter - yBefore, 2));
     }
 
-    public double getTraveledAngle(){
+    public double getTraveledAngle() {
         double angle = Math.toDegrees(Math.atan2(yAfter - yBefore, xAfter - xBefore));
         angle -= 270;
         angle %= 360;
-        if(angle < 0) {
+        if (angle < 0) {
             angle += 360;
         }
 
@@ -48,7 +45,7 @@ public class PointerDetector {
     }
 
     public void update(float x, float y) {
-        if(Math.sqrt( Math.pow(xAfter - x, 2) + Math.pow(yAfter - y, 2)) >= MINIUM_DISTANCE_MOVE) {
+        if (Math.sqrt(Math.pow(xAfter - x, 2) + Math.pow(yAfter - y, 2)) >= MINIUM_DISTANCE_MOVE) {
             xBefore = xAfter;
             yBefore = yAfter;
 
@@ -62,11 +59,11 @@ public class PointerDetector {
     }
 
     private double getDistanceFromPointerAfter(PointerDetector pointer) {
-        return Math.sqrt( Math.pow(xAfter - pointer.xAfter, 2) + Math.pow(yAfter - pointer.yAfter, 2));
+        return Math.sqrt(Math.pow(xAfter - pointer.xAfter, 2) + Math.pow(yAfter - pointer.yAfter, 2));
     }
 
     private double getDistanceFromPointerBefore(PointerDetector pointer) {
-        return Math.sqrt( Math.pow(xBefore - pointer.xBefore, 2) + Math.pow(yBefore - pointer.yBefore, 2));
+        return Math.sqrt(Math.pow(xBefore - pointer.xBefore, 2) + Math.pow(yBefore - pointer.yBefore, 2));
     }
 
     public short getZoomInteractionType(PointerDetector pointer) {

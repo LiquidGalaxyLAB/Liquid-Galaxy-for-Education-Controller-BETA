@@ -18,7 +18,7 @@ public class ArrayAlternateAdapter<T> extends ArrayAdapter<T> {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = super.getView(position, convertView, parent);
         if (position % 2 == 1) {
-            view.setBackgroundColor(Color.argb(127,240,240,240));
+            view.setBackgroundColor(Color.argb(127, 240, 240, 240));
         } else {
             view.setBackgroundColor(Color.TRANSPARENT);
         }

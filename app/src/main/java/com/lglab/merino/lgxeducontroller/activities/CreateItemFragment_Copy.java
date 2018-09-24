@@ -1,21 +1,15 @@
 package com.lglab.merino.lgxeducontroller.activities;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
@@ -29,7 +23,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -45,11 +38,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.lglab.merino.lgxeducontroller.R;
-import com.lglab.merino.lgxeducontroller.fragments.ExitFromQuizFragment;
 import com.lglab.merino.lgxeducontroller.legacy.LGPCAdminActivity;
 import com.lglab.merino.lgxeducontroller.legacy.POISFragment;
-import com.lglab.merino.lgxeducontroller.legacy.TourPOIsAdapter;
-import com.lglab.merino.lgxeducontroller.legacy.beans.TourPOI;
 import com.lglab.merino.lgxeducontroller.legacy.data.POIsContract;
 
 import java.util.ArrayList;
@@ -142,8 +132,7 @@ public class CreateItemFragment_Copy extends Fragment implements OnMapReadyCallb
             this.creationType = extras.getString("CREATION_TYPE");
             try {
                 this.button = extras.getInt("Button");
-            }
-            catch(Exception e){
+            } catch (Exception e) {
 
             }
         }
@@ -174,7 +163,7 @@ public class CreateItemFragment_Copy extends Fragment implements OnMapReadyCallb
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         try {
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DISTANCE, this); //You can also use LocationManager.GPS_PROVIDER and LocationManager.PASSIVE_PROVIDER
-        } catch (SecurityException e){
+        } catch (SecurityException e) {
         }
         return rootView;
     }
@@ -188,7 +177,7 @@ public class CreateItemFragment_Copy extends Fragment implements OnMapReadyCallb
         map.getUiSettings().setMapToolbarEnabled(true);
         try {
             map.setMyLocationEnabled(true);
-        } catch (SecurityException e){
+        } catch (SecurityException e) {
         }
         map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         map.setOnMapLongClickListener(this);
@@ -364,8 +353,9 @@ public class CreateItemFragment_Copy extends Fragment implements OnMapReadyCallb
             }
         } else {
             try {
-                fillCategorySpinner(viewHolder.categoryID); }
-            catch(Exception e){}
+                fillCategorySpinner(viewHolder.categoryID);
+            } catch (Exception e) {
+            }
         }
         //On the screen there is a button to cancel the creation and return to the main administration view
         setCancelComeBackBehaviour(viewHolder.cancel);

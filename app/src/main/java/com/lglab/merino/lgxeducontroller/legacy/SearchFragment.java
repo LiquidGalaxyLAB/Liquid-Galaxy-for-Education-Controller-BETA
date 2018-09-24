@@ -27,12 +27,12 @@ import android.widget.Toast;
 
 import com.jcraft.jsch.Session;
 import com.lglab.merino.lgxeducontroller.R;
+import com.lglab.merino.lgxeducontroller.connection.LGCommand;
 import com.lglab.merino.lgxeducontroller.connection.LGConnectionManager;
 import com.lglab.merino.lgxeducontroller.legacy.beans.Category;
 import com.lglab.merino.lgxeducontroller.legacy.beans.POI;
 import com.lglab.merino.lgxeducontroller.legacy.data.POIsContract;
 import com.lglab.merino.lgxeducontroller.legacy.utils.PoisGridViewAdapter;
-import com.lglab.merino.lgxeducontroller.connection.LGCommand;
 
 import java.util.ArrayList;
 import java.util.List;

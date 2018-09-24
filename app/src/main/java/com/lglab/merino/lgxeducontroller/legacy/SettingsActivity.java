@@ -10,10 +10,8 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.lglab.merino.lgxeducontroller.R;
-import com.lglab.merino.lgxeducontroller.connection.LGConnectionManager;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On

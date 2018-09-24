@@ -3,7 +3,6 @@ package com.lglab.merino.lgxeducontroller.legacy.beans;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.android.gms.plus.model.people.Person;
 import com.lglab.merino.lgxeducontroller.interfaces.IJsonPacker;
 
 import org.json.JSONException;
@@ -11,6 +10,15 @@ import org.json.JSONObject;
 
 public class POI implements IJsonPacker, Parcelable {
 
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public POI createFromParcel(Parcel in) {
+            return new POI(in);
+        }
+
+        public POI[] newArray(int size) {
+            return new POI[size];
+        }
+    };
     private long id;
     private String name;
     private String visited_place;
@@ -24,7 +32,8 @@ public class POI implements IJsonPacker, Parcelable {
     private boolean hidden;
     private int categoryId;
 
-    public POI() { }
+    public POI() {
+    }
 
     public POI(long id, String name, String visited_place, double longitude, double latitude, double altitude, double heading, double tilt, double range, String altitudeMode, boolean hidden, int categoryId) {
         this.id = id;
@@ -224,13 +233,4 @@ public class POI implements IJsonPacker, Parcelable {
         parcel.writeInt(hidden ? 1 : 0);
         parcel.writeInt(categoryId);
     }
-
-    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
-        public POI createFromParcel(Parcel in) {
-            return new POI(in);
-        }
-        public POI[] newArray(int size) {
-            return new POI[size];
-        }
-    };
 }

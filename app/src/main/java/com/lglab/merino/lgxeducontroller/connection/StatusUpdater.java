@@ -5,7 +5,7 @@ public class StatusUpdater implements Runnable {
 
     private LGConnectionManager lgConnectionManager;
 
-    public StatusUpdater(LGConnectionManager lgConnectionManager){
+    public StatusUpdater(LGConnectionManager lgConnectionManager) {
         this.lgConnectionManager = lgConnectionManager;
     }
 

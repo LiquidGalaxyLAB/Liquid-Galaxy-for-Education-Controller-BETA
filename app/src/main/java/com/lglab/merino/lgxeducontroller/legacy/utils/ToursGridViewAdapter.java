@@ -183,7 +183,7 @@ public class ToursGridViewAdapter extends BaseAdapter {
         private void sendTourPOI(Integer duration, String command) throws IOException, JSchException {
             try {
                 Thread.sleep((long) ((duration * 2) * 1000));
-               // LGUtils.setConnectionWithLiquidGalaxy(session, command, activity);
+                // LGUtils.setConnectionWithLiquidGalaxy(session, command, activity);
                 LGConnectionManager.getInstance().addCommandToLG(new LGCommand(command, LGCommand.CRITICAL_MESSAGE));
             } catch (InterruptedException e) {
                 e.printStackTrace();

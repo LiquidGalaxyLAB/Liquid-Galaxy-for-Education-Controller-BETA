@@ -8,14 +8,11 @@ import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
-import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.lglab.merino.lgxeducontroller.BuildConfig;
 import com.lglab.merino.lgxeducontroller.connection.LGCommand;
 import com.lglab.merino.lgxeducontroller.connection.LGConnectionManager;
-import com.lglab.merino.lgxeducontroller.legacy.utils.LGUtils;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -121,9 +118,9 @@ public class LiquidGalaxyTourView extends AsyncTask<String, Void, String> {
 
     private void sendFirstTourPOI(HashMap<String, String> firstPoi) {
         //try {
-            //LGUtils.setConnectionWithLiquidGalaxy(session, buildCommand(firstPoi), poisFragmentAct);
-            LGConnectionManager.getInstance().addCommandToLG(new LGCommand(buildCommand(firstPoi), LGCommand.CRITICAL_MESSAGE));
-            Log.d(TAG, "First send");
+        //LGUtils.setConnectionWithLiquidGalaxy(session, buildCommand(firstPoi), poisFragmentAct);
+        LGConnectionManager.getInstance().addCommandToLG(new LGCommand(buildCommand(firstPoi), LGCommand.CRITICAL_MESSAGE));
+        Log.d(TAG, "First send");
         /*} catch (JSchException e) {
             Log.d(TAG, "Error in connection with Liquid Galaxy.");
         } catch (IOException e) {

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:weightSum="6"
     tools:context=".activities.ResultsActivity">
@@ -12,8 +12,8 @@
         android:id="@+id/my_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:scrollbars="vertical"
-        android:layout_weight="4"/>
+        android:layout_weight="4"
+        android:scrollbars="vertical" />
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -37,16 +37,16 @@
             android:id="@+id/textViewScore"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
             android:layout_margin="16dp"
             android:layout_weight="1"
             android:fontFamily="sans-serif-light"
+            android:gravity="center"
             android:text="You have scored 5 out of 7!"
-            android:textStyle="bold"
             android:textColor="#000000"
-            android:textSize="42sp" />
+            android:textSize="42sp"
+            android:textStyle="bold" />
 
 
     </RelativeLayout>
 
-</LinearLayout >
+</LinearLayout>

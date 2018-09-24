@@ -184,8 +184,7 @@ public class CreateItemFragment extends Fragment implements OnMapReadyCallback, 
             this.creationType = extras.getString("CREATION_TYPE");
             try {
                 this.button = extras.getInt("Button");
-            }
-            catch(Exception e){
+            } catch (Exception e) {
 
             }
         }
@@ -238,7 +237,7 @@ public class CreateItemFragment extends Fragment implements OnMapReadyCallback, 
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         try {
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DISTANCE, this); //You can also use LocationManager.GPS_PROVIDER and LocationManager.PASSIVE_PROVIDER
-        } catch (SecurityException e){
+        } catch (SecurityException e) {
         }
         return rootView;
     }
@@ -252,7 +251,7 @@ public class CreateItemFragment extends Fragment implements OnMapReadyCallback, 
         map.getUiSettings().setMapToolbarEnabled(true);
         try {
             map.setMyLocationEnabled(true);
-        } catch (SecurityException e){
+        } catch (SecurityException e) {
         }
         map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         map.setOnMapLongClickListener(this);
@@ -428,8 +427,9 @@ public class CreateItemFragment extends Fragment implements OnMapReadyCallback, 
             }
         } else {
             try {
-                fillCategorySpinner(viewHolder.categoryID); }
-            catch(Exception e){}
+                fillCategorySpinner(viewHolder.categoryID);
+            } catch (Exception e) {
+            }
         }
         //On the screen there is a button to cancel the creation and return to the main administration view
         setCancelComeBackBehaviour(viewHolder.cancel);

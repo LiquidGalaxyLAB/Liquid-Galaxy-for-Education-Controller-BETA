@@ -164,25 +164,25 @@
 
     </LinearLayout>
 
-        <LinearLayout
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center">
+
+        <GridView
+            android:id="@+id/POISgridview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:gravity="center">
+            android:layout_gravity="bottom"
+            android:columnWidth="30dp"
+            android:gravity="center"
+            android:horizontalSpacing="10dp"
+            android:numColumns="3"
+            android:scrollbars="vertical"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="15dp" />
 
-            <GridView
-                android:id="@+id/POISgridview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:columnWidth="30dp"
-                android:gravity="center"
-                android:horizontalSpacing="10dp"
-                android:numColumns="3"
-                android:scrollbars="vertical"
-                android:stretchMode="columnWidth"
-                android:verticalSpacing="15dp" />
-
-        </LinearLayout>
     </LinearLayout>
+</LinearLayout>
 

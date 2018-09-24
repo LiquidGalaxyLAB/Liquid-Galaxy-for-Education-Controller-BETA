@@ -1,8 +1,5 @@
 package com.lglab.merino.lgxeducontroller.utils.Exceptions;
 
-import com.lglab.merino.lgxeducontroller.R;
-import android.content.Context;
-
 public class MissingInformationException extends Exception {
 
     private String exception;

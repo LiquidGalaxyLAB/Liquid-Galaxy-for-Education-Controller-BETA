@@ -1,26 +1,21 @@
 package com.lglab.merino.lgxeducontroller.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.drive.Drive;
-import com.google.android.gms.drive.DriveClient;
 import com.google.android.gms.drive.DriveContents;
 import com.google.android.gms.drive.DriveFile;
 import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.DriveId;
-import com.google.android.gms.drive.DriveResourceClient;
 import com.google.android.gms.drive.MetadataChangeSet;
 import com.google.android.gms.drive.OpenFileActivityOptions;
 import com.google.android.gms.drive.query.Filters;
@@ -28,7 +23,6 @@ import com.google.android.gms.drive.query.SearchableField;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
-import com.lglab.merino.lgxeducontroller.R;
 import com.lglab.merino.lgxeducontroller.drive.GoogleDriveManager;
 import com.lglab.merino.lgxeducontroller.games.quiz.Quiz;
 
@@ -53,19 +47,20 @@ public abstract class GoogleDriveActivity extends AppCompatActivity {
         switch (requestCode) {
             case RC_SIGN_IN:
                 if (resultCode == RESULT_OK) {
+                    Toast.makeText(this, "OK", Toast.LENGTH_SHORT).show();
                     handleSignInResult(GoogleSignIn.getSignedInAccountFromIntent(data));
                     return;
                 }
 
-                Log.e(GoogleDriveManager.TAG, "Sign-in failed with requestCode = " + String.valueOf(requestCode));
-                finish();
+                Log.e(GoogleDriveManager.TAG, "Sign-in failed with resultCode = " + String.valueOf(resultCode));
+//                finish();
                 break;
             case GoogleDriveManager.RC_OPEN_ITEM:
                 if (resultCode == RESULT_OK) {
                     mOpenItemTaskSource.setResult(data.getParcelableExtra(
                             OpenFileActivityOptions.EXTRA_RESPONSE_DRIVE_ID));
                 } else {
-                     //mOpenItemTaskSource.setException(new RuntimeException("Unable to open file"));
+                    //mOpenItemTaskSource.setException(new RuntimeException("Unable to open file"));
                 }
                 break;
         }
@@ -75,7 +70,7 @@ public abstract class GoogleDriveActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(GoogleDriveManager.GoogleSignInClient != null && GoogleDriveManager.DriveClient != null && GoogleDriveManager.DriveResourceClient != null)
+        if (GoogleDriveManager.GoogleSignInClient != null && GoogleDriveManager.DriveClient != null && GoogleDriveManager.DriveResourceClient != null)
             return;
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -86,7 +81,7 @@ public abstract class GoogleDriveActivity extends AppCompatActivity {
         GoogleDriveManager.GoogleSignInClient = GoogleSignIn.getClient(this, gso);
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
 
-        if(account != null)
+        if (account != null)
             GoogleDriveManager.GoogleSignInClient.signOut();
 
         Intent signInIntent = GoogleDriveManager.GoogleSignInClient.getSignInIntent();
@@ -94,7 +89,8 @@ public abstract class GoogleDriveActivity extends AppCompatActivity {
     }
 
     public void importQuiz() {
-        if(GoogleDriveManager.DriveClient != null && GoogleDriveManager.DriveResourceClient != null) {
+        Toast.makeText(this, "importQuiz", Toast.LENGTH_SHORT).show();
+        if (GoogleDriveManager.DriveClient != null && GoogleDriveManager.DriveResourceClient != null) {
             pickTextFile()
                     .addOnSuccessListener(this,
                             driveId -> handleReadItem(driveId.asDriveFile()))
@@ -106,7 +102,7 @@ public abstract class GoogleDriveActivity extends AppCompatActivity {
     }
 
     public void exportQuiz(Quiz quiz) {
-        if(GoogleDriveManager.DriveClient != null && GoogleDriveManager.DriveResourceClient != null) {
+        if (GoogleDriveManager.DriveClient != null && GoogleDriveManager.DriveResourceClient != null) {
             pickFolder()
                     .addOnSuccessListener(this,
                             driveId -> handleSaveItem(driveId.asDriveFolder(), quiz))
@@ -121,7 +117,7 @@ public abstract class GoogleDriveActivity extends AppCompatActivity {
         OpenFileActivityOptions openOptions =
                 new OpenFileActivityOptions.Builder()
                         //.setSelectionFilter(Filters.eq(SearchableField.MIME_TYPE, "text/plain"))
-                        .setMimeType(new ArrayList(Arrays.asList( "text/plain", "application/json")))
+                        .setMimeType(new ArrayList(Arrays.asList("text/plain", "application/json")))
                         .setActivityTitle("Select a file")
                         .build();
         return pickItem(openOptions);
@@ -222,9 +218,8 @@ public abstract class GoogleDriveActivity extends AppCompatActivity {
     }
 
 
-    public void showMessage(String message){
-        Toast.makeText(this, message,
-                Toast.LENGTH_LONG).show();
+    public void showMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
     public abstract void handleStringFromDrive(String input);

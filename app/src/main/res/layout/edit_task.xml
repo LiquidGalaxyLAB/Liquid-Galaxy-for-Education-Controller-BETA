@@ -184,28 +184,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
-            <Button
-                android:id="@+id/btn_save_task"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/button_rounded_green"
-                android:text="@string/save_new_task"
-                android:textColor="@android:color/white" />
 
-            <Button
-                android:id="@+id/btn_cancel_edit_task"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/button_rounded_red"
-                android:text="@string/cancel"
-                android:textColor="@android:color/white" />
+                <Button
+                    android:id="@+id/btn_save_task"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_rounded_green"
+                    android:text="@string/save_new_task"
+                    android:textColor="@android:color/white" />
+
+                <Button
+                    android:id="@+id/btn_cancel_edit_task"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_rounded_red"
+                    android:text="@string/cancel"
+                    android:textColor="@android:color/white" />
             </LinearLayout>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
