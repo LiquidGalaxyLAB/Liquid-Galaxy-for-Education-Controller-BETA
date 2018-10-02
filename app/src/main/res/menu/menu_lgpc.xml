@@ -10,6 +10,7 @@
     <item
         android:id="@+id/action_information_help"
         android:title="@string/help"
+        android:visible="false"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_about"

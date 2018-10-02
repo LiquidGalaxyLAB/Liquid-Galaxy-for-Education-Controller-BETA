@@ -27,11 +27,13 @@ import com.lglab.merino.lgxeducontroller.legacy.beans.POI;
 import com.lglab.merino.lgxeducontroller.legacy.data.POIsProvider;
 import com.lglab.merino.lgxeducontroller.utils.Exceptions.MissingInformationException;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 public class CreateQuestionActivity extends AppCompatActivity {
+    private static final String TAG = CreateQuestionActivity.class.getSimpleName();
     private final int BUTTON_0 = 0;
     private final int BUTTON_1 = 1;
     private final int BUTTON_2 = 2;
@@ -254,8 +256,10 @@ public class CreateQuestionActivity extends AppCompatActivity {
                 }
 
                 String information = additionalInformation.getText().toString();
-
+                Log.i(TAG, "acceptButton: " + id + " " + question + " " + correctAnswer + " " + Arrays.toString(answers) + " " + information + " " + Arrays.toString(pois) + " " + initialPOI);
                 quiz.addQuestion(new Question(id, question, correctAnswer, answers, information, this.pois, initialPOI));
+
+                Log.i(TAG, "acceptButton: " + quiz);
 
             } catch (MissingInformationException e) {
                 Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
@@ -281,31 +285,10 @@ public class CreateQuestionActivity extends AppCompatActivity {
     private void questionPOIText() {
         AutoCompleteTextView textPOI = (AutoCompleteTextView) findViewById(R.id.questionPOITextEdit);
         textPOI.setAdapter(poiStringList);
-        final POI[] toReturn = new POI[1];
 
         textPOI.setOnItemClickListener((parent, view, position, id) -> {
-            POI poi = poiStringList.getItem(position);
-            toReturn[0] = poi;
+            initialPOI = poiStringList.getItem(position);
         });
-
-        AutoCompleteTextView finalTextPOI = textPOI;
-        textPOI.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (toReturn[0] == null || !toReturn[0].toString().equals(finalTextPOI.getText()))
-                    toReturn[0] = null;
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
-        });
-
-        this.initialPOI = toReturn[0] == null ? new POI() : toReturn[0];
     }
 
     @Override

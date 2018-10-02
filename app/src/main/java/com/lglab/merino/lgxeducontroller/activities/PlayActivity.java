@@ -24,7 +24,6 @@ import com.lglab.merino.lgxeducontroller.utils.CategoryAdapter;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -35,7 +34,6 @@ public class PlayActivity extends GoogleDriveActivity {
 
     public CategoryAdapter adapter;
     RecyclerView recyclerView;
-    HashMap<String, Category> categories;
 
     private String searchInput = "";
 
@@ -78,7 +76,7 @@ public class PlayActivity extends GoogleDriveActivity {
 
     public List<Category> makeCategories() {
 
-        categories = new HashMap<>();
+        HashMap<String, Category> categories = new HashMap<>();
 
         Cursor category_cursor = POIsProvider.getAllCategories();
         while (category_cursor.moveToNext()) {
@@ -96,13 +94,13 @@ public class PlayActivity extends GoogleDriveActivity {
                 Quiz newQuiz = new Quiz().unpack(new JSONObject(questData));
                 newQuiz.id = quizId;
 
-                if (searchInput != "" && !newQuiz.toString().toLowerCase().startsWith(searchInput.toLowerCase()))
+                if (!searchInput.isEmpty() && !newQuiz.toString().toLowerCase().startsWith(searchInput.toLowerCase()))
                     continue;
 
                 Category category = categories.get(newQuiz.category.toLowerCase());
                 if (category == null) {
                     long id = POIsProvider.insertCategory(newQuiz.category);
-                    categories.put(newQuiz.category.toLowerCase(), new Category(id, newQuiz.category, Arrays.asList(newQuiz)));
+                    categories.put(newQuiz.category.toLowerCase(), new Category(id, newQuiz.category, Collections.singletonList(newQuiz)));
                 } else {
                     category.getItems().add(newQuiz);
                 }
@@ -122,7 +120,7 @@ public class PlayActivity extends GoogleDriveActivity {
 
         //ORDER CATEGORIES BY ID
         ArrayList<Category> orderedCategories = new ArrayList<>(categories.values());
-        Collections.sort(orderedCategories, (p1, p2) -> new Long(p1.id).compareTo(p2.id));
+        Collections.sort(orderedCategories, (p1, p2) -> Long.compare(p1.id, p2.id));
 
         return orderedCategories;
     }

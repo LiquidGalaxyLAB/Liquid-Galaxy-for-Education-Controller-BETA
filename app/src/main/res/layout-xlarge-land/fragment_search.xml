@@ -133,7 +133,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginStart="20dp">
+                android:layout_marginStart="20dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
 
                 <EditText
                     android:id="@+id/search_edittext"

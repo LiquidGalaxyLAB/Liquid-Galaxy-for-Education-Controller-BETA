@@ -27,7 +27,7 @@ public class QuizViewHolder extends ChildViewHolder {
     }
 
     public void onBind(Quiz quiz) {
-        quizName.setText(quiz.toString());
+        quizName.setText(quiz.name);
         this.quiz = quiz;
         this.itemView.setOnClickListener(arg0 -> startQuiz((GoogleDriveActivity) itemView.getContext()));
         this.playButton.setOnClickListener(arg0 -> startQuiz((GoogleDriveActivity) itemView.getContext()));

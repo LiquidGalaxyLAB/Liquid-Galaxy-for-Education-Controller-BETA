@@ -1,7 +1,6 @@
 package com.lglab.merino.lgxeducontroller.activities;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
@@ -50,10 +49,6 @@ public class LGPC_Copy extends AppCompatActivity implements ActionBar.TabListene
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         actionBar.setDisplayHomeAsUpEnabled(true);
-
-        if (Build.VERSION.SDK_INT >= 23) {
-            actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_action_bar));
-        }
 
 
         // Create the adapter that will return a fragment for each of the three

@@ -26,7 +26,7 @@ public class Quiz implements IJsonPacker, Parcelable {
     public ArrayList<Question> questions;
     public long id;
     public String category;
-    private String name;
+    public String name;
 
     public Quiz() {
         id = 0;
@@ -74,7 +74,12 @@ public class Quiz implements IJsonPacker, Parcelable {
 
     @Override
     public String toString() {
-        return name;
+        return "Quiz{" +
+                "questions=" + questions +
+                ", id=" + id +
+                ", category='" + category + '\'' +
+                ", name='" + name + '\'' +
+                '}';
     }
 
     @Override

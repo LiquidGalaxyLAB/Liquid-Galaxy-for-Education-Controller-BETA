@@ -8,7 +8,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.FragmentTransaction;
@@ -46,10 +45,6 @@ public class LGPCAdminActivity extends AppCompatActivity implements TabListener 
         setContentView(R.layout.activity_lgpcadmin);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
-        if (Build.VERSION.SDK_INT >= 23) {
-            actionBar.setBackgroundDrawable(getDrawable(R.drawable.button_action_bar));
-        }
 
 
         this.mSectionsPagerAdapter = new AdminCollectionPagerAdapter(getSupportFragmentManager());

@@ -50,6 +50,7 @@
             android:layout_weight="2"
             android:text="@string/play" />
 
+
     </LinearLayout>
 
     <ImageView

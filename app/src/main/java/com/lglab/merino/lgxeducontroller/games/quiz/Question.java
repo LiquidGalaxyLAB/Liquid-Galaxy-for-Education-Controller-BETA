@@ -1,12 +1,17 @@
 package com.lglab.merino.lgxeducontroller.games.quiz;
 
+import android.util.Log;
+
 import com.lglab.merino.lgxeducontroller.interfaces.IJsonPacker;
 import com.lglab.merino.lgxeducontroller.legacy.beans.POI;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
+
 public class Question implements IJsonPacker {
+    public static final String TAG = Question.class.getSimpleName();
     public static final int MAX_ANSWERS = 4;
     public String question;
     public int correctAnswer;
@@ -24,9 +29,11 @@ public class Question implements IJsonPacker {
     }
 
     public Question(int id, String question, int correctAnswer, String[] answers, String information, POI[] answer_pois, POI initialPOI) {
+        this();
         this.id = id;
         this.question = question;
         this.correctAnswer = correctAnswer;
+        Log.i(TAG, "Question: " + Arrays.toString(answers) + " " + Arrays.toString(this.answers));
         System.arraycopy(answers, 0, this.answers, 0, answers.length);
         this.information = information;
         System.arraycopy(answer_pois, 0, this.pois, 0, answer_pois.length);
@@ -72,5 +79,19 @@ public class Question implements IJsonPacker {
         }
 
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "Question{" +
+                "question='" + question + '\'' +
+                ", correctAnswer=" + correctAnswer +
+                ", answers=" + Arrays.toString(answers) +
+                ", information='" + information + '\'' +
+                ", pois=" + Arrays.toString(pois) +
+                ", initialPOI=" + initialPOI +
+                ", selectedAnswer=" + selectedAnswer +
+                ", id=" + id +
+                '}';
     }
 }
