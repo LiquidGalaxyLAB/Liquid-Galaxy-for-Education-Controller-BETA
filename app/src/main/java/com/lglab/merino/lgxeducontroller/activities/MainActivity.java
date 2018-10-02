@@ -57,8 +57,7 @@ public class MainActivity extends GoogleDriveActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_admin) {
-//            showPasswordAlert();
-            startActivity(new Intent(context, LGPCAdminActivity.class));
+            showPasswordAlert();
             return true;
         } else if (id == R.id.action_information_help) {
             startActivity(new Intent(this, Help.class));
@@ -122,6 +121,7 @@ public class MainActivity extends GoogleDriveActivity {
         // set the message to display
         alertbox.setMessage("Please, enter the password:");
         final EditText input = new EditText(context);
+        input.setSingleLine();
         input.setHint("Password");
         input.setTransformationMethod(PasswordTransformationMethod.getInstance());
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
