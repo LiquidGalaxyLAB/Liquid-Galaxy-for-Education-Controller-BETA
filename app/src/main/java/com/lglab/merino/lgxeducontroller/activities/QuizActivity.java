@@ -35,6 +35,7 @@ public class QuizActivity extends AppCompatActivity {
         setContentView(R.layout.activity_quiz);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle(QuizManager.getInstance().getQuiz().name);
 
         viewPager = findViewById(R.id.view_pager);
         SpringIndicator springIndicator = findViewById(R.id.indicator);

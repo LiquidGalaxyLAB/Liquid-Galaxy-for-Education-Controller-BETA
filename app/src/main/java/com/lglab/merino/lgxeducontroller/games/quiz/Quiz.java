@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Quiz implements IJsonPacker, Parcelable {
     public static final Creator<Quiz> CREATOR = new Creator<Quiz>() {
@@ -23,10 +24,10 @@ public class Quiz implements IJsonPacker, Parcelable {
             return new Quiz[size];
         }
     };
-    public ArrayList<Question> questions;
     public long id;
-    public String category;
     public String name;
+    public String category;
+    public List<Question> questions;
 
     public Quiz() {
         id = 0;
@@ -36,8 +37,11 @@ public class Quiz implements IJsonPacker, Parcelable {
     }
 
     protected Quiz(Parcel in) {
-        /*name = in.readString();
-        id = in.readLong();*/
+        this();
+        id = in.readLong();
+        name = in.readString();
+        category = in.readString();
+        in.readList(questions, getClass().getClassLoader());
     }
 
     @Override
@@ -89,7 +93,10 @@ public class Quiz implements IJsonPacker, Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeLong(id);
         parcel.writeString(name);
+        parcel.writeString(category);
+        parcel.writeList(questions);
     }
 
     public void addQuestion(Question question) {

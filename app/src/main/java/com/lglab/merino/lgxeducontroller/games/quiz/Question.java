@@ -1,5 +1,7 @@
 package com.lglab.merino.lgxeducontroller.games.quiz;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import com.lglab.merino.lgxeducontroller.interfaces.IJsonPacker;
@@ -10,8 +12,20 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
-public class Question implements IJsonPacker {
+public class Question implements IJsonPacker, Parcelable {
+
     public static final String TAG = Question.class.getSimpleName();
+    public static final Creator<Question> CREATOR = new Creator<Question>() {
+        @Override
+        public Question createFromParcel(Parcel in) {
+            return new Question(in);
+        }
+
+        @Override
+        public Question[] newArray(int size) {
+            return new Question[size];
+        }
+    };
     public static final int MAX_ANSWERS = 4;
     public String question;
     public int correctAnswer;
@@ -21,23 +35,23 @@ public class Question implements IJsonPacker {
     public POI initialPOI;
     //Additional for game-use only
     public int selectedAnswer = 0;
-    private int id;
+    public int id;
 
     public Question() {
         answers = new String[MAX_ANSWERS];
         pois = new POI[MAX_ANSWERS];
     }
 
-    public Question(int id, String question, int correctAnswer, String[] answers, String information, POI[] answer_pois, POI initialPOI) {
+    public Question(Parcel in) {
         this();
-        this.id = id;
-        this.question = question;
-        this.correctAnswer = correctAnswer;
-        Log.i(TAG, "Question: " + Arrays.toString(answers) + " " + Arrays.toString(this.answers));
-        System.arraycopy(answers, 0, this.answers, 0, answers.length);
-        this.information = information;
-        System.arraycopy(answer_pois, 0, this.pois, 0, answer_pois.length);
-        this.initialPOI = initialPOI;
+        question = in.readString();
+        correctAnswer = in.readInt();
+        in.readStringArray(answers);
+        information = in.readString();
+        in.readTypedArray(pois, POI.CREATOR);
+        initialPOI = in.readParcelable(POI.class.getClassLoader());
+        selectedAnswer = in.readInt();
+        id = in.readInt();
     }
 
     @Override
@@ -93,5 +107,22 @@ public class Question implements IJsonPacker {
                 ", selectedAnswer=" + selectedAnswer +
                 ", id=" + id +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int flags) {
+        parcel.writeString(question);
+        parcel.writeInt(correctAnswer);
+        parcel.writeStringArray(answers);
+        parcel.writeString(information);
+        parcel.writeTypedArray(pois, flags);
+        parcel.writeParcelable(initialPOI, flags);
+        parcel.writeInt(selectedAnswer);
+        parcel.writeInt(id);
     }
 }

@@ -4,7 +4,9 @@ public class QuizManager {
 
     private static QuizManager instance = null;
     private Quiz quiz;
-    private boolean hasStarted = false;
+
+    private QuizManager() {
+    }
 
     public static QuizManager getInstance() {
         if (instance == null)
@@ -21,17 +23,21 @@ public class QuizManager {
     }
 
     public boolean hasAnsweredAllQuestions() {
-        boolean allAnswered = true;
-        for (int i = 0; allAnswered && i < quiz.questions.size(); i++)
-            allAnswered = quiz.questions.get(i).selectedAnswer != 0;
-
-        return allAnswered;
+        for (Question question : quiz.questions) {
+            if (question.selectedAnswer == 0) return false;
+        }
+        return true;
     }
 
     public int correctAnsweredQuestionsCount() {
         int total = 0;
-        for (int i = 0; i < quiz.questions.size(); i++)
-            total += quiz.questions.get(i).selectedAnswer == quiz.questions.get(i).correctAnswer ? 1 : 0;
+        for (Question question : quiz.questions) {
+            total += isCorrectAnswer(question) ? 1 : 0;
+        }
         return total;
+    }
+
+    private boolean isCorrectAnswer(Question question) {
+        return question.selectedAnswer == question.correctAnswer;
     }
 }

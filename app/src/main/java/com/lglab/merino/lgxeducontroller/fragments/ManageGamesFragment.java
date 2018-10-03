@@ -57,13 +57,13 @@ public class ManageGamesFragment extends Fragment {
             TreeQuizHolder.IconTreeItem parentNode = new TreeQuizHolder.IconTreeItem(android.R.drawable.ic_delete, category.getTitle(), category.id, TreeQuizHolder.TreeQuizType.SUBJECT);
             final TreeNode parent = new TreeNode(parentNode).setViewHolder(new TreeQuizHolder(getActivity()));
             for (Quiz quiz : category.getItems()) {
-                TreeNode quizNode = new TreeNode(new TreeQuizHolder.IconTreeItem(R.drawable.ic_place_black_24dp, quiz.name, quiz.id, TreeQuizHolder.TreeQuizType.GAME));
+                TreeNode quizNode = new TreeNode(new TreeQuizHolder.IconTreeItem(R.drawable.ic_place_black_24dp, quiz.name + " (" + quiz.questions.size() + ")", quiz.id, TreeQuizHolder.TreeQuizType.GAME, quiz));
                 quizNode.setViewHolder(new TreeQuizHolder(getActivity()));
 
-                ArrayList<Question> questions = quiz.questions;
+                List<Question> questions = quiz.questions;
                 for (int i = 0; i < questions.size(); i++) {
                     Question question = questions.get(i);
-                    TreeNode questionNode = new TreeNode(new TreeQuizHolder.IconTreeItem(R.drawable.ic_add_circle_black_48dp, question.question, i, TreeQuizHolder.TreeQuizType.QUESTION));
+                    TreeNode questionNode = new TreeNode(new TreeQuizHolder.IconTreeItem(R.drawable.ic_add_circle_black_48dp, question.question, i, TreeQuizHolder.TreeQuizType.QUESTION, quiz));
                     quizNode.addChild(questionNode);
                 }
                 parent.addChild(quizNode);

@@ -8,7 +8,7 @@
     <!-- Create Question -->
     <string name="question_text_edit">Question</string>
     <string name="correct_answer">Correct answer</string>
-    <string name="question_POI">Question POI</string>
+    <string name="question_POI">Initial POI</string>
     <string name="bubble_text">Additional information for the answer</string>
     <string name="answer_1">Answer 1</string>
     <string name="answer_2">Answer 2</string>
@@ -284,6 +284,7 @@
     <string name="clean_KML">Clean KMLS</string>
     <string name="app_label">LGxEDU</string>
     <string name="search_hint">Search a quiz</string>
+    <string name="update_question">Update Question</string>
     <!-- Legacy -->
 
 

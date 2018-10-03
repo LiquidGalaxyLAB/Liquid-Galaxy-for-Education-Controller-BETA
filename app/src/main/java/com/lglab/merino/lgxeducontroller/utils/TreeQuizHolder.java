@@ -2,6 +2,7 @@ package com.lglab.merino.lgxeducontroller.utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -10,12 +11,16 @@ import android.widget.Toast;
 
 import com.lglab.merino.lgxeducontroller.R;
 import com.lglab.merino.lgxeducontroller.activities.CreateQuestionActivity;
+import com.lglab.merino.lgxeducontroller.asynctask.RemoveQuizTask;
+import com.lglab.merino.lgxeducontroller.asynctask.UpdateQuizTask;
+import com.lglab.merino.lgxeducontroller.games.quiz.Quiz;
 import com.unnamed.b.atv.model.TreeNode;
 
 /**
  * Created by Albert Merino on 02/10/18.
  */
 public class TreeQuizHolder extends TreeNode.BaseNodeViewHolder<TreeQuizHolder.IconTreeItem> {
+    public static final String TAG = TreeQuizHolder.class.getSimpleName();
     private ImageView arrowView;
 
     public TreeQuizHolder(Context context) {
@@ -50,15 +55,20 @@ public class TreeQuizHolder extends TreeNode.BaseNodeViewHolder<TreeQuizHolder.I
                 deleteButton.setVisibility(View.VISIBLE);
 
                 addPOIButton.setOnClickListener(view12 -> {
-                    showToast("Add Question");
+                    showToast("Add Question ");
                     Intent intent = new Intent(context, CreateQuestionActivity.class);
-//                    context.startActivity(intent);
+                    intent.putExtra("quiz", value.quiz);
+                    intent.putExtra("type", CreateQuestionActivity.UpdateNew.NEW);
+                    context.startActivity(intent);
                 });
                 deleteButton.setOnClickListener(view12 -> {
-                    showToast("Delete Game");
+                    showToast("Deleted Game");
+                    new RemoveQuizTask(value.quiz).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    getTreeView().removeNode(node);
                 });
                 break;
             case QUESTION:
+                int id = node.getId() - 1;
                 arrowView.setVisibility(View.GONE);
                 editButton.setVisibility(View.VISIBLE);
                 deleteButton.setVisibility(View.VISIBLE);
@@ -69,9 +79,18 @@ public class TreeQuizHolder extends TreeNode.BaseNodeViewHolder<TreeQuizHolder.I
 
                 editButton.setOnClickListener(view12 -> {
                     showToast("Edit question");
+                    Intent intent = new Intent(context, CreateQuestionActivity.class);
+                    intent.putExtra("quiz", value.quiz);
+                    intent.putExtra("index", id);
+                    intent.putExtra("type", CreateQuestionActivity.UpdateNew.UPDATE);
+                    context.startActivity(intent);
                 });
                 deleteButton.setOnClickListener(view12 -> {
-                    showToast("Delete Question");
+
+                    showToast("Deleted Question " + id);
+                    value.quiz.questions.remove(id);
+                    new UpdateQuizTask(value.quiz).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    getTreeView().removeNode(node);
                 });
                 break;
         }
@@ -92,14 +111,20 @@ public class TreeQuizHolder extends TreeNode.BaseNodeViewHolder<TreeQuizHolder.I
     public static class IconTreeItem {
         public String text;
         public int icon;
-        public TreeQuizType type;
         public long id;
+        public TreeQuizType type;
+        public Quiz quiz;
 
         public IconTreeItem(int icon, String text, long id, TreeQuizType type) {
+            this(icon, text, id, type, null);
+        }
+
+        public IconTreeItem(int icon, String text, long id, TreeQuizType type, Quiz quiz) {
             this.icon = icon;
             this.text = text;
             this.type = type;
             this.id = id;
+            this.quiz = quiz;
         }
     }
 
