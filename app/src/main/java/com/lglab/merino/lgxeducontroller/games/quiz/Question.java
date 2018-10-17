@@ -2,7 +2,6 @@ package com.lglab.merino.lgxeducontroller.games.quiz;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import com.lglab.merino.lgxeducontroller.interfaces.IJsonPacker;
 import com.lglab.merino.lgxeducontroller.legacy.beans.POI;

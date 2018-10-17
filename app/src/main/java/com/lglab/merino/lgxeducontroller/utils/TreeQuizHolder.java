@@ -3,14 +3,18 @@ package com.lglab.merino.lgxeducontroller.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lglab.merino.lgxeducontroller.R;
 import com.lglab.merino.lgxeducontroller.activities.CreateQuestionActivity;
+import com.lglab.merino.lgxeducontroller.asynctask.InsertQuizTask;
 import com.lglab.merino.lgxeducontroller.asynctask.RemoveQuizTask;
 import com.lglab.merino.lgxeducontroller.asynctask.UpdateQuizTask;
 import com.lglab.merino.lgxeducontroller.games.quiz.Quiz;
@@ -48,6 +52,7 @@ public class TreeQuizHolder extends TreeNode.BaseNodeViewHolder<TreeQuizHolder.I
                 addPOIButton.setVisibility(View.VISIBLE);
                 addPOIButton.setOnClickListener(view1 -> {
                     showToast("Add Game");
+                    showAddGameDialog();
                 });
                 break;
             case GAME:
@@ -95,6 +100,32 @@ public class TreeQuizHolder extends TreeNode.BaseNodeViewHolder<TreeQuizHolder.I
                 break;
         }
         return view;
+    }
+
+    private void showAddGameDialog() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+        alertDialog.setTitle("Add game");
+        alertDialog.setMessage("Game title");
+
+        final EditText input = new EditText(context);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        input.setLayoutParams(lp);
+        alertDialog.setView(input);
+
+        alertDialog.setPositiveButton(android.R.string.yes,
+                (dialog, which) -> {
+                    Quiz quiz = new Quiz();
+                    quiz.name = input.getText().toString();
+                    showToast("Adding game " + quiz.name);
+                    new InsertQuizTask(quiz).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                });
+
+        alertDialog.setNegativeButton(android.R.string.cancel, null);
+
+        alertDialog.show();
+
     }
 
     private void showToast(String text) {

@@ -32,7 +32,7 @@ public class Quiz implements IJsonPacker, Parcelable {
     public Quiz() {
         id = 0;
         name = "";
-        category = "";
+        category = "Geography";
         questions = new ArrayList<>();
     }
 

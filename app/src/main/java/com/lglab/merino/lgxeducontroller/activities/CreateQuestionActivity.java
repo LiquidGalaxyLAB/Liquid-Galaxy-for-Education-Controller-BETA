@@ -3,7 +3,6 @@ package com.lglab.merino.lgxeducontroller.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
@@ -18,13 +17,14 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.lglab.merino.lgxeducontroller.R;
-import com.lglab.merino.lgxeducontroller.asynctask.UpdateQuizTask;
 import com.lglab.merino.lgxeducontroller.fragments.ExitFromQuizFragment;
 import com.lglab.merino.lgxeducontroller.games.quiz.Question;
 import com.lglab.merino.lgxeducontroller.games.quiz.Quiz;
 import com.lglab.merino.lgxeducontroller.legacy.beans.POI;
 import com.lglab.merino.lgxeducontroller.legacy.data.POIsProvider;
 import com.lglab.merino.lgxeducontroller.utils.Exceptions.MissingInformationException;
+
+import org.json.JSONException;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -270,7 +270,12 @@ public class CreateQuestionActivity extends AppCompatActivity {
                 }
                 Log.i(TAG, "acceptButton: " + question.id + " " + question + " " + correctAnswer + " " + Arrays.toString(answers) + " " + information + " " + Arrays.toString(question.pois) + " " + question.initialPOI);
                 Log.i(TAG, "acceptButton: " + quiz);
-                new UpdateQuizTask(quiz).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+                try {
+                    POIsProvider.updateQuizById((int) quiz.id, quiz.pack().toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 finish();
 
             } catch (MissingInformationException e) {
